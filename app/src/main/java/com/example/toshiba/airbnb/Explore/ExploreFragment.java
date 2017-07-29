@@ -36,6 +36,9 @@ public class ExploreFragment extends android.support.v4.app.Fragment {
         TabLayout exploreSectionTab = (TabLayout) view.findViewById(R.id.exploreSectionTab);
         exploreSectionTab.addTab(exploreSectionTab.newTab().setText("For You"));
         exploreSectionTab.addTab(exploreSectionTab.newTab().setText("Homes"));
+        exploreSectionTab.addTab(exploreSectionTab.newTab().setText("Experiences"));
+        exploreSectionTab.setTabGravity(TabLayout.GRAVITY_FILL);
+        exploreSectionTab.setTabMode(TabLayout.MODE_FIXED);
 
         exploreSectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -55,6 +58,13 @@ public class ExploreFragment extends android.support.v4.app.Fragment {
                         fragmentTransaction1.replace(R.id.exploreSectionFragment, new HomeFragment());
                         fragmentTransaction1.commit();
                         break;
+                    case 2:
+                        Log.d("tabCheck", String.valueOf(tab.getPosition()));
+                        FragmentManager fragmentManager2 = getFragmentManager();
+                        android.support.v4.app.FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+                        fragmentTransaction2.replace(R.id.exploreSectionFragment, new ExperienceFragment());
+                        fragmentTransaction2.commit();
+
 
                 }
             }
