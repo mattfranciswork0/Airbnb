@@ -27,41 +27,15 @@ public class ForYouFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_for_you, container, false);
+        Log.d("fragmentCheck", "For You Fragment");
+//        final LinearLayout searchLayout = (LinearLayout) getParentFragment().getView().findViewById(R.id.searchLayout);
+//        final LinearLayout exploreSectionFragment = (LinearLayout) getParentFragment().getView().findViewById(R.id.exploreSectionFragment);
 
-        final LinearLayout searchLayout = (LinearLayout) getParentFragment().getView().findViewById(R.id.searchLayout);
-        final LinearLayout exploreSectionFragment = (LinearLayout) getParentFragment().getView().findViewById(R.id.exploreSectionFragment);
-        final RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-        SectionAdapter sectionAdapter = new SectionAdapter();
-        mRecyclerView.setAdapter(sectionAdapter);
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-                //TODO: if recyclerview is scrolled, disable/enable scrollView for LinearLayout in explore_tab_fragment_explore
-
-                super.onScrolled(recyclerView, dx, dy);
-                Log.d("scroll", "dx: " + String.valueOf(dx) + "and dy: " + String.valueOf(dy));
-                Log.d("scroll", String.valueOf(layoutManager.findFirstCompletelyVisibleItemPosition()));
-
-//                if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-//                    searchLayout.setVisibility(View.VISIBLE);
-//                }else{
-//                    searchLayout.setVisibility(View.GONE);
-//                    ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
-//                }
-
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
+        recyclerView.setLayoutManager(layoutManager);
+        ForYouSectionAdapter forYouSectionAdapter = new ForYouSectionAdapter();
+        recyclerView.setAdapter(forYouSectionAdapter);
         return view;
     }
 }
-

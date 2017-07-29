@@ -16,13 +16,13 @@ import com.example.toshiba.airbnb.R;
  * Created by Owner on 2017-06-25.
  */
 
-public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionViewHolder> {
+public class ForYouSectionAdapter extends RecyclerView.Adapter<ForYouSectionAdapter.SectionViewHolder> {
     Context mContext;
 
     @Override
     public SectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.section_adapter, parent, false);
+                .inflate(R.layout.for_you_section_adapter_single_content_item, parent, false);
         mContext = parent.getContext();
         SectionViewHolder SectionViewHolder = new SectionViewHolder(view);
         return SectionViewHolder;
@@ -31,10 +31,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
     @Override
     public void onBindViewHolder(SectionViewHolder holder, int position) {
         holder.bindView(position);
-        SingleContentAdapter singleContentAdapter = new SingleContentAdapter();
+        ForYouSingleContentAdapter forYouSingleContentAdapter = new ForYouSingleContentAdapter();
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         holder.singleContentRecyclerView.setLayoutManager(layoutManager);
-        holder.singleContentRecyclerView.setAdapter(singleContentAdapter);
+        holder.singleContentRecyclerView.setAdapter(forYouSingleContentAdapter);
     }
 
 

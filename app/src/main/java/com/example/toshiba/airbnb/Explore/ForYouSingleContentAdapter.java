@@ -13,12 +13,12 @@ package com.example.toshiba.airbnb.Explore;
  * Created by Owner on 2017-06-26.
  */
 
-public class SingleContentAdapter extends RecyclerView.Adapter<SingleContentAdapter.SingleContentViewHolder> {
+public class ForYouSingleContentAdapter extends RecyclerView.Adapter<ForYouSingleContentAdapter.SingleContentViewHolder> {
 
     @Override
     public SingleContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.section_adapter_single_content_item, parent, false);
+                .inflate(R.layout.for_you_section_adapter_single_content_item, parent, false);
         SingleContentViewHolder singleContentViewHolder = new SingleContentViewHolder(view);
         return singleContentViewHolder;
     }

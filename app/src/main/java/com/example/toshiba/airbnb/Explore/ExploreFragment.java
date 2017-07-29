@@ -4,10 +4,12 @@ package com.example.toshiba.airbnb.Explore;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.toshiba.airbnb.R;
 
@@ -17,29 +19,42 @@ import com.example.toshiba.airbnb.R;
  */
 
 public class ExploreFragment extends android.support.v4.app.Fragment {
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
-        Log.d("fragmentCheck", "ExploreFragment");
 
-        //Launch foryouFragment when view is created
-        final ForYouFragment forYouFragment = new ForYouFragment();
-        android.support.v4.app.FragmentManager fragmentManager = getChildFragmentManager();
+//        Launch foryouFragment when view is created
+        ForYouFragment forYouFragment = new ForYouFragment();
+        final android.support.v4.app.FragmentManager fragmentManager = getFragmentManager() ;
         final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.exploreSectionFragment, forYouFragment);
         fragmentTransaction.commit();
 
         TabLayout exploreSectionTab = (TabLayout) view.findViewById(R.id.exploreSectionTab);
         exploreSectionTab.addTab(exploreSectionTab.newTab().setText("For You"));
+        exploreSectionTab.addTab(exploreSectionTab.newTab().setText("Homes"));
+
         exploreSectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
+                switch(tab.getPosition()){
                     case 0:
-                        Log.d("fragmentCheck", "For You tab is clicked");
-                        fragmentTransaction.replace(R.id.exploreSectionFragment, forYouFragment);
+                        Log.d("tabCheck", String.valueOf(tab.getPosition()));
+                        final android.support.v4.app.FragmentManager fragmentManager = getFragmentManager() ;
+                        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.exploreSectionFragment,  new ForYouFragment());
                         fragmentTransaction.commit();
+                        break;
+                    case 1:
+                        Log.d("tabCheck", String.valueOf(tab.getPosition()));
+                        FragmentManager fragmentManager1 = getFragmentManager();
+                        android.support.v4.app.FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
+                        fragmentTransaction1.replace(R.id.exploreSectionFragment, new HomeFragment());
+                        fragmentTransaction1.commit();
+                        break;
 
                 }
             }
@@ -51,16 +66,8 @@ public class ExploreFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        Log.d("fragmentCheck", "For You tab is clicked");
-                        fragmentTransaction.replace(R.id.exploreSectionFragment, forYouFragment);
-                        fragmentTransaction.commit();
-
-                }
             }
         });
-
 
         return view;
     }

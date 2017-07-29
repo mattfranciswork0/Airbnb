@@ -1,7 +1,5 @@
 package com.example.toshiba.airbnb.Explore;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +7,12 @@ import android.os.Bundle;
 import com.example.toshiba.airbnb.R;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.menu);
 
         final ExploreFragment exploreFragment = new ExploreFragment();
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
