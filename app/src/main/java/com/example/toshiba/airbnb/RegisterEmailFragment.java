@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 public class RegisterEmailFragment extends Fragment {
     EditText etEmail;
     Button bRegProceed;
+    public static String sEmail;
 
     @Nullable
     @Override
@@ -58,11 +59,13 @@ public class RegisterEmailFragment extends Fragment {
 
     public void registrationProceed() {
         if (isValidEmail(etEmail.getText().toString().trim())) {
+            bRegProceed.setEnabled(true);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
             bRegProceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    sEmail = etEmail.getText().toString();
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     RegisterPasswordFragment registerPasswordFragment = new RegisterPasswordFragment();
@@ -72,6 +75,7 @@ public class RegisterEmailFragment extends Fragment {
                 }
             });
         } else {
+            bRegProceed.setEnabled(false);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button_fail);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
         }

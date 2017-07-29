@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,10 @@ public class RegisterAgeFragment extends Fragment {
     EditText etAge;
     String date;
     Button bRegProceed;
+    Calendar newDate;
+    SimpleDateFormat simpleDateFormat;
+    public static int sAge;
+
 
     @Nullable
     @Override
@@ -50,9 +55,9 @@ public class RegisterAgeFragment extends Fragment {
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar newDate = Calendar.getInstance();
+                        newDate = Calendar.getInstance();
                         newDate.set(year, monthOfYear, dayOfMonth);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         date = simpleDateFormat.format(newDate.getTime());
                         etAge.setText(date);
                     }
@@ -80,17 +85,26 @@ public class RegisterAgeFragment extends Fragment {
 
     public void registrationProceed() {
         if (!(etAge.getText().toString().isEmpty())) {
+            bRegProceed.setEnabled(true);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
             bRegProceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Calendar today = Calendar.getInstance();
+
+                    int diff = today.get(Calendar.YEAR) - newDate.get(Calendar.YEAR);
+                    ;
+                    //Use Jodatime for specific age difference
+                    sAge = diff;
+                    Log.d("blue", Integer.toString(sAge));
                     Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
             });
         } else {
+            bRegProceed.setEnabled(false);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button_fail);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
         }

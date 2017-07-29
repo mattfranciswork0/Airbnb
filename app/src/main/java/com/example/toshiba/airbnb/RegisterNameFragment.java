@@ -1,5 +1,6 @@
 package com.example.toshiba.airbnb;
 
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -16,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-
 /**
  * Created by Owner on 2017-06-09.
  */
@@ -25,6 +25,8 @@ public class RegisterNameFragment extends Fragment {
     Button bRegProceed;
     EditText etFirstName;
     EditText etLastName;
+    public static String sFirstName;
+    public static String sLastName;
 
     @Nullable
     @Override
@@ -39,8 +41,12 @@ public class RegisterNameFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 registrationProceed();
             }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
         };
         etFirstName.addTextChangedListener(textWatcher);
         etLastName.addTextChangedListener(textWatcher);
@@ -52,15 +58,19 @@ public class RegisterNameFragment extends Fragment {
 
     //Method to check if users can proceed based on the results of the EditTexts
     public void registrationProceed() {
-        if (etFirstName.getText().toString().isEmpty() || etLastName.getText().toString().isEmpty()){
+        if (etFirstName.getText().toString().isEmpty() || etLastName.getText().toString().isEmpty()) {
+            bRegProceed.setEnabled(false);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button_fail);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
-        }else {
+        } else {
+            bRegProceed.setEnabled(true);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
             bRegProceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    sFirstName = etFirstName.getText().toString();
+                    sLastName = etLastName.getText().toString();
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     RegisterEmailFragment registerEmailFragment = new RegisterEmailFragment();
@@ -74,4 +84,3 @@ public class RegisterNameFragment extends Fragment {
 
 
 }
-

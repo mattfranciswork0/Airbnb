@@ -1,6 +1,5 @@
 package com.example.toshiba.airbnb;
 
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -54,15 +53,16 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
-                        "Matt", "Louis", "test@gmail.com", "lp334564a", 84);
+                        RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
+                        RegisterPasswordFragment.sPassword, RegisterAgeFragment.sAge);
 
                 Call<POJOUserRegistration> call = retrofit.insertUserRegistration(userRegistrationRequest);
                 call.enqueue(new Callback<POJOUserRegistration>() {
                     @Override
                     public void onResponse(Call<POJOUserRegistration> call, Response<POJOUserRegistration> response) {
                         Log.d("blue", "Data is sent");
-                        if (response.isSuccessful()) {
-                        } else {
+                        if(response.isSuccessful()){
+                        }else{
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 jObjError.getString("message");
@@ -73,7 +73,6 @@ public class WelcomeActivity extends AppCompatActivity {
                             }
                         }
                     }
-
                     @Override
                     public void onFailure(Call<POJOUserRegistration> call, Throwable t) {
                         Log.d("blue", "fail");
