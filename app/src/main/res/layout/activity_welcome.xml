@@ -1,9 +1,66 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_welcome"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.toshiba.airbnb.WelcomeActivity">
+    android:layout_height="match_parent">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.example.toshiba.airbnb.WelcomeActivity"
+        android:background="#ff6666">
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:text="By tapping Continue, Create account or More Options, I agree to Airbnb's Terms of Service, Paymemnts Term of Service, Privacy Policy, and Non-Discrimination Policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvPolicy"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#ffffff"
+            android:textStyle="normal|bold"/>
+
+        <TextView
+            android:text="Log In"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/tvLog_in"
+            android:textStyle="normal|bold"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:text="Welcome to Airbnb."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="73dp"
+            android:id="@+id/tvWelcome"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_below="@+id/tvLog_in"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <Button
+            android:text="Create Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bRegister"
+            android:background="#ffffff"
+            android:layout_marginTop="91dp"
+            android:layout_below="@+id/tvWelcome"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+</FrameLayout>
