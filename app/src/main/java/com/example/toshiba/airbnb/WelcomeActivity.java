@@ -1,5 +1,6 @@
 package com.example.toshiba.airbnb;
 
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +31,18 @@ public class WelcomeActivity extends AppCompatActivity {
 //        TextView tvWelcome = (TextView) findViewById(R.id.tvWelcome);
 //        Typeface openSans = Typeface.createFromAsset(getAssets(), "fonts.opensans/OpenSans-Regular.ttf");
 //        tvWelcome.setTypeface(openSans);
-
+        TextView tvLogIn = (TextView) findViewById(R.id.tvLogIn);
+        tvLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                LogInFragment logInFragment = new LogInFragment();
+                fragmentTransaction.replace(R.id.activity_welcome, logInFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         //Create Account Button
         Button bRegister = (Button) findViewById(R.id.bRegister);
         bRegister.setOnClickListener(new View.OnClickListener() {
@@ -56,13 +69,13 @@ public class WelcomeActivity extends AppCompatActivity {
                         RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
                         RegisterPasswordFragment.sPassword, RegisterAgeFragment.sAge);
 
-                Call<POJOUserRegistration> call = retrofit.insertUserRegistration(userRegistrationRequest);
-                call.enqueue(new Callback<POJOUserRegistration>() {
+                Call<Void> call = retrofit.insertUserRegistration(userRegistrationRequest);
+                call.enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<POJOUserRegistration> call, Response<POJOUserRegistration> response) {
+                    public void onResponse(Call<Void> call, Response<Void> response) {
                         Log.d("blue", "Data is sent");
-                        if(response.isSuccessful()){
-                        }else{
+                        if (response.isSuccessful()) {
+                        } else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 jObjError.getString("message");
@@ -73,8 +86,9 @@ public class WelcomeActivity extends AppCompatActivity {
                             }
                         }
                     }
+
                     @Override
-                    public void onFailure(Call<POJOUserRegistration> call, Throwable t) {
+                    public void onFailure(Call<Void> call, Throwable t) {
                         Log.d("blue", "fail");
                     }
                 });

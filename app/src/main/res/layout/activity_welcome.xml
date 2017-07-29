@@ -1,8 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_welcome"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="googleplayservices.samples.android.teamtreehouse.com.airbnb.WelcomeActivity">
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +15,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.example.toshiba.airbnb.WelcomeActivity"
+        tools:context="googleplayservices.samples.android.teamtreehouse.com.airbnb.WelcomeActivity"
         android:background="#ff6666">
 
         <TextView
@@ -34,7 +36,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:id="@+id/tvLog_in"
+            android:id="@+id/tvLogIn"
             android:textStyle="normal|bold"
             android:textColor="#ffffff"/>
 
@@ -46,7 +48,7 @@
             android:id="@+id/tvWelcome"
             android:textColor="#ffffff"
             android:textSize="18sp"
-            android:layout_below="@+id/tvLog_in"
+            android:layout_below="@+id/tvLogIn"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 

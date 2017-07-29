@@ -18,5 +18,9 @@ import retrofit2.http.POST;
 public interface DatabaseInterface {
     @Headers("Content-Type: application/json")
     @POST("/register")
-    Call<POJOUserRegistration> insertUserRegistration(@Body UserRegistrationRequest body);
+    Call<Void> insertUserRegistration(@Body UserRegistrationRequest body); //Alter to Call<Void> later
+
+    @Headers("Content-Type: application/json")
+    @POST("/login")
+    Call<PasswordMatch> findLogInData(@Body LogInRequest body);
 }
