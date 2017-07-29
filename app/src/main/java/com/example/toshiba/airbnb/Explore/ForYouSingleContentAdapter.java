@@ -18,7 +18,7 @@ public class ForYouSingleContentAdapter extends RecyclerView.Adapter<ForYouSingl
     @Override
     public SingleContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.for_you_section_adapter_single_content_item, parent, false);
+                .inflate(R.layout.for_you_single_content_adapter_item, parent, false);
         SingleContentViewHolder singleContentViewHolder = new SingleContentViewHolder(view);
         return singleContentViewHolder;
     }

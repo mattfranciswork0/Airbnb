@@ -4,12 +4,15 @@ package com.example.toshiba.airbnb.Explore;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.toshiba.airbnb.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -18,11 +21,18 @@ import com.example.toshiba.airbnb.R;
 
 public class ForYouSectionAdapter extends RecyclerView.Adapter<ForYouSectionAdapter.SectionViewHolder> {
     Context mContext;
+    ArrayList<Integer> numbers = new ArrayList<>();
+
+    public void addNumbers(Integer name) {
+        numbers.add(name);
+
+    }
 
     @Override
     public SectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d("notifyDataSetChanged", "notified");
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.for_you_section_adapter_single_content_item, parent, false);
+                .inflate(R.layout.for_you_section_adapter, parent, false);
         mContext = parent.getContext();
         SectionViewHolder SectionViewHolder = new SectionViewHolder(view);
         return SectionViewHolder;
@@ -40,7 +50,7 @@ public class ForYouSectionAdapter extends RecyclerView.Adapter<ForYouSectionAdap
 
     @Override
     public int getItemCount() {
-        return 3;
+        return numbers.size();
     }
 
     public class SectionViewHolder extends RecyclerView.ViewHolder {
@@ -54,8 +64,7 @@ public class ForYouSectionAdapter extends RecyclerView.Adapter<ForYouSectionAdap
         }
 
         public void bindView(int position) {
-            if (position == 1)
-                textView.setText("Hey");
+            textView.setText("Section " + String.valueOf(numbers.get(position)));
         }
     }
 }
