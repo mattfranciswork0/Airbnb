@@ -64,7 +64,7 @@
                     android:textStyle="normal|bold"/>
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/tvtotalnput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvTotal"
@@ -101,7 +101,7 @@
                     android:textStyle="normal|bold"/>
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/tvBedRoomInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvBedroom"
@@ -140,7 +140,7 @@
                     android:textStyle="normal|bold"/>
 
                 <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/tvBedInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvBed"
@@ -166,7 +166,7 @@
                 android:paddingTop="20dp">
 
                 <TextView
-                    android:id="@+id/tvBedKind"
+                    android:id="@+id/tvKindOfBed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -178,13 +178,13 @@
                     android:textStyle="normal|bold"/>
 
                 <TextView
-                    android:id="@+id/tvTypeInput"
+                    android:id="@+id/tvKindOfBedInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/tvBedKind"
-                    android:text="Flat"
+                    android:layout_below="@+id/tvKindOfBed"
+                    android:text="Real bed"
                     android:textSize="18sp"/>
 
             </RelativeLayout>

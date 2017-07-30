@@ -26,6 +26,7 @@ public class GuestFragment extends Fragment {
     public static final String BED_ROOM_BOTTOM_SHEET = "BED_ROOM_BOTTOM_SHEET";
     public static final String BED_BOTTOM_SHEET = "BED_BOTTOM_SHEET";
     public static final String KIND_OF_BED_BOTTOM_SHEET = "KIND_OF_BED_BOTTOM_SHEET";
+    public static View mView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,8 +38,14 @@ public class GuestFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_guess, container, false);
+        View view = inflater.inflate(R.layout.fragment_guest, container, false);
+        mView = view;
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.layoutTotalGuest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +89,7 @@ public class GuestFragment extends Fragment {
                 bottomSheetFragment.show(getFragmentManager(), bottomSheetFragment.getTag());
             }
         });
+
         view.findViewById(R.id.bContinue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +97,5 @@ public class GuestFragment extends Fragment {
             }
         });
 
-
-        return view;
     }
 }

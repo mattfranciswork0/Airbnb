@@ -1,11 +1,9 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost;
 
-/**
- * Created by TOSHIBA on 30/07/2017.
- */
-
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BathroomFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.R;
 
+import org.w3c.dom.Text;
 
 /**
  * Created by Owner on 2017-07-06.
@@ -22,13 +24,14 @@ import com.example.toshiba.airbnb.R;
 
 public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.BottomSheetViewHolder> {
     Context mContext;
+    BottomSheetFragment bottomSheetFragment;
 
     boolean propertyTypeBottomSheet;
     String[] propertyTypeArray;
     int propertyTypeSize;
 
     boolean totalGuestBottomSheet;
-    int totalGuessSize;
+    int totalGuestSize;
 
     boolean bedRoomBottomSheet;
     int bedRoomSize;
@@ -42,6 +45,10 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     boolean bathroomBottomSheet;
     int bathroomSize = 16;
+
+    public BottomSheetAdapter(BottomSheetFragment bottomSheetFragment) {
+        this.bottomSheetFragment = bottomSheetFragment;
+    }
 
     //PropertyTypeFragment
     public void isPropertyType(String[] array) {
@@ -72,11 +79,11 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         bathroomBottomSheet = true;
     }
 
+
     @Override
     public BottomSheetAdapter.BottomSheetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.bottom_sheet_adapter_item, parent, false);
-
         mContext = parent.getContext();
         return new BottomSheetAdapter.BottomSheetViewHolder(view);
     }
@@ -93,8 +100,8 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             propertyTypeSize = propertyTypeArray.length;
             return propertyTypeArray.length;
         } else if (totalGuestBottomSheet) {
-            totalGuessSize = 16;
-            return totalGuessSize;
+            totalGuestSize = 16;
+            return totalGuestSize;
         } else if (bedRoomBottomSheet) {
             bedRoomSize = 11;
             return bedRoomSize;
@@ -113,47 +120,158 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     public class BottomSheetViewHolder extends RecyclerView.ViewHolder {
         TextView tv;
-        int incrementByHalf;
 
         public BottomSheetViewHolder(View itemView) {
             super(itemView);
             tv = (TextView) itemView.findViewById(R.id.tv);
         }
 
-        public void bindView(int position) {
+        public void bindView(final int position) {
             //PropertyTypeFragment
-            if (propertyTypeBottomSheet) tv.setText(propertyTypeArray[position]);
+            if (propertyTypeBottomSheet) {
+                tv.setText(propertyTypeArray[position]);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView input = (TextView) PropertyTypeFragment.mView.findViewById(R.id.tvTypeInput);
+                        input.setText(propertyTypeArray[position]);
+                        bottomSheetFragment.dismiss();
+                    }
+                });
+            }
 
-                //GuestFragment
+            //GuestFragment
             else if (totalGuestBottomSheet) {
-                if (position == 0) tv.setText(String.valueOf(position + 1) + " guest");
-                else if (position == totalGuessSize - 1)
-                    tv.setText(String.valueOf(position + 1) + "+ guests");
-                else tv.setText(String.valueOf(position + 1) + " guests");
+                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvtotalnput);
+                if (position == 0) {
+                    tv.setText(String.valueOf(position + 1) + " guest");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position + 1) + " guest");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                }
+//                else if
+//                    (position == totalGuestSize - 1){
+//                    tv.setText(String.valueOf(position + 1) + "+ guests");
+//                    tv.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            guessFragment.setText(String.valueOf(position + 1) + "+ guests");
+//                        }
+//                    });
+//                }
+                else {
+                    tv.setText(String.valueOf(position + 1) + " guests");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position + 1) + "+ guests");
+                        }
+                    });
+                }
 
 
             } else if (bedRoomBottomSheet) {
-                if (position == 0) tv.setText("Studio");
-                else if (position == 1) tv.setText(String.valueOf(position) + " bedroom");
-                else if (position == bedRoomSize - 1)
+                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvBedRoomInput);
+                if (position == 0) {
+                    tv.setText("Studio");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText("Studio");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                } else if (position == 1) {
+                    tv.setText(String.valueOf(position) + " bedroom");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position) + " bedroom");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                } else if (position == bedRoomSize - 1) {
                     tv.setText(String.valueOf(position) + "+ bedrooms");
-                else tv.setText(String.valueOf(position) + " bedrooms");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position) + "+ bedrooms");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                } else {
+                    tv.setText(String.valueOf(position) + " bedrooms");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position) + " bedrooms");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                }
 
             } else if (bedBottomSheet) {
-                if (position == 0) tv.setText(String.valueOf(position + 1) + " bed");
-                else if (position == bedSize - 1)
+                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvBedInput);
+                if (position == 0) {
+                    tv.setText(String.valueOf(position + 1) + " bed");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position + 1) + " bed");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                } else if (position == bedSize - 1) {
                     tv.setText(String.valueOf(position + 1) + "+ beds");
-                else tv.setText(String.valueOf(position + 1) + " beds");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position + 1) + "+ beds");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                } else {
+                    tv.setText(String.valueOf(position + 1) + " beds");
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            input.setText(String.valueOf(position + 1) + " beds");
+                            bottomSheetFragment.dismiss();
+                        }
+                    });
+                }
 
             } else if (kindOfBedBottomSheet) {
                 tv.setText(kindOfBedArray[position]);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvKindOfBedInput);
+                        input.setText(kindOfBedArray[position]);
+                        bottomSheetFragment.dismiss();
+                    }
+                });
+
             }
 
             //BathroomFragment
             else if (bathroomBottomSheet) {
-                double val = position / 2.0;
+                final double val = position / 2.0;
                 tv.setText(Double.toString(val) + " bathrooms");
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView input = (TextView) BathroomFragment.mView.findViewById(R.id.tvBathroomInput);
+                        input.setText(Double.toString(val) + " bathrooms");
+                        bottomSheetFragment.dismiss();
+                    }
+                });
             }
+
 
         }
     }

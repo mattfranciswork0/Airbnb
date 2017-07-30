@@ -22,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -65,7 +66,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .zoom(11)
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.addMarker(markerOptions);
+        googleMap.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(300)
+                .strokeWidth(0f)
+                .fillColor(0x550000FF));
     }
 }

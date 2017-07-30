@@ -25,7 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:background="@color/lightRed"
-            android:padding="5dp">
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/textView3"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="Tap to learn more about different types of rooms."
                 android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -198,8 +198,18 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tvType"
-                    android:text="Real bed"
-                    android:textSize="18sp" />
+                    android:text="Flat"
+                    android:textSize="18sp"/>
+
+                <ImageView
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/close"
+                    android:id="@+id/showPropertyTypes"
+                    android:rotation="90"
+                    android:layout_width="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/tvType"
+                    android:layout_alignBottom="@+id/tvType"/>
 
             </RelativeLayout>
 

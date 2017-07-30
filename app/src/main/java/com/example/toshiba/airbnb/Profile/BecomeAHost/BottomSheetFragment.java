@@ -44,36 +44,36 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
         //PropertyTypeFragment
         if(getArguments().getBoolean(PropertyTypeFragment.PROPERTY_TYPE_BOTTOM_SHEET)) {
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter();
+            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
             bottomSheetAdapter.isPropertyType(propertyTypes);
             recyclerView.setAdapter(bottomSheetAdapter);
             dialog.setContentView(view);
         }
 
-        //GuessFragment
+//        GuessFragment
         if(getArguments().getBoolean(GuestFragment.TOTAL_GUEST_BOTTOM_SHEET)){
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter();
+            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
             bottomSheetAdapter.isTotalGuest();
             recyclerView.setAdapter(bottomSheetAdapter);
             dialog.setContentView(view);
         }
 
         if(getArguments().getBoolean(GuestFragment.BED_ROOM_BOTTOM_SHEET)){
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter();
+            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
             bottomSheetAdapter.isBedRoom();
             recyclerView.setAdapter(bottomSheetAdapter);
             dialog.setContentView(view);
         }
 
         if(getArguments().getBoolean(GuestFragment.BED_BOTTOM_SHEET)){
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter();
+            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
             bottomSheetAdapter.isBed();
             recyclerView.setAdapter(bottomSheetAdapter);
             dialog.setContentView(view);
         }
 
         if(getArguments().getBoolean(GuestFragment.KIND_OF_BED_BOTTOM_SHEET)){
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter();
+            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
             bottomSheetAdapter.isKindOfBed(kindOfBeds);
             recyclerView.setAdapter(bottomSheetAdapter);
             dialog.setContentView(view);
@@ -81,7 +81,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
         //Bathroom Fragment
         if(getArguments().getBoolean(BathroomFragment.BATHROOM_BOTTOM_SHEET)){
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter();
+            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
             bottomSheetAdapter.isBathroom();
             recyclerView.setAdapter(bottomSheetAdapter);
             dialog.setContentView(view);

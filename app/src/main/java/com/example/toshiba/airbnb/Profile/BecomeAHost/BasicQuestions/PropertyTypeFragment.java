@@ -25,6 +25,7 @@ import com.example.toshiba.airbnb.R;
 
 public class PropertyTypeFragment extends Fragment {
 
+    public static View mView;
     public static final String PROPERTY_TYPE_BOTTOM_SHEET = "PROPERTY_TYPE_BOTTOM_SHEET";
 
     @Override
@@ -35,12 +36,17 @@ public class PropertyTypeFragment extends Fragment {
 
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_property_type, container, false);
+        mView = view;
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.layoutTypeOfProperty).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +88,7 @@ public class PropertyTypeFragment extends Fragment {
         final RadioButton entireRadio = (RadioButton) view.findViewById(R.id.entireRadio);
         final RadioButton privateRadio = (RadioButton) view.findViewById(R.id.privateRadio);
         final RadioButton sharedRadio = (RadioButton) view.findViewById(R.id.sharedRadio);
-
+        entireRadio.setChecked(true);
         entireRadio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -112,8 +118,6 @@ public class PropertyTypeFragment extends Fragment {
                 }
             }
         });
-
-
-        return view;
     }
+
 }

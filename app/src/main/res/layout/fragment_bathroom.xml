@@ -73,7 +73,7 @@
                 android:paddingTop="20dp">
 
                 <TextView
-                    android:id="@+id/tvType"
+                    android:id="@+id/tvBathroom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bathrooms for guests"
@@ -84,12 +84,12 @@
                     android:layout_alignParentStart="true"/>
 
                 <TextView
-                    android:id="@+id/tvTypeInput"
+                    android:id="@+id/tvBathroomInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1"
                     android:textSize="18sp"
-                    android:layout_below="@+id/tvType"
+                    android:layout_below="@+id/tvBathroom"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"/>
 
