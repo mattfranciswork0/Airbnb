@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/close"
+            android:id="@+id/closeIcon"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:text="What each room type means"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textSize="30sp"
+        android:textStyle="normal|bold"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:text="Entire Place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:textStyle="normal|bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:text="Guests will rent the entire place. This includes in-law units."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:textSize="20sp"
+        android:layout_marginBottom="15dp"/>
+    <TextView
+        android:text="Private room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        android:textStyle="normal|bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:text="Guests share some spaces but they'll have their own private room for sleeping."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8"
+        android:textSize="20sp"
+        android:layout_marginBottom="15dp"/>
+    <TextView
+        android:text="Shared room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView9"
+        android:textStyle="normal|bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:text="Guests don't have a room to themselves."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView10"
+        android:textSize="20sp"
+        android:layout_marginBottom="15dp"/>
+
+
+</LinearLayout>

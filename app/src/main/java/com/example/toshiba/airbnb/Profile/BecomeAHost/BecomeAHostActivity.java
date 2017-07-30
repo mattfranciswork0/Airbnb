@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity;
 import com.example.toshiba.airbnb.R;
 
 public class BecomeAHostActivity extends AppCompatActivity {
