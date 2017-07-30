@@ -1,0 +1,19 @@
+<resources>
+    <!--
+
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=17:52:B4:AD:FF:C2:AE:AA:40:C2:2C:4D:AF:48:75:F7:15:13:7E:D1%3Bgoogleplayservices.samples.android.teamtreehouse.com.airbnb
+
+    You can also add your credentials to an existing key, using this line:
+    17:52:B4:AD:FF:C2:AE:AA:40:C2:2C:4D:AF:48:75:F7:15:13:7E:D1;googleplayservices.samples.android.teamtreehouse.com.airbnb
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyC-bL94CXK2hiP7_QwZ0Rj1rmZkXuDtZtg</string>
+</resources>
