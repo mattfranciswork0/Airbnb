@@ -8,7 +8,6 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +80,12 @@ public class GuestFragment extends Fragment {
                 bundle.putBoolean(KIND_OF_BED_BOTTOM_SHEET, true);
                 bottomSheetFragment.setArguments(bundle);
                 bottomSheetFragment.show(getFragmentManager(), bottomSheetFragment.getTag());
+            }
+        });
+        view.findViewById(R.id.bContinue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.progressFragment, new BathroomFragment()).addToBackStack(null).commit();
             }
         });
 

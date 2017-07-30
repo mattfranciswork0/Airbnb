@@ -40,6 +40,9 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     String[] kindOfBedArray;
     int kindOfBedSize;
 
+    boolean bathroomBottomSheet;
+    int bathroomSize = 16;
+
     //PropertyTypeFragment
     public void isPropertyType(String[] array) {
         propertyTypeArray = array;
@@ -64,6 +67,11 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         kindOfBedBottomSheet = true;
     }
 
+    //BathroomFragment
+    public void isBathroom() {
+        bathroomBottomSheet = true;
+    }
+
     @Override
     public BottomSheetAdapter.BottomSheetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -86,22 +94,26 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             return propertyTypeArray.length;
         } else if (totalGuestBottomSheet) {
             totalGuessSize = 16;
-            return 16;
+            return totalGuessSize;
         } else if (bedRoomBottomSheet) {
             bedRoomSize = 11;
-            return 11;
+            return bedRoomSize;
         } else if (bedBottomSheet) {
             bedSize = 16;
-            return 16;
+            return bedSize;
         } else if (kindOfBedBottomSheet) {
             kindOfBedSize = kindOfBedArray.length;
             return kindOfBedArray.length;
+        } else if (bathroomBottomSheet) {
+            bathroomSize = 16;
+            return bathroomSize;
         }
         return 0;
     }
 
     public class BottomSheetViewHolder extends RecyclerView.ViewHolder {
         TextView tv;
+        int incrementByHalf;
 
         public BottomSheetViewHolder(View itemView) {
             super(itemView);
@@ -136,6 +148,13 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             } else if (kindOfBedBottomSheet) {
                 tv.setText(kindOfBedArray[position]);
             }
+
+            //BathroomFragment
+            else if (bathroomBottomSheet) {
+                double val = position / 2.0;
+                tv.setText(Double.toString(val) + " bathrooms");
+            }
+
         }
     }
 
