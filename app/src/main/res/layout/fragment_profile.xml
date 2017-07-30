@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutEditProfile"
+        android:layout_marginBottom="30dp">
+        <TextView
+            android:text="Matt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvName"
+            android:textStyle="normal|bold"
+            android:layout_marginBottom="10dp"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:text="View and edit profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/tvEdit"/>
+
+        <ImageView
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/presence_away"
+            android:id="@+id/imageView2"
+            android:layout_marginLeft="186dp"
+            android:layout_marginStart="186dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/tvEdit"
+            android:layout_alignBottom="@+id/tvEdit"
+            android:layout_width="50dp"/>
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutBecomeAHost">
+        <TextView
+            android:text="Become a host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvBecomeAHost"
+            android:layout_marginBottom="10dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightRed"/>
+    </LinearLayout>
+</LinearLayout>
