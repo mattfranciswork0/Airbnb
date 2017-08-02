@@ -69,13 +69,16 @@
                         android:textSize="14sp"
                         android:textStyle="normal|bold"/>
 
-                    <TextView
-                        android:id="@+id/tvCountryInput"
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/etCountryInput"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvCountry"
-                        android:text="e.g. United Kingdom"
-                        android:textSize="18sp"/>
+                        android:hint="e.g. United Kingdom"
+                        android:textSize="18sp"
+                        android:background="@null"
+                        android:textColor="@android:color/tab_indicator_text"
+                        />
 
                 </RelativeLayout>
 
@@ -108,7 +111,7 @@
                         android:textStyle="normal|bold"/>
 
                     <TextView
-                        android:id="@+id/etStreet"
+                        android:id="@+id/tvStreetInput"
                         android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -149,7 +152,7 @@
                         android:textStyle="normal|bold"/>
 
                     <EditText
-                        android:id="@+id/etOptional"
+                        android:id="@+id/etOptionalInput"
                         android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,7 +162,8 @@
                         android:hint="e.g. Apartment 2"
                         android:outlineProvider="none"
                         android:padding="0dp"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:textColor="@android:color/tab_indicator_text"/>
                 </RelativeLayout>
 
                 <View
@@ -180,7 +184,7 @@
                     android:paddingTop="10dp">
 
                     <EditText
-                        android:id="@+id/etCity"
+                        android:id="@+id/etCityInput"
                         android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -189,7 +193,8 @@
                         android:layout_below="@+id/tvCity"
                         android:hint="e.g. London"
                         android:padding="0dp"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:textColor="@android:color/tab_indicator_text"/>
 
                     <TextView
                         android:id="@+id/tvCity"
@@ -198,7 +203,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:text="City"
+                        android:text="City (if avalible)"
                         android:textSize="14sp"
                         android:textStyle="normal|bold"/>
 
@@ -222,16 +227,19 @@
                     android:paddingTop="10dp">
 
                     <EditText
-                        android:id="@+id/etState"
+                        android:id="@+id/etStateInput"
                         android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/tvState"
-                        android:hint="e.g. England"
+                        android:hint="e.g. Washington"
+                        android:layout_marginBottom="90dp"
                         android:padding="0dp"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:textColor="@android:color/tab_indicator_text"
+                        />
 
                     <TextView
                         android:id="@+id/tvState"
@@ -240,9 +248,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:text="State"
+                        android:text="State (if available)"
                         android:textSize="14sp"
-                        android:textStyle="normal|bold"/>
+                        android:textStyle="normal|bold" />
 
                 </RelativeLayout>
 
@@ -254,42 +262,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="10dp"
                     android:background="@color/lightRed"/>
-
-
-                <RelativeLayout
-                    android:id="@+id/layoutZip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:layout_marginBottom="90dp">
-
-                    <EditText
-                        android:id="@+id/etZip"
-                        android:background="@null"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/tvZip"
-                        android:hint="e.g. SW1P"
-                        android:padding="0dp"
-                        android:textSize="18sp"
-                        />
-
-                    <TextView
-                        android:id="@+id/tvZip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:text="Zip / Postal Code"
-                        android:textSize="14sp"
-                        android:textStyle="normal|bold"/>
-
-                </RelativeLayout>
 
 
             </LinearLayout>

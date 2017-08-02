@@ -201,16 +201,6 @@
                     android:text="Flat"
                     android:textSize="18sp"/>
 
-                <ImageView
-                    android:layout_height="25dp"
-                    app:srcCompat="@drawable/close"
-                    android:id="@+id/showPropertyTypes"
-                    android:rotation="90"
-                    android:layout_width="25dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/tvType"
-                    android:layout_alignBottom="@+id/tvType"/>
-
             </RelativeLayout>
 
             <View

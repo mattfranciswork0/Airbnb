@@ -58,7 +58,7 @@ public class PropertyTypeFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.showPropertyTypes).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.layoutTypeOfProperty).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();

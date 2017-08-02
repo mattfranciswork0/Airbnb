@@ -1,5 +1,7 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -55,8 +57,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("GoogleMaps", "OnMapReady");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
 
-        LatLng latLng = new LatLng(43.6532, 79.3832);
+        Double LAT = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LAT,"0.000000"));
+        Double LNG = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LNG,"0.000000"));
+        LatLng latLng = new LatLng(LAT, LNG);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));

@@ -13,11 +13,10 @@
         android:layout_marginBottom="20dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/close"
             android:id="@+id/closeIcon"
-            />
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/close" />
     </LinearLayout>
 
     <TextView
