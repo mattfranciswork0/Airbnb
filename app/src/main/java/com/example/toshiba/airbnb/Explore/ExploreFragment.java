@@ -28,7 +28,7 @@ public class ExploreFragment extends android.support.v4.app.Fragment {
 
 //        Launch foryouFragment when view is created
         ForYouFragment forYouFragment = new ForYouFragment();
-        final android.support.v4.app.FragmentManager fragmentManager = getFragmentManager() ;
+        final android.support.v4.app.FragmentManager fragmentManager = getChildFragmentManager();
         final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.exploreSectionFragment, forYouFragment);
         fragmentTransaction.commit();
@@ -43,24 +43,24 @@ public class ExploreFragment extends android.support.v4.app.Fragment {
         exploreSectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch(tab.getPosition()){
+                switch (tab.getPosition()) {
                     case 0:
                         Log.d("tabCheck", String.valueOf(tab.getPosition()));
-                        final android.support.v4.app.FragmentManager fragmentManager = getFragmentManager() ;
+                        final android.support.v4.app.FragmentManager fragmentManager = getChildFragmentManager();
                         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.exploreSectionFragment,  new ForYouFragment());
+                        fragmentTransaction.replace(R.id.exploreSectionFragment, new ForYouFragment());
                         fragmentTransaction.commit();
                         break;
                     case 1:
                         Log.d("tabCheck", String.valueOf(tab.getPosition()));
-                        FragmentManager fragmentManager1 = getFragmentManager();
+                        FragmentManager fragmentManager1 = getChildFragmentManager();
                         android.support.v4.app.FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
                         fragmentTransaction1.replace(R.id.exploreSectionFragment, new HomeFragment());
                         fragmentTransaction1.commit();
                         break;
                     case 2:
                         Log.d("tabCheck", String.valueOf(tab.getPosition()));
-                        FragmentManager fragmentManager2 = getFragmentManager();
+                        FragmentManager fragmentManager2 = getChildFragmentManager();
                         android.support.v4.app.FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
                         fragmentTransaction2.replace(R.id.exploreSectionFragment, new ExperienceFragment());
                         fragmentTransaction2.commit();

@@ -17,12 +17,17 @@
 
         <activity android:name=".WelcomeActivity"></activity>
         <activity android:name=".Explore.SingleContentDescActivity">
+
+        </activity>
+        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"></activity>
+        <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.example.newmapview.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />

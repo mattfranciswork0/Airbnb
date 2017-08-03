@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_register_host"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="googleplayservices.samples.android.teamtreehouse.com.airbnb.ProfileTab.BecomeAHost.BecomeAHostActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/scrollLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="40dp"
+                android:paddingTop="40dp"
+                android:background="@color/lightRed"
+                android:id="@+id/layoutStarted">
+
+                <TextView
+                    android:text="Let's get you ready to host."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvTitle"
+                    android:textSize="30sp"
+                    android:textStyle="normal|bold"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:id="@+id/layoutBasic">
+
+                <TextView
+                    android:text="Start with the basics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layoutTypeOfProperty"
+                    android:textStyle="normal|bold"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:text="We'll ask you about your beds, bathrooms and amenities."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvBasicDesc"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:text="Continue >"
+                    android:layout_width="159dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/basicButton"
+                    android:background="@drawable/reg_host_proceed"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightRed"
+                    >
+
+                </View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:id="@+id/layoutScene">
+
+                <TextView
+                    android:text="Set the scene"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvSceneTitle"
+                    android:textStyle="normal|bold"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/lightGrey"
+                    />
+
+                <TextView
+                    android:text="Walk through aking the best photos and writing a description guests are looking for."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvSceneDesc"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/lightGrey"/>
+
+                <Button
+                    android:text="Continue >"
+                    android:layout_width="159dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/sceneButton"
+                    android:background="@drawable/reg_host_proceed"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:textColor="@color/lightGrey"
+                    >
+
+                </View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:id="@+id/layoutReady">
+
+                <TextView
+                    android:text="Get ready for guests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvReadyTitle"
+                    android:textStyle="normal|bold"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/lightGrey"/>
+
+                <TextView
+                    android:text="We'll ask you about your beds, bathrooms and amenities."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvReadyDesc"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/lightGrey"/>
+
+                <Button
+                    android:text="Continue >"
+                    android:layout_width="159dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/readyButton"
+                    android:background="@drawable/reg_host_proceed"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:textColor="@color/lightGrey"
+                    >
+
+                </View>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

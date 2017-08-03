@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/closeIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/close" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Only confirmed guests see your address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textSize="36sp"
+        android:textStyle="normal|bold"
+        android:layout_marginBottom="35dp"/>
+
+    <TextView
+        android:text="When a guest's booking is confirmed, they'll be able to see your exact locaiton."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:textSize="20sp"
+        android:layout_marginBottom="35dp"/>
+
+    <TextView
+        android:text="Everyone else will just see an approximate location of your home, so they get an idea of the area your place is in."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8"
+        android:textSize="20sp"/>
+
+
+</LinearLayout>
