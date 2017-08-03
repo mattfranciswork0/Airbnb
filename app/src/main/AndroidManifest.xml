@@ -19,14 +19,15 @@
 
         </activity>
         <activity android:name=".Explore.MenuActivity">
+       </activity>
+        <activity android:name=".Explore.SingleContentDescActivity">
+
+        </activity>
+        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter></activity>
-        <activity android:name=".Explore.SingleContentDescActivity">
-
-        </activity>
-        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"></activity>
         <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
 
         </activity>

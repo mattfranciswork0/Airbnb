@@ -33,7 +33,7 @@ public class GuestFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(60);
+        basicProgressBar.setProgress(40);
     }
 
     @Nullable

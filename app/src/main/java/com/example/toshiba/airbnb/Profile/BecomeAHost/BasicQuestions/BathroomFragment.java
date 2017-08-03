@@ -24,7 +24,7 @@ public class BathroomFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(40);
+        basicProgressBar.setProgress(60);
     }
 
     @Nullable

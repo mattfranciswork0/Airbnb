@@ -32,7 +32,7 @@ public class PropertyTypeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(10);
+        basicProgressBar.setProgress(20);
 
     }
 
