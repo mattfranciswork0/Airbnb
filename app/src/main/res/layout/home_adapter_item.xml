@@ -4,12 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="20dp">
+    android:paddingBottom="20dp"
+    android:id="@+id/layoutHome">
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="202dp"
-        app:srcCompat="@drawable/home"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:id="@+id/ivHome"/>
 
     <TextView
         android:text="Joshua Tree Homesteader Cabin"

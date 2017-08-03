@@ -13,7 +13,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activvity_menu);
+        setContentView(R.layout.activity_menu);
 
         final ExploreFragment exploreFragment = new ExploreFragment();
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();

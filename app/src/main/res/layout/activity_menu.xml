@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Explore.MenuActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_home"
     android:layout_width="match_parent"
@@ -21,23 +22,23 @@
         app:tabSelectedTextColor="#ffffff"/>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1"
+        android:layout_height="match_parent"
         android:layout_above="@+id/sectionTab"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:orientation="vertical"
+        android:weightSum="1">
 
 
         <LinearLayout
-            android:layout_width="386dp"
             android:id="@+id/sectionFragmentReplace"
-            android:layout_below="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:orientation="vertical"
-            android:layout_height="518dp"/>
+            android:layout_below="@+id/linearLayout"
+            android:orientation="vertical" />
 
     </LinearLayout>
 

@@ -21,8 +21,7 @@ public class ExperienceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_and_experience_fragment, container, false);
-        Log.d("fragmentCheck", "HomeFragment");
+        View view = inflater.inflate(R.layout.fragment_home_and_experience, container, false);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);

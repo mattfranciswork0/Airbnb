@@ -14,9 +14,12 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.R;
 
 import java.util.Calendar;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -28,7 +31,11 @@ public class SingleContentDescFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_single_content_desc, container, false);
-        view.findViewById(R.id.ivHost).setOnClickListener(new View.OnClickListener() {
+
+        CircleImageView ivHost = (CircleImageView) view.findViewById(R.id.ivHost);
+        Glide.with(this).load("https://cdn.pixabay.com/photo/2014/03/04/12/55/people-279457_960_720.jpg").into(ivHost);
+
+        ivHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().replace(R.id.rootLayout, new HostProfileFragment()).commit();
