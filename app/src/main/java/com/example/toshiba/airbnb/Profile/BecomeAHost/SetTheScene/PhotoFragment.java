@@ -1,26 +1,30 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-        import android.content.Intent;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.net.Uri;
-        import android.os.Bundle;
-        import android.support.annotation.Nullable;
-        import android.support.v4.app.Fragment;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
+import com.bumptech.glide.Glide;
+import com.example.toshiba.airbnb.R;
 
-        import com.example.toshiba.airbnb.R;
-
-        import java.io.FileNotFoundException;
-        import java.io.InputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 
-        import static android.app.Activity.RESULT_OK;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Owner on 2017-07-13.
@@ -28,8 +32,11 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
 public class PhotoFragment extends Fragment {
     private static final int SELECT_PICTURE = 1;
-    public static final String BIT_MAP_IMAGE = "BIT_MAP_IMAGE";
+    public static final String IMAGE_URI = "IMAGE_URI ";
+    public static final String PHOTOFRAGMENT_REMOVE = "PHOTOFRAGMENT_REMOVE";
+    public static final String PHOTOFRAGMENT = "PHOTOFRAGMENT";
     Bundle bundle;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,6 +52,7 @@ public class PhotoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
+
                 //MIME DATA TYPE
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -67,20 +75,19 @@ public class PhotoFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri imageUri = data.getData();
-
                 //Read IMAGE URI FORM SD CARD with InputStream
-                try {
-                    InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
-                    GalleryFragment galleryFragment = new GalleryFragment();
-                    Bitmap image = BitmapFactory.decodeStream(inputStream);
-                    bundle.putParcelable(BIT_MAP_IMAGE, image);
-                    galleryFragment.setArguments(bundle);
+                GalleryFragment galleryFragment = new GalleryFragment();
+                bundle.putString(IMAGE_URI, imageUri.toString());
+                galleryFragment.setArguments(bundle);
 
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.progressFragment,galleryFragment).commit();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PHOTOFRAGMENT, Context.MODE_PRIVATE);
+                //GET EDITOR
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(PHOTOFRAGMENT_REMOVE, true);
+                editor.apply();
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.progressFragment, galleryFragment).commit();
 
 
             }
@@ -89,4 +96,3 @@ public class PhotoFragment extends Fragment {
     }
 
 }
-

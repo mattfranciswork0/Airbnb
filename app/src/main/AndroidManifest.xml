@@ -31,7 +31,9 @@
         <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
 
         </activity>
+        <activity android:name=".Profile.BecomeAHost.ProgressActivity"></activity>
         <activity android:name=".Explore.HomeDescActivity"></activity>
+
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.example.newmapview.permission.MAPS_RECEIVE" />

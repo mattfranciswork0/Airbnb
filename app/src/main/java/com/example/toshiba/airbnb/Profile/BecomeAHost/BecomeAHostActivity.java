@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.toshiba.airbnb.Explore.HomeDescActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.MapFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.R;
@@ -53,6 +54,14 @@ public class BecomeAHostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BecomeAHostActivity.this, ProgressActivity.class);
                 intent.putExtra(SCENE_BUTTON, true);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.bPreview).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BecomeAHostActivity.this, HomeDescActivity.class);
                 startActivity(intent);
             }
         });
