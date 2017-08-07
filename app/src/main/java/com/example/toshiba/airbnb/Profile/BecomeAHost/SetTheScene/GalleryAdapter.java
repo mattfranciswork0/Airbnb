@@ -1,6 +1,7 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -42,20 +44,18 @@ import static android.R.attr.imeActionId;
  */
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
-    private Context mActivity;
+
     public static final String CLICKED_IMAGE_URI = "CLICKED_IMAGE_URI";
     public static final String GALLERY_FRAGMENT = "GALLERY_FRAGMENT";
-    public static boolean IMAGE_LOADING = false;
     ArrayList<Uri> imageUriArrayList = new ArrayList<>();
-    ArrayList<Boolean> imageLoadedArrayList = new ArrayList<>();
     File[] listFile;
     ProgressBar progressBar;
-    //if position is lower than filePathsArrayList.length
-
-    private Fragment mFragment;
+    private GalleryFragment mFragment;
     private String airBnbDirectory = "/Airbnb";
+    ProgressDialog dialog;
+    int position;
 
-    public GalleryAdapter(Fragment fragment) {
+    public GalleryAdapter(GalleryFragment fragment) {
         mFragment = fragment;
         //When RecyclerView is first initalized, load the images in SD card
         loadSDCard();
@@ -63,30 +63,29 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     public void addImage(final Uri imageUri) {
         imageUriArrayList.add(imageUri);
-        //Save image in SD CARD(External Storage)
-        Log.d("mattAdapter", "addImage");
-       new AsyncTask<Void, Void, Void>() {
-            boolean success = false;
+
+        notifyItemChanged(position);
+        new AsyncTask<Void, Void, Void>() {
+            //
+            String imageUriForLoadingSP;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                imageLoadedArrayList.add(true);
+                dialog = ProgressDialog.show(mFragment.getActivity(), "",
+                        "Image is being saved, please wait....", true);
             }
 
             @Override
             protected Void doInBackground(Void... params) {
-                success = saveInSDCard(imageUri);
+                imageUriForLoadingSP = saveInSDCard(imageUri);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                if(success){
-                    imageLoadedArrayList.set(imageLoadedArrayList.size() - 1, false);
-                    progressBar.setVisibility(View.GONE);
-                }
+                dialog.dismiss();
 
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
@@ -94,8 +93,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     }
 
-    public boolean saveInSDCard(Uri imageUri) {
-        IMAGE_LOADING = true;
+    public String saveInSDCard(Uri imageUri) {
+
         File sdCardDirectory = Environment.getExternalStorageDirectory();
         File file = new File(sdCardDirectory.getAbsolutePath() + airBnbDirectory);
         if (!file.exists()) {
@@ -105,7 +104,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         String fileNameAsTime = "" + System.currentTimeMillis() + ".png";
         File image = new File(sdCardDirectory.getAbsolutePath() + airBnbDirectory, fileNameAsTime);
 
-        boolean success = false;
         FileOutputStream outStream;
         Bitmap bitmap;
         try {
@@ -116,13 +114,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
             outStream.flush();
             outStream.close();
-            success = true;
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return success;
+        return imageUri.toString();
     }
 
     public void loadSDCard() {
@@ -138,7 +137,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
                 for (int i = 0; i < listFile.length; i++) {
                     //Convert file path to Uri, then add to arrayList
                     imageUriArrayList.add(Uri.fromFile(new File(listFile[i].getAbsolutePath())));
-                    imageLoadedArrayList.add(false);
+//                    imageLoadingArrayList.add(false);
                 }
 
                 Log.d("mattList", "SD CARD LOADED with size of " + listFile.length);
@@ -152,13 +151,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public GalleryAdapter.GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.gallery_adapter_item, parent, false);
-        mActivity = parent.getContext();
         return new GalleryAdapter.GalleryViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(GalleryAdapter.GalleryViewHolder holder, int position) {
         holder.bindView(position);
+        this.position = position;
     }
 
     @Override
@@ -171,38 +170,31 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
         public GalleryViewHolder(View itemView) {
             super(itemView);
+            Log.d("adapter", "ViewHolder");
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+
         }
 
         public void bindView(final int position) {
             //load images called by addImage()
-
             Glide.with(mFragment)
                     .load(imageUriArrayList.get(position)) // Uri of the picture
                     .into(ivPhoto);
 
+            Log.d("adapter", "bindView");
+
             ivPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PhotoDescFragment photoDescFragment = new PhotoDescFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(CLICKED_IMAGE_URI, imageUriArrayList.get(position).toString());
-                    photoDescFragment.setArguments(bundle);
-                    mFragment.getFragmentManager().beginTransaction().replace(R.id.progressFragment, photoDescFragment)
-                            .addToBackStack(null).commit();
-//                    ((AppCompatActivity) mActivity).getSupportFragmentManager().beginTransaction().replace(R.id.progressFragment, locationFragment).commit();
-
+                        PhotoDescFragment photoDescFragment = new PhotoDescFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(CLICKED_IMAGE_URI, imageUriArrayList.get(position).toString());
+                        photoDescFragment.setArguments(bundle);
+                        mFragment.getFragmentManager().beginTransaction().replace(R.id.progressFragment, photoDescFragment)
+                                .addToBackStack(null).commit();
                 }
             });
-            //Loading bar
-            if(imageLoadedArrayList.get(position)){
-                progressBar.setVisibility(View.VISIBLE);
-            } else{
-                progressBar.setVisibility(View.GONE);
-            }
-
-
         }
 
     }

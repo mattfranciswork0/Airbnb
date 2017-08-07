@@ -25,6 +25,20 @@
             android:layout_marginRight="20dp"
             android:layout_above="@id/layoutTapInfo"/>
 
+        <Button
+            android:text="Delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bDelete"
+            android:background="@drawable/reg_host_proceed"
+            android:textColor="@color/white"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_above="@id/layoutTapInfo"/>
+
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
