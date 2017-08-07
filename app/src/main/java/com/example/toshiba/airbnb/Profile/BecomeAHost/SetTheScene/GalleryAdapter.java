@@ -51,7 +51,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     File[] listFile;
     ProgressBar progressBar;
     private GalleryFragment mFragment;
-    private String airBnbDirectory = "/Airbnb";
+    public static final String airBnbDirectory = "/Airbnb";
     ProgressDialog dialog;
     int position;
 
