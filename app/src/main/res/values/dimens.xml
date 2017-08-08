@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="item_decoration_margin">3dp</dimen>
+    <dimen name="amenities_icon_height_and_width">30dp</dimen>
 </resources>
