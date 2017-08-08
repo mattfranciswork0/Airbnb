@@ -29,17 +29,17 @@ public class LocationFragment extends Fragment {
     private EditText etCountryInput;
     View view;
     public void checkSavedData(){
-
-            etCountryInput.setText(sharedPreferences.getString(LocationFilterAdapter.COUNTRY_NAME,"NULL"));
+            etCountryInput = (EditText) view.findViewById(R.id.etCountryInput);
+            etCountryInput.setText(sharedPreferences.getString(LocationFilterAdapter.COUNTRY_NAME,""));
 
             TextView tvStreetInput = (TextView) view.findViewById(R.id.tvStreetInput);
-            tvStreetInput.setText(sharedPreferences.getString(LocationFilterAdapter.STREET_NAME,"NULL"));
+            tvStreetInput.setText(sharedPreferences.getString(LocationFilterAdapter.STREET_NAME,""));
 
             EditText etCityInput = (EditText) view.findViewById(R.id.etCityInput);
-            etCityInput.setText(sharedPreferences.getString(LocationFilterAdapter.CITY_NAME,"NULL"));
+            etCityInput.setText(sharedPreferences.getString(LocationFilterAdapter.CITY_NAME,""));
 
             EditText etStateInput = (EditText) view.findViewById(R.id.etStateInput);
-            etStateInput.setText(sharedPreferences.getString(LocationFilterAdapter.STATE_NAME,"NULL"));
+            etStateInput.setText(sharedPreferences.getString(LocationFilterAdapter.STATE_NAME,""));
 
     }
     @Override
@@ -47,6 +47,7 @@ public class LocationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
         basicProgressBar.setProgress(80);
+        sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
     }
 
     @Nullable
@@ -62,13 +63,9 @@ public class LocationFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
-        etCountryInput = (EditText) view.findViewById(R.id.etCountryInput);
         this.view = view;
         checkSavedData();
 
-        Toast.makeText(getActivity(), "onViewCreated", Toast.LENGTH_LONG).show();
         view.findViewById(R.id.layoutStreet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +101,6 @@ public class LocationFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Toast.makeText(getActivity(), "OnResume", Toast.LENGTH_LONG).show();
-//        checkSavedData();
+        checkSavedData();
     }
 }

@@ -21,10 +21,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.MapFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +46,7 @@ import java.util.Objects;
  * Created by Owner on 2017-07-14.
  */
 
-public class HomeDescFragment extends Fragment {
+public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Uri> imageUriArrayList = new ArrayList<>();
     private ImageSliderPager imageSliderPager;
 
@@ -79,6 +90,9 @@ public class HomeDescFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
@@ -148,5 +162,30 @@ public class HomeDescFragment extends Fragment {
                 tvPlaceTitle.setText(getArguments().getString(TitleFragment.TITLE_PREVIEW));
             }
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
+
+        Double LAT = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LAT,"0.000000"));
+        Double LNG = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LNG,"0.000000"));
+        LatLng latLng = new LatLng(LAT, LNG);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(11)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.addMarker(markerOptions);
+        googleMap.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(300)
+                .strokeWidth(0f)
+                .fillColor(0x550000FF));
+
     }
 }
