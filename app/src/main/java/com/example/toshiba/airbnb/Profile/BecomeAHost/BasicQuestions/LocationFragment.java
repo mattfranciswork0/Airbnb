@@ -2,10 +2,12 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,18 +29,21 @@ public class LocationFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     public static String COUNTRY = "COUNTRY";
     private EditText etCountryInput;
+    TextView tvStreetInput;
+    EditText etCityInput;
+    EditText etStateInput;
     View view;
     public void checkSavedData(){
             etCountryInput = (EditText) view.findViewById(R.id.etCountryInput);
             etCountryInput.setText(sharedPreferences.getString(LocationFilterAdapter.COUNTRY_NAME,""));
 
-            TextView tvStreetInput = (TextView) view.findViewById(R.id.tvStreetInput);
+            tvStreetInput = (TextView) view.findViewById(R.id.tvStreetInput);
             tvStreetInput.setText(sharedPreferences.getString(LocationFilterAdapter.STREET_NAME,""));
 
-            EditText etCityInput = (EditText) view.findViewById(R.id.etCityInput);
+            etCityInput = (EditText) view.findViewById(R.id.etCityInput);
             etCityInput.setText(sharedPreferences.getString(LocationFilterAdapter.CITY_NAME,""));
 
-            EditText etStateInput = (EditText) view.findViewById(R.id.etStateInput);
+            etStateInput = (EditText) view.findViewById(R.id.etStateInput);
             etStateInput.setText(sharedPreferences.getString(LocationFilterAdapter.STATE_NAME,""));
 
     }
@@ -64,6 +69,8 @@ public class LocationFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
+        //checkSavedData in OnViewCreated wont refresh the views when popBackStack is called in LocationFilterFragment
+        //hence it's called on OnResume..
         checkSavedData();
 
         view.findViewById(R.id.layoutStreet).setOnClickListener(new View.OnClickListener() {
@@ -79,12 +86,43 @@ public class LocationFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.bContinue).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MapFragment mapFragment = new MapFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.progressFragment, mapFragment).addToBackStack(null).commit();
+                if(etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0 ){
+                    if(etCityInput.getText().length() > 0 || etStateInput.getText().length() > 0){
+                        MapFragment mapFragment = new MapFragment();
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.progressFragment, mapFragment).addToBackStack(null).commit();
+                    }
+                    else{
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setMessage("Please fill in your state / city");
+                        dialog.setCancelable(false);
+                        dialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+
+                }else{
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setMessage("Please fill in the required fields");
+                    dialog.setCancelable(false);
+                    dialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
+
+
+
             }
         });
         view.findViewById(R.id.layoutTapInfo).setOnClickListener(new View.OnClickListener() {
@@ -100,7 +138,6 @@ public class LocationFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toast.makeText(getActivity(), "OnResume", Toast.LENGTH_LONG).show();
         checkSavedData();
     }
 }
