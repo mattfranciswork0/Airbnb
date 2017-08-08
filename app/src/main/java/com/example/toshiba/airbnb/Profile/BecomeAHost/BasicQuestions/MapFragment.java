@@ -1,6 +1,7 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -36,7 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleApiClient mGoogleApiClient;
-
+    public static final String BASIC_QUESTIONS_COMPLETED = "BASIC_QUESTIONS_COMPLETED";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapFragment.this);
+
+        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
+                intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
+                startActivity(intent);
+            }
+        });
+
     }
 
     //Google Map interface

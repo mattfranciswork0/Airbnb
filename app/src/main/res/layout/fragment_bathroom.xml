@@ -191,7 +191,7 @@
             android:id="@+id/bNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/reg_host_proceed"
+            android:background="@drawable/reg_host_proceed_button"
             android:text="Next >"
             android:textColor="@color/white"
             android:layout_marginBottom="20dp"

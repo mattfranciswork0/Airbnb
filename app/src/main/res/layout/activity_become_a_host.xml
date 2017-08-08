@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register_host"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
+    <Button
+        android:text="Preview"
+        android:textAllCaps="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bPreview"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/reg_host_proceed_button"
+        android:textColor="@color/white"/>
+
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -72,7 +86,7 @@
                     android:layout_width="159dp"
                     android:layout_height="35dp"
                     android:id="@+id/basicButton"
-                    android:background="@drawable/reg_host_proceed"
+                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"/>
 
@@ -80,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/lightRed"
-                    >
+                    android:id="@+id/basicView">
 
                 </View>
             </LinearLayout>
@@ -116,16 +130,16 @@
                     android:layout_width="159dp"
                     android:layout_height="35dp"
                     android:id="@+id/sceneButton"
-                    android:background="@drawable/reg_host_proceed"
+                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
-                    android:visibility="gone"/>
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:textColor="@color/lightGrey"
-                    >
+                    android:id="@+id/sceneView">
 
                 </View>
             </LinearLayout>
@@ -160,7 +174,7 @@
                     android:layout_width="159dp"
                     android:layout_height="35dp"
                     android:id="@+id/readyButton"
-                    android:background="@drawable/reg_host_proceed"
+                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:visibility="gone"/>
@@ -176,4 +190,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>
