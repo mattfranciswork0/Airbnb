@@ -99,12 +99,12 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-//        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getFragmentManager().beginTransaction().replace(R.id.progressFragment, new DescribePlaceFragment()).addToBackStack(null).commit();
-//            }
-//        });
+        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.progressFragment, new DescribePlaceFragment()).addToBackStack(null).commit();
+            }
+        });
 
 
     }

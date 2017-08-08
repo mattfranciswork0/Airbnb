@@ -38,7 +38,7 @@ public class ImageSliderPager extends PagerAdapter {
     private LayoutInflater layoutInflater;
     private View view;
     private HomeDescFragment homeDescFragment;
-    SharedPreferences sharedPreferences;
+    SharedPreferences captionSP;
     private String savedCaption;
     TextView tvSize;
     ViewPager viewPager;
@@ -66,6 +66,15 @@ public class ImageSliderPager extends PagerAdapter {
 
     }
 
+    public String getFirstCaption(){
+        //ViewPager Listener in HomeDesFragment would not be triggered unless user slide the image, therefore, savedCaption would return null on the first image
+        return savedCaption = captionSP.getString(imageUriArrayList.get(0).toString(), "NO CAPTION");
+    }
+
+    public String getOtherCaptions(int position){
+        return savedCaption= captionSP.getString(imageUriArrayList.get(position).toString(), "NO CAPTION");
+    }
+
     public ImageSliderPager(Context context, ArrayList<Uri> imageUriArrayList,
                             HomeDescFragment homeDescFragment, ViewPager viewPager) {
         this.context = context;
@@ -73,6 +82,7 @@ public class ImageSliderPager extends PagerAdapter {
         this.homeDescFragment =homeDescFragment;
         this.viewPager = viewPager;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        captionSP = homeDescFragment.getActivity().getSharedPreferences(PhotoDescFragment.CAPTION_SP, Context.MODE_PRIVATE);
     }
 
     @Override

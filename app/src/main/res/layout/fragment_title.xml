@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/layoutInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/lightRed"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keep your title brief, but catchy."
+            android:textColor="@color/white"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="30dp"
+            android:text="Give your place a title  "
+            android:textSize="30sp"
+            android:textStyle="normal|bold"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/etTitle"
+            android:background="@null"
+            android:maxLength="50"
+            android:textSize="18sp"
+            android:gravity="left"
+            android:focusable="true"
+            android:textColor="@android:color/tab_indicator_text">
+        </EditText>
+
+
+        <TextView
+            android:text="50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvWordCount"
+            android:textStyle="normal|bold"/>
+
+
+    </LinearLayout>
+
+    <Button
+        android:text="Preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bPreview"
+        android:background="@drawable/reg_host_proceed"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="16dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@id/layoutInfo"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <Button
+        android:text="Next >"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bNext"
+        android:layout_above="@id/layoutInfo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/reg_host_proceed"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="16dp"
+        />
+</RelativeLayout>

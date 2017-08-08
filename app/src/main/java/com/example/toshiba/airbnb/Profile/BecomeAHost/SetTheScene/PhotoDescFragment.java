@@ -39,21 +39,27 @@ public class PhotoDescFragment extends Fragment {
     public static final String CAPTION_SP = "CAPTION_SP";
     private SharedPreferences.Editor editor;
     private static final String KEY_EDITTEXT = "KEY_EDITTEXT";
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences captionSP;
+    String stringImageUri;
+    Uri imageUri;
+    String savedCaption;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_desc, container, false);
-        sharedPreferences = getActivity().getSharedPreferences(CAPTION_SP, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        stringImageUri = getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URI);
+        imageUri = Uri.parse(stringImageUri);
+
+        captionSP = getActivity().getSharedPreferences(CAPTION_SP, Context.MODE_PRIVATE);
+        editor = captionSP.edit();
+        savedCaption = captionSP.getString(stringImageUri, "");
         return view;
     }
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
-        final String stringImageUri = getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URI);
-        final Uri imageUri = Uri.parse(stringImageUri);
+
 
         ImageView ivClickedPhoto = (ImageView) view.findViewById(R.id.ivClickedPhoto);
         Glide.with(getActivity()).load(imageUri).into(ivClickedPhoto);
@@ -62,16 +68,17 @@ public class PhotoDescFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 EditText etCaption = (EditText) view.findViewById(R.id.etCaption);
-                etCaption.getText();
-
-
-                //Save EditText to sharedpreferences for HomeDescFragment (initialzied by the preview button)
-                //get access to sharedpreferences to save to internal storage, only applicaitons can access it
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PROGRESS_SP, Context.MODE_PRIVATE);
-                //GET EDITOR
-                editor = sharedPreferences.edit();
-                editor.putString(KEY_EDITTEXT, etCaption.getText().toString());
+                //write captions to sharedpreferences
+                if (captionSP.contains(stringImageUri)) {
+                    editor.remove(stringImageUri);
+                    editor.putString(stringImageUri, etCaption.getText().toString());
+                    Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                } else {
+                    editor.putString(stringImageUri, etCaption.getText().toString());
+                    Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
+                }
                 editor.apply();
+                getFragmentManager().popBackStack();
             }
         });
 
@@ -82,11 +89,11 @@ public class PhotoDescFragment extends Fragment {
                         "Image is being processed, please wait....", true);
 
                 File file = new File(imageUri.getPath());
-                if(file.exists()){
+                if (file.exists()) {
 
                     //Delete picture
                     file.delete();
-                    if (sharedPreferences.contains(stringImageUri)) {
+                    if (captionSP.contains(stringImageUri)) {
                         editor.remove(stringImageUri);
                         editor.apply();
                     }
@@ -98,7 +105,6 @@ public class PhotoDescFragment extends Fragment {
                     //Delete caption
 
 
-
                 }
 
             }
@@ -106,4 +112,6 @@ public class PhotoDescFragment extends Fragment {
 
 
     }
+
 }
+

@@ -37,6 +37,8 @@ public class HomeDescActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_desc);
-        getSupportFragmentManager().beginTransaction().replace(R.id.rootLayout, new HomeDescFragment()).commit();
+        HomeDescFragment homeDescFragment = new HomeDescFragment();
+        homeDescFragment.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().replace(R.id.homeDescLayout, homeDescFragment).commit();
     }
 }
