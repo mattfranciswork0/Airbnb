@@ -126,27 +126,27 @@ public class HomeDescFragment extends Fragment {
         TextView tvPlaceTitle = (TextView) view.findViewById(R.id.tvPlaceTitle);
 
         Bundle bundle = getArguments();
-        //TODO: GET RID OF BUNDLE WHEN USER BACK OUT FROM PREVIEW
+
+        //Load description from shared preferences if user did not make any changes
+        SharedPreferences describeSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
+        String savedEtDescribePlace = describeSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, "");
+        tvDesc.setText(savedEtDescribePlace);
+
+        //Load title from shared preferences
+        SharedPreferences titleSP = getActivity().getSharedPreferences(TitleFragment.TITLE_SP, Context.MODE_PRIVATE);
+        String savedEtTitle = titleSP.getString(TitleFragment.TITLE_KEY, "");
+        tvPlaceTitle.setText(savedEtTitle);
+
         //Show preview that is not saved to shared preferences yet
+        if (bundle != null) {
+            //TODO: GET RID OF BUNDLE WHEN USER BACK OUT FROM PREVIEW
+            //Show preview that is not saved to shared preferences yet
 
-        if (bundle.containsKey(DescribePlaceFragment.DESCRIBE_PREVIEW)) {
-            tvDesc.setText(bundle.getString(DescribePlaceFragment.DESCRIBE_PREVIEW));
-        } else {
-            //Load description from shared preferences if user did not make any changes
-            SharedPreferences describeSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
-            String savedEtDescribePlace = describeSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, "");
-            tvDesc.setText(savedEtDescribePlace);
-        }
-
-        if (bundle.containsKey(TitleFragment.TITLE_PREVIEW)) {
-            tvPlaceTitle.setText(bundle.getString(TitleFragment.TITLE_PREVIEW));
-        } else {
-            //Load title from shared preferences
-            SharedPreferences titleSP = getActivity().getSharedPreferences(TitleFragment.TITLE_SP, Context.MODE_PRIVATE);
-            String savedEtTitle = titleSP.getString(TitleFragment.TITLE_KEY, "");
-            tvPlaceTitle.setText(savedEtTitle);
-
+            if (bundle.containsKey(DescribePlaceFragment.DESCRIBE_PREVIEW)) {
+                tvDesc.setText(getArguments().getString(DescribePlaceFragment.DESCRIBE_PREVIEW));
+            } else if (bundle.containsKey(TitleFragment.TITLE_PREVIEW)) {
+                tvPlaceTitle.setText(getArguments().getString(TitleFragment.TITLE_PREVIEW));
+            }
         }
     }
-
 }

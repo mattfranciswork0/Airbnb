@@ -41,7 +41,7 @@ public class TitleFragment extends Fragment {
         //OnCreate does not get called if user backs out from PhoneNumFragment
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
         basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_holo_light));
-        basicProgressBar.setProgress(68);
+        basicProgressBar.setProgress(100);
         return view;
     }
 
@@ -59,6 +59,29 @@ public class TitleFragment extends Fragment {
         }
         etTitle.setText(savedEtTitle);
 
+        bPreview = (Button) view.findViewById(R.id.bPreview);
+        bNext = (Button) view.findViewById(R.id.bNext);
+
+        bPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HomeDescActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(TITLE_PREVIEW, etTitle.getText().toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        bNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.remove(TITLE_KEY);
+                editor.putString(TITLE_KEY, etTitle.getText().toString());
+                editor.apply();
+            }
+        });
+
         TextWatcher textWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 tvWordCount.setText(String.valueOf(50 - etTitle.getText().length()));
@@ -73,9 +96,6 @@ public class TitleFragment extends Fragment {
         };
         etTitle.addTextChangedListener(textWatcher);
 
-        bPreview = (Button) view.findViewById(R.id.bPreview);
-        bNext = (Button) view.findViewById(R.id.bNext);
-
     }
 
     public void registrationProceed() {
@@ -89,27 +109,8 @@ public class TitleFragment extends Fragment {
         } else {
             bPreview.setEnabled(true);
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button);
-            bPreview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), HomeDescActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(TITLE_PREVIEW, etTitle.getText().toString());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-
             bNext.setEnabled(true);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button);
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    editor.remove(TITLE_KEY);
-                    editor.putString(TITLE_KEY, etTitle.getText().toString());
-                    editor.apply();
-                }
-            });
         }
     }
 }

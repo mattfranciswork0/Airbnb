@@ -86,8 +86,8 @@
                 android:id="@+id/tvInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Only guests who have booked your place will see your exact location."
-                android:textColor="@color/white"/>
+                android:text="Captions help guests understand what they're looking at."
+                android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 

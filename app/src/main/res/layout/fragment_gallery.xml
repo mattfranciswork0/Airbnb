@@ -13,14 +13,6 @@
         >
 
         <ImageView
-            android:id="@+id/closeIcon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="0.5"
-            app:srcCompat="@drawable/close"
-            />
-
-        <ImageView
             android:id="@+id/ivAddPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

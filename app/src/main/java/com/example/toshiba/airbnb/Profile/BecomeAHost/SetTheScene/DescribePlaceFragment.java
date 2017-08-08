@@ -39,7 +39,7 @@ public class DescribePlaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_describe_place, container, false);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(51);
+        basicProgressBar.setProgress(75);
         return view;
     }
 
@@ -55,6 +55,33 @@ public class DescribePlaceFragment extends Fragment {
         String savedEtDescribePlace = describePlaceSP.getString(DESCRIBE_PLACE_KEY, "");
         etDescribePlace.setText(savedEtDescribePlace);
 
+        bPreview = (Button) view.findViewById(R.id.bPreview);
+        bNext = (Button) view.findViewById(R.id.bNext);
+
+        bPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HomeDescActivity.class);
+                intent.putExtra(DESCRIBE_PREVIEW, etDescribePlace.getText().toString());
+                Bundle bundle = new Bundle();
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        bNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.progressFragment, new TitleFragment()).addToBackStack(null).commit();
+                //Save description
+                SharedPreferences.Editor editor = describePlaceSP.edit();
+                editor.remove(DESCRIBE_PLACE_KEY);
+                editor.putString(DESCRIBE_PLACE_KEY, etDescribePlace.getText().toString());
+                editor.apply();
+            }
+        });
+
+
         TextWatcher textWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 tvWordCount.setText(String.valueOf(500 - etDescribePlace.getText().length()));
@@ -68,8 +95,9 @@ public class DescribePlaceFragment extends Fragment {
             }
         };
         etDescribePlace.addTextChangedListener(textWatcher);
-        bPreview = (Button) view.findViewById(R.id.bPreview);
-        bNext = (Button) view.findViewById(R.id.bNext);
+
+
+
 
     }
 
@@ -84,30 +112,8 @@ public class DescribePlaceFragment extends Fragment {
         } else {
             bPreview.setEnabled(true);
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button);
-            bPreview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), HomeDescActivity.class);
-                    intent.putExtra(DESCRIBE_PREVIEW, etDescribePlace.getText().toString());
-                    Bundle bundle = new Bundle();
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-
             bNext.setEnabled(true);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button);
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getFragmentManager().beginTransaction().replace(R.id.progressFragment, new TitleFragment()).addToBackStack(null).commit();
-                    //Save description
-                    SharedPreferences.Editor editor = describePlaceSP.edit();
-                    editor.remove(DESCRIBE_PLACE_KEY);
-                    editor.putString(DESCRIBE_PLACE_KEY, etDescribePlace.getText().toString());
-                    editor.apply();
-                }
-            });
         }
     }
 }

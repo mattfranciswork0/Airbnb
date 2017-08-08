@@ -79,16 +79,6 @@
                 android:textColor="@color/white"
                 android:padding="10dp"/>
 
-            <Button
-                android:text="Come back to it later"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/bDoItLater"
-                android:background="@drawable/reg_host_proceed_button"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:padding="10dp"/>
-
 
         </LinearLayout>
 
