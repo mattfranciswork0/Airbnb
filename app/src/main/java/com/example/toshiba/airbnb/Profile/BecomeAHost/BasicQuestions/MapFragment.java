@@ -39,6 +39,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleApiClient mGoogleApiClient;
     public static final String BASIC_QUESTIONS_COMPLETED = "BASIC_QUESTIONS_COMPLETED";
+    SupportMapFragment mapFragment;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,15 +61,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapFragment.this);
 
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
-                intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
-                startActivity(intent);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.progressFragment, new AmenitiesItemFragment()).addToBackStack(null).commit();
             }
         });
 
@@ -98,4 +99,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .strokeWidth(0f)
                 .fillColor(0x550000FF));
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //need to remove child fragment when destroyed or else "error loading xml file would occur"
+        if (mapFragment != null)
+        {
+            //get rid of child when activity is already saved
+            getChildFragmentManager().beginTransaction().remove(mapFragment).commitAllowingStateLoss();
+        }
+
+        mapFragment = null;
+    }
+
 }

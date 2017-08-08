@@ -18,16 +18,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesIconMoreFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.MapFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -35,9 +51,17 @@ import java.util.Objects;
  * Created by Owner on 2017-07-14.
  */
 
-public class HomeDescFragment extends Fragment {
+public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Uri> imageUriArrayList = new ArrayList<>();
     private ImageSliderPager imageSliderPager;
+    //Amenities
+    SharedPreferences amenitiesSP;
+    Map<String, ?> savedAmenities;
+    LinearLayout layoutIconAmenities;
+    //Layout params for amenities icons
+    LinearLayout.LayoutParams params;
+    ImageView showOthersIcon;
+    boolean showOthersIconAddded;
 
     public ImageSliderPager getImageSliderPager() {
         return imageSliderPager;
@@ -62,6 +86,34 @@ public class HomeDescFragment extends Fragment {
         }
     }
 
+    public int loadAmenitiesIcon(String glideIconLink, int showOtherIconsInt) {
+        if (savedAmenities != null && layoutIconAmenities != null && params != null) {
+            Log.d("mattValue", "First if block");
+            if (showOtherIconsInt > 0) {
+                Log.d("mattValue", "Second if block");
+                ImageView amenitiesIcon = new ImageView(getActivity());
+                Glide.with(getContext()).load(glideIconLink).into(amenitiesIcon);
+                amenitiesIcon.setLayoutParams(params);
+                layoutIconAmenities.addView(amenitiesIcon);
+                showOtherIconsInt--;
+                return showOtherIconsInt;
+            } else {
+                if (!showOthersIconAddded) {
+                    showOthersIcon = new ImageView(getActivity());
+                    Glide.with(getContext()).load("http://www.freeiconspng.com/uploads/plus-icon-black-2.png").into(showOthersIcon);
+                    showOthersIcon.setLayoutParams(params);
+                    layoutIconAmenities.addView(showOthersIcon);
+                    showOthersIconAddded = true;
+                }
+
+            }
+
+        } else {
+            Log.e("mattError", "Variable savedAmenities, layouticonAmentities, or params are null");
+        }
+        return showOtherIconsInt;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +131,9 @@ public class HomeDescFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        showOthersIconAddded = false;
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
@@ -139,14 +194,121 @@ public class HomeDescFragment extends Fragment {
 
         //Show preview that is not saved to shared preferences yet
         if (bundle != null) {
-            //TODO: GET RID OF BUNDLE WHEN USER BACK OUT FROM PREVIEW
             //Show preview that is not saved to shared preferences yet
-
             if (bundle.containsKey(DescribePlaceFragment.DESCRIBE_PREVIEW)) {
                 tvDesc.setText(getArguments().getString(DescribePlaceFragment.DESCRIBE_PREVIEW));
             } else if (bundle.containsKey(TitleFragment.TITLE_PREVIEW)) {
                 tvPlaceTitle.setText(getArguments().getString(TitleFragment.TITLE_PREVIEW));
             }
         }
+
+
+        //Load amenities icon from sharedpreferences
+        amenitiesSP = getActivity().getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
+        savedAmenities = amenitiesSP.getAll();
+        Map<String, ?> keys = amenitiesSP.getAll();
+
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+            Log.d("map values", entry.getKey() + ": " +
+                    entry.getValue().toString());
+        }
+
+        layoutIconAmenities = (LinearLayout) view.findViewById(R.id.layoutIconAmenities);
+
+        //Layout params for amenities icons
+        float widthAndHeight = getResources().getDimension(R.dimen.amenities_icon_height_and_width);
+        params = new LinearLayout.LayoutParams((int) widthAndHeight,
+                (int) widthAndHeight);
+        params.weight = 1;
+
+
+        //-1 because loadAmenititesIcon() will create an additional + icon.
+        int showOthersIconInt = 6 - 1;
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbEssentials))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.EssentialsIcon), showOthersIconInt);
+        }
+
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbInternet))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.InternetIcon), showOthersIconInt);
+        }
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbShampoo))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ShampooIcon), showOthersIconInt);
+        }
+
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbHangers))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HangersIcon), showOthersIconInt);
+        }
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbTV))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.TVIcon), showOthersIconInt);
+        }
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbHeating))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HeatingIcon), showOthersIconInt);
+        }
+
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbAirConditioning))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.AirConditioningIcon), showOthersIconInt);
+        }
+
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbBreakfast))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.BreakfastIcon), showOthersIconInt);
+        }
+
+        layoutIconAmenities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null).commit();
+            }
+        });
+
+        //AmenitiesSpaceFragment
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbKitchen))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.KitchenIcon), showOthersIconInt);
+        }
+
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbLaundry))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.LaundryIcon), showOthersIconInt);
+        }
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbParking))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ParkingIcon), showOthersIconInt);
+        }
+
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbElevator))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ElevatorIcon), showOthersIconInt);
+        }
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbPool))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.PoolIcon), showOthersIconInt);
+        }
+        if (savedAmenities.containsKey(getResources().getString(R.string.rbGym))) {
+            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
+        }
+        Log.d("mattError", showOthersIconInt + "");
+
+
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
+
+        Double LAT = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LAT, "0.000000"));
+        Double LNG = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LNG, "0.000000"));
+        LatLng latLng = new LatLng(LAT, LNG);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(11)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.addMarker(markerOptions);
+        googleMap.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(300)
+                .strokeWidth(0f)
+                .fillColor(0x550000FF));
+    }
+
 }
+

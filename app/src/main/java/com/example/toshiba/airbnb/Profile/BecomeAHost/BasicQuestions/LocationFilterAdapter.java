@@ -3,6 +3,7 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -91,13 +92,15 @@ public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAd
             tvLocations.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final ProgressDialog progressdialog = new ProgressDialog(mActivity);
+                    progressdialog.setMessage("Please Wait....");
+                    progressdialog.show();
+
                     EditText etStreet = (EditText) LocationFilterFragment.mView.findViewById(R.id.etStreetFilter);
                     etStreet.setText(output);
                     SharedPreferences sharedPreferences = mActivity.getSharedPreferences(LOCATION_SP, Context.MODE_PRIVATE);
                     final SharedPreferences.Editor edit = sharedPreferences.edit();
                     edit.clear();
-
-
                     Call<POJOResults> call = retrofit.getPlaceDetailsInfo(placeIdArrayList.get(position), mActivity.getResources().getString(R.string.google_maps_key));
                     call.enqueue(new Callback<POJOResults>() {
                         @Override
@@ -106,6 +109,7 @@ public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAd
                             SharedPreferences sharedPreferences = mActivity.getSharedPreferences(LOCATION_SP, Context.MODE_PRIVATE);
                             SharedPreferences.Editor edit = sharedPreferences.edit();
                             edit.clear();
+
                             for (int i = 0; i < result.getAddressComponents().size(); i++) {
 
                                 if (result.getAddressComponents().get(i).getTypes().get(0).equals("route"))
@@ -123,6 +127,7 @@ public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAd
                             edit.putString(LNG,result.getGeometry().getLocation().getLng().toString());
                             edit.putString(LAT,result.getGeometry().getLocation().getLat().toString());
                             edit.apply();
+                            progressdialog.dismiss();
                             ((AppCompatActivity) mActivity).getSupportFragmentManager().popBackStack("layoutStreet", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         }
 

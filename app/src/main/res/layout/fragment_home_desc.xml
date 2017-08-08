@@ -190,34 +190,34 @@
                     android:layout_alignParentStart="true"
                     android:background="@color/lightRed"/>
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="About this place  "
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tvDescTitle"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textStyle="normal|bold"/>
-
-                    <TextView
-                        android:text="TextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tvDesc"
-                        android:layout_marginBottom="10dp"/>
-                </LinearLayout>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:background="@color/lightRed"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDescTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="About this place  "
+                        android:textStyle="normal|bold" />
+
+                    <TextView
+                        android:id="@+id/tvDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="TextView" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/nightsMin"
@@ -226,13 +226,6 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:text="x nights min"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:background="@color/lightRed"/>
 
                 <LinearLayout
                     android:id="@+id/layoutAmentities"
@@ -250,24 +243,26 @@
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="Amenities"
-                        android:textStyle="normal|bold"/>
+                        android:textStyle="normal|bold" />
 
                     <LinearLayout
+                        android:id="@+id/layoutIconAmenities"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
-                        android:id="@+id/layoutIconAmenities">
+                        android:weightSum="6">
 
                     </LinearLayout>
                 </LinearLayout>
 
-                <View
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="300dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:background="@color/lightRed"/>
+                    android:layout_alignParentTop="true" />
 
                 <RelativeLayout
                     android:id="@+id/layoutCancellaton"
