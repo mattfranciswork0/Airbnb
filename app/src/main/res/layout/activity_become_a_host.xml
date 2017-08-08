@@ -18,7 +18,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
-        android:background="@drawable/reg_host_proceed"
+        android:background="@drawable/reg_host_proceed_button"
         android:textColor="@color/white"/>
 
 
@@ -86,7 +86,7 @@
                     android:layout_width="159dp"
                     android:layout_height="35dp"
                     android:id="@+id/basicButton"
-                    android:background="@drawable/reg_host_proceed"
+                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"/>
 
@@ -130,7 +130,7 @@
                     android:layout_width="159dp"
                     android:layout_height="35dp"
                     android:id="@+id/sceneButton"
-                    android:background="@drawable/reg_host_proceed"
+                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     />
@@ -174,7 +174,7 @@
                     android:layout_width="159dp"
                     android:layout_height="35dp"
                     android:id="@+id/readyButton"
-                    android:background="@drawable/reg_host_proceed"
+                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:visibility="gone"/>

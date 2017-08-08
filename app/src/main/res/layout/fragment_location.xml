@@ -298,7 +298,7 @@
             android:layout_marginBottom="13dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/reg_host_proceed"
+            android:background="@drawable/reg_host_proceed_button"
             android:text="Next >"
             android:textAllCaps="false"
             android:textColor="@color/white"

@@ -1,18 +1,14 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +19,6 @@ import android.widget.TextView;
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.RegisterEmailFragment;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by TOSHIBA on 07/08/2017.
@@ -89,13 +82,13 @@ public class TitleFragment extends Fragment {
         if (etTitle.getText().length() > 0) {
             bPreview.setEnabled(false);
             bNext.setEnabled(false);
-            bPreview.setBackgroundResource(R.drawable.reg_host_proceed_fail);
-            bNext.setBackgroundResource(R.drawable.reg_host_proceed_fail);;
+            bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
+            bNext.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);;
 
 
         } else {
             bPreview.setEnabled(true);
-            bPreview.setBackgroundResource(R.drawable.reg_host_proceed);
+            bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button);
             bPreview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,7 +101,7 @@ public class TitleFragment extends Fragment {
             });
 
             bNext.setEnabled(true);
-            bNext.setBackgroundResource(R.drawable.reg_host_proceed);
+            bNext.setBackgroundResource(R.drawable.reg_host_proceed_button);
             bNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
