@@ -16,7 +16,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="35dp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/reg_host_proceed_button"
         android:textColor="@color/white"/>
@@ -170,14 +170,13 @@
                     android:textColor="@color/lightGrey"/>
 
                 <Button
-                    android:text="Continue >"
+                    android:id="@+id/bGetReady"
                     android:layout_width="159dp"
                     android:layout_height="35dp"
-                    android:id="@+id/readyButton"
+                    android:layout_marginBottom="100dp"
                     android:background="@drawable/reg_host_proceed_button"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:visibility="gone"/>
+                    android:text="Continue >"
+                    android:textColor="@color/white" />
 
                 <View
                     android:layout_width="match_parent"
