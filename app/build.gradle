@@ -41,4 +41,10 @@ dependencies {
 
     //Circular ImageView by hdodenhof
    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    //Caldroid for CalendarView
+    compile 'com.roomorama:caldroid:3.0.1'
+
+
+
 }

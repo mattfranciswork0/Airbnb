@@ -62,6 +62,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     LinearLayout.LayoutParams params;
     ImageView showOthersIcon;
     boolean showOthersIconAddded;
+    SupportMapFragment mapFragment;
 
     public ImageSliderPager getImageSliderPager() {
         return imageSliderPager;
@@ -132,7 +133,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         showOthersIconAddded = false;
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
@@ -162,7 +163,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         ivHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HostProfileFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HostProfileFragment()).
+                        addToBackStack(null).commit();
             }
         });
         Glide.with(this).load("https://cdn.pixabay.com/photo/2014/03/04/12/55/people-279457_960_720.jpg").into(ivHost);
@@ -281,8 +283,23 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         if (savedAmenities.containsKey(getResources().getString(R.string.rbGym))) {
             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
         }
-        Log.d("mattError", showOthersIconInt + "");
 
+
+        view.findViewById(R.id.layoutHouseRule).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HouseRuleMoreFragment()).
+                        addToBackStack(null).commit();
+            }
+        });
+
+        view.findViewById(R.id.layoutAvailability).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AvailabilityFragment()).
+                        addToBackStack(null).commit();
+            }
+        });
 
     }
 
@@ -310,5 +327,17 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                 .fillColor(0x550000FF));
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //need to remove child fragment when destroyed or else "error loading xml file would occur"
+        if (mapFragment != null)
+        {
+            //get rid of child when activity is already saved
+            getChildFragmentManager().beginTransaction().remove(mapFragment).commitAllowingStateLoss();
+        }
+
+        mapFragment = null;
+    }
 }
 

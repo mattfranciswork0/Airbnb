@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="40dp"
+                android:text="Availability"
+                android:textSize="30sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Listing length"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:text="How many months is the place listed for?" />
+
+            <EditText
+                android:id="@+id/etMaxMonth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:hint="Maximum is 12 months"
+                android:textColor="@android:color/tab_indicator_text"
+                android:inputType="number"
+                android:textSize="20dp"
+                android:maxLength="2"
+                android:paddingBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/tvCheckIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Check In"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tvAriveAfter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:text="Arrive after"
+                android:textSize="15dp"/>
+
+            <EditText
+                android:id="@+id/etAriveAfter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"
+                android:paddingBottom="20dp"
+                android:hint="include AM/PM"
+                android:textColor="@android:color/tab_indicator_text"/>
+
+            <TextView
+                android:id="@+id/tvLeaveBefore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Leave Before" />
+
+            <EditText
+                android:id="@+id/etLeaveBefore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:textSize="20dp"
+                android:paddingBottom="20dp"
+                android:hint="include AM/PM"
+                android:textColor="@android:color/tab_indicator_text"/>
+
+            <TextView
+                android:id="@+id/tvTripLength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Trip length"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvMinStay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:text="Minimum stay(nights)" />
+
+            <EditText
+                android:id="@+id/etMinStay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:inputType="number"
+                android:paddingBottom="20dp"
+                android:textColor="@android:color/tab_indicator_text"
+                android:textSize="20dp"
+                />
+
+            <TextView
+                android:id="@+id/tvMaxStay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:text="Maximum stay (nights)"
+                />
+
+            <EditText
+                android:id="@+id/etMaxStay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:inputType="number"
+                android:textSize="20dp"
+                android:paddingBottom="20dp"
+                android:hint="none"
+                android:textColor="@android:color/tab_indicator_text"
+
+                />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/bNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginRight="29dp"
+        android:background="@drawable/reg_host_proceed_button"
+        android:text="Next >"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</RelativeLayout>

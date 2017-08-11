@@ -33,6 +33,11 @@
     <string name="ElevatorIcon">https://cdn3.iconfinder.com/data/icons/glyph/227/Hanger-512.png</string>
     <string name="PoolIcon">https://cdn1.iconfinder.com/data/icons/hotel-restaurant/512/8-512.png</string>
     <string name="GymIcon">https://cdn4.iconfinder.com/data/icons/hotel-facilities-1/512/gym-512.png</string>
-
+    <!--tags in HouseRuleFragment-->
+    <string name="rbChildren">rbChildren</string>
+    <string name="rbInfants">rbInfants</string>
+    <string name="rbPets">rbPets</string>
+    <string name="rbSmoking">rbSmoking</string>
+    <string name="rbParties">rbParties</string>
 
 </resources>

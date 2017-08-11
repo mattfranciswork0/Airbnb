@@ -22,12 +22,14 @@ import com.example.toshiba.airbnb.R;
 public class BecomeAHostActivity extends AppCompatActivity {
     public final static String BASIC_BUTTON = "BASIC_BUTTON";
     public final static String SCENE_BUTTON = "SCENE_BUTTON";
+    public final static String GET_READY_BUTTON = "GET_READY_BUTTON";
+    public final static boolean PREVIEW_MODE = true;//turn this to false after user has done listing their place
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_become_a_host);
-
+        //TODO: TRACK PROGRESS WITH SHAREDPREFERENCES
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean(MapFragment.BASIC_QUESTIONS_COMPLETED)) {
                 findViewById(R.id.sceneButton).setVisibility(View.VISIBLE);
@@ -62,6 +64,15 @@ public class BecomeAHostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BecomeAHostActivity.this, HomeDescActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.bGetReady).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BecomeAHostActivity.this, ProgressActivity.class);
+                intent.putExtra(GET_READY_BUTTON, true);
                 startActivity(intent);
             }
         });

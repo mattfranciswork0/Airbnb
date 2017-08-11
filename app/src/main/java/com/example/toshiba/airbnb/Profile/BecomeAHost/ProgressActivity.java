@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.example.toshiba.airbnb.Explore.HomeDescFragment;
 import com.example.toshiba.airbnb.Explore.ImageSliderPager;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.BookingFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.HouseRuleFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.PriceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
@@ -34,33 +37,79 @@ public class ProgressActivity extends AppCompatActivity {
         final EditText etDescribePlace = (EditText) currentFragment.getView().findViewById(R.id.etDescribePlace);
         final SharedPreferences describePlaceSP = getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
 
-        //PlaceTitle
+        //TitleFragment
         final EditText etTitle = (EditText) currentFragment.getView().findViewById(R.id.etTitle);
         final SharedPreferences titleSP = getSharedPreferences(TitleFragment.TITLE_SP, Context.MODE_PRIVATE);
+
+        //HouseRuleFragment
+        final EditText etAdditionalRules = (EditText) currentFragment.getView().findViewById(R.id.etAdditionalRules);
+        final SharedPreferences houseSP = getSharedPreferences(HouseRuleFragment.HOUSE_RULE_SP, Context.MODE_PRIVATE);
+
+        //BookingFragment
+        final SharedPreferences bookingSP = getSharedPreferences(BookingFragment.BOOKING_SP, Context.MODE_PRIVATE);
+        final EditText etMaxMonth = (EditText) currentFragment.getView().findViewById(R.id.etMaxMonth);
+        final EditText etArriveAfter = (EditText) currentFragment.getView().findViewById(R.id.etAriveAfter);
+        final EditText etLeaveBefore = (EditText) currentFragment.getView().findViewById(R.id.etLeaveBefore);
+        final EditText etMinStay = (EditText) currentFragment.getView().findViewById(R.id.etMinStay);
+        final EditText etMaxStay = (EditText) currentFragment.getView().findViewById(R.id.etMaxStay);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setCancelable(true);
         dialog.setTitle("Want to save your changes?");
         dialog.setMessage("You'll lose your changes if you continue without saving them.");
 
+        //PriceFragment
+        final SharedPreferences priceSP = getSharedPreferences(PriceFragment.PRICE_SP, Context.MODE_PRIVATE);
+        final EditText etPricePerNight = (EditText) currentFragment.getView().findViewById(R.id.etPricePerNight);
+
         dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 //Action for "Save".
                 if (currentFragment instanceof DescribePlaceFragment) {
-                    SharedPreferences.Editor editor = describePlaceSP.edit();
-                    editor.remove(DescribePlaceFragment.DESCRIBE_PLACE_KEY);
-                    editor.putString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, etDescribePlace.getText().toString());
-                    editor.apply();
+                    SharedPreferences.Editor edit = describePlaceSP.edit();
+                    edit.remove(DescribePlaceFragment.DESCRIBE_PLACE_KEY);
+                    edit.putString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, etDescribePlace.getText().toString());
+                    edit.apply();
 
                 }
 
-                if (currentFragment instanceof TitleFragment) {
-                    SharedPreferences.Editor editor = titleSP.edit();
-                    editor.remove(TitleFragment.TITLE_KEY);
-                    editor.putString(TitleFragment.TITLE_KEY, etTitle.getText().toString());
-                    editor.apply();
+                else if (currentFragment instanceof TitleFragment) {
+                    SharedPreferences.Editor edit = titleSP.edit();
+                    edit.remove(TitleFragment.TITLE_KEY);
+                    edit.putString(TitleFragment.TITLE_KEY, etTitle.getText().toString());
+                    edit.apply();
 
+                }
+
+                else if(currentFragment instanceof  HouseRuleFragment){
+                    SharedPreferences.Editor edit = houseSP.edit();
+                    edit.remove(HouseRuleFragment.ADDITIONAL_RULES);
+                    edit.putString(HouseRuleFragment.ADDITIONAL_RULES, etAdditionalRules.getText().toString());
+                    edit.apply();
+                }
+
+                else if(currentFragment instanceof BookingFragment){
+                    SharedPreferences.Editor edit = bookingSP.edit();
+                    edit.remove(BookingFragment.MAX_MONTH);
+                    edit.remove(BookingFragment.ARRIVE_AFTER);
+                    edit.remove(BookingFragment.LEAVE_BEFORE);
+                    edit.remove(BookingFragment.MAX_STAY);
+                    edit.remove(BookingFragment.MIN_STAY);
+
+                    edit.putString(BookingFragment.MAX_MONTH, etMaxMonth.getText().toString());
+                    edit.putString(BookingFragment.ARRIVE_AFTER, etArriveAfter.getText().toString());
+                    edit.putString(BookingFragment.LEAVE_BEFORE, etLeaveBefore.getText().toString());
+                    edit.putString(BookingFragment.MAX_STAY, etMaxStay.getText().toString());
+                    edit.putString(BookingFragment.MIN_STAY, etMinStay.getText().toString());
+
+                    edit.apply();
+                }
+                else if(currentFragment instanceof PriceFragment){
+                    SharedPreferences.Editor edit = priceSP.edit();
+                    edit.remove(PriceFragment.PRICE);
+                    edit.putString(PriceFragment.PRICE, etPricePerNight.getText().toString());
+                    edit.apply();
                 }
 
             }
@@ -90,6 +139,43 @@ public class ProgressActivity extends AppCompatActivity {
                 super.onBackPressed();
             }
         }
+        else if (currentFragment instanceof HouseRuleFragment){
+            if (!(etAdditionalRules.getText().toString().equals(titleSP.getString(HouseRuleFragment.ADDITIONAL_RULES, "")))) {
+                dialog.create().show();
+            } else {
+                //if already saved/no saved needed to be make, go back
+                super.onBackPressed();
+            }
+        }
+        else if(currentFragment instanceof BookingFragment){
+            if (!(etMaxMonth.getText().toString().equals(bookingSP.getString(BookingFragment.MAX_MONTH, "")))) {
+                dialog.create().show();
+            }
+            else if (!(etArriveAfter.getText().toString().equals(bookingSP.getString(BookingFragment.ARRIVE_AFTER, "")))) {
+                dialog.create().show();
+            }
+            else if (!(etLeaveBefore.getText().toString().equals(bookingSP.getString(BookingFragment.LEAVE_BEFORE, "")))) {
+                dialog.create().show();
+            }
+            else if (!(etMinStay.getText().toString().equals(bookingSP.getString(BookingFragment.MIN_STAY, "")))) {
+                dialog.create().show();
+            }
+            else if (!(etMaxStay.getText().toString().equals(bookingSP.getString(BookingFragment.MAX_STAY, "")))) {
+                dialog.create().show();
+            }
+            else {
+                //if already saved/no saved needed to be make, go back
+                super.onBackPressed();
+            }
+        }
+        else if(currentFragment instanceof PriceFragment){
+             if(!(etPricePerNight.getText().toString().equals(priceSP.getString(PriceFragment.PRICE, "")))){
+                dialog.create().show();
+            }else {
+                 //if already saved/no saved needed to be make, go back
+                 super.onBackPressed();
+             }
+        }
         else {
             super.onBackPressed();
         }
@@ -116,6 +202,11 @@ public class ProgressActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.progressFragment, new PhotoFragment()).commit();
             }
+        }
+
+        else if(getIntent().getExtras().getBoolean(BecomeAHostActivity.GET_READY_BUTTON)){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.progressFragment, new HouseRuleFragment()).commit();
         }
 
     }

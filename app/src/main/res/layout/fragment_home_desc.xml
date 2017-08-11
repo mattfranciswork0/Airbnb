@@ -265,28 +265,28 @@
                     android:layout_alignParentTop="true" />
 
                 <RelativeLayout
-                    android:id="@+id/layoutCancellaton"
+                    android:id="@+id/layoutHouseRule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp">
 
                     <TextView
-                        android:id="@+id/tvCancellation"
+                        android:id="@+id/tvHouseRule"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cancellation policy"
+                        android:text="House Rules"
                         android:textSize="18sp"/>
 
                     <TextView
                         android:id="@+id/tvFlexible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/tvCancellation"
-                        android:layout_alignBottom="@+id/tvCancellation"
+                        android:layout_alignBaseline="@+id/tvHouseRule"
+                        android:layout_alignBottom="@+id/tvHouseRule"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:text="Flexible"
+                        android:text="Read"
                         android:textSize="18sp"/>
                 </RelativeLayout>
 
@@ -329,8 +329,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp">
 
                     <TextView
                         android:id="@+id/textView11"
@@ -360,8 +360,9 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:id="@+id/layoutAvailability">
 
                     <TextView
                         android:id="@+id/tvAvailability"
@@ -391,8 +392,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp">
 
                     <TextView
                         android:id="@+id/tvMessage"
