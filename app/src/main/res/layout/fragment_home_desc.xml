@@ -361,7 +361,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="20dp"
-                    android:paddingTop="20dp">
+                    android:paddingTop="20dp"
+                    android:id="@+id/layoutAvailability">
 
                     <TextView
                         android:id="@+id/tvAvailability"

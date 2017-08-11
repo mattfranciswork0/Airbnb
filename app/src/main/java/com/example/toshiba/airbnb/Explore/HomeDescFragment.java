@@ -293,6 +293,14 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        view.findViewById(R.id.layoutAvailability).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AvailabilityFragment()).
+                        addToBackStack(null).commit();
+            }
+        });
+
     }
 
     @Override

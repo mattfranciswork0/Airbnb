@@ -87,13 +87,13 @@ public class ProgressActivity extends AppCompatActivity {
                 else if(currentFragment instanceof BookingFragment){
                     SharedPreferences.Editor edit = bookingSP.edit();
                     edit.remove(BookingFragment.MAX_MONTH);
-                    edit.remove(BookingFragment.ARIVE_AFTER);
+                    edit.remove(BookingFragment.ARRIVE_AFTER);
                     edit.remove(BookingFragment.LEAVE_BEFORE);
                     edit.remove(BookingFragment.MAX_STAY);
                     edit.remove(BookingFragment.MIN_STAY);
 
                     edit.putString(BookingFragment.MAX_MONTH, etMaxMonth.getText().toString());
-                    edit.putString(BookingFragment.ARIVE_AFTER, etArriveAfter.getText().toString());
+                    edit.putString(BookingFragment.ARRIVE_AFTER, etArriveAfter.getText().toString());
                     edit.putString(BookingFragment.LEAVE_BEFORE, etLeaveBefore.getText().toString());
                     edit.putString(BookingFragment.MAX_STAY, etMaxStay.getText().toString());
                     edit.putString(BookingFragment.MIN_STAY, etMinStay.getText().toString());
@@ -140,7 +140,7 @@ public class ProgressActivity extends AppCompatActivity {
             if (!(etMaxMonth.getText().toString().equals(bookingSP.getString(BookingFragment.MAX_MONTH, "")))) {
                 dialog.create().show();
             }
-            else if (!(etArriveAfter.getText().toString().equals(bookingSP.getString(BookingFragment.ARIVE_AFTER, "")))) {
+            else if (!(etArriveAfter.getText().toString().equals(bookingSP.getString(BookingFragment.ARRIVE_AFTER, "")))) {
                 dialog.create().show();
             }
             else if (!(etLeaveBefore.getText().toString().equals(bookingSP.getString(BookingFragment.LEAVE_BEFORE, "")))) {
@@ -149,7 +149,7 @@ public class ProgressActivity extends AppCompatActivity {
             else if (!(etMinStay.getText().toString().equals(bookingSP.getString(BookingFragment.MIN_STAY, "")))) {
                 dialog.create().show();
             }
-            else if (!(etMaxStay.getText().toString().equals(bookingSP.getString(BookingFragment.MIN_STAY, "")))) {
+            else if (!(etMaxStay.getText().toString().equals(bookingSP.getString(BookingFragment.MAX_STAY, "")))) {
                 dialog.create().show();
             }
             else {

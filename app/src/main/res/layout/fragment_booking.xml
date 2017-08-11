@@ -143,6 +143,7 @@
                 android:inputType="number"
                 android:textSize="20dp"
                 android:paddingBottom="20dp"
+                android:hint="none"
                 android:textColor="@android:color/tab_indicator_text"
 
                 />

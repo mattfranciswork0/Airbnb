@@ -23,6 +23,7 @@ public class BecomeAHostActivity extends AppCompatActivity {
     public final static String BASIC_BUTTON = "BASIC_BUTTON";
     public final static String SCENE_BUTTON = "SCENE_BUTTON";
     public final static String GET_READY_BUTTON = "GET_READY_BUTTON";
+    public final static boolean PREVIEW_MODE = true;//turn this to false after user has done listing their place
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

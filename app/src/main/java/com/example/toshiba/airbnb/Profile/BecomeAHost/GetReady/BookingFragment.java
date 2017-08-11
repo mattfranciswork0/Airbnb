@@ -29,7 +29,7 @@ public class BookingFragment extends Fragment {
     public static final String BOOKING_SP = "BOOKING_SP";
 
     public static final String MAX_MONTH = "MAX_MONTH";
-    public static final String ARIVE_AFTER = "ARIVE_AFTER";
+    public static final String ARRIVE_AFTER = "ARRIVE_AFTER";
     public static final String LEAVE_BEFORE = "LEAVE_BEFORE";
     public static final String MAX_STAY = "MAX_STAY";
     public static final String MIN_STAY = "MIN_STAY";
@@ -56,7 +56,7 @@ public class BookingFragment extends Fragment {
         final EditText etMaxStay = (EditText) view.findViewById(R.id.etMaxStay);
 
         etMaxMonth.setText(sharedPreferences.getString(MAX_MONTH, ""));
-        etArriveAfter.setText(sharedPreferences.getString(ARIVE_AFTER, ""));
+        etArriveAfter.setText(sharedPreferences.getString(ARRIVE_AFTER, ""));
         etLeaveBefore.setText(sharedPreferences.getString(LEAVE_BEFORE, ""));
         etMinStay.setText(sharedPreferences.getString(MIN_STAY, ""));
         etMaxStay.setText(sharedPreferences.getString(MAX_STAY, ""));
@@ -86,14 +86,17 @@ public class BookingFragment extends Fragment {
                 if(etMaxMonth.getText().length()> 0 &&
                         etArriveAfter.getText().length() > 0 &&
                         etLeaveBefore.getText().length()> 0 &&
-                        etMinStay.getText().length()> 0 &&
-                        etMaxStay.getText().length()> 0){
+                        etMinStay.getText().length()> 0){
 
                     edit.putString(MAX_MONTH, etMaxMonth.getText().toString());
-                    edit.putString(ARIVE_AFTER, etArriveAfter.getText().toString());
+                    edit.putString(ARRIVE_AFTER, etArriveAfter.getText().toString());
                     edit.putString(LEAVE_BEFORE, etLeaveBefore.getText().toString());
                     edit.putString(MIN_STAY, etMinStay.getText().toString());
-                    edit.putString(MAX_STAY, etMaxStay.getText().toString());
+
+                    //etMaxStay is optional
+                    if(etMaxStay.getText().length()> 0) {
+                        edit.putString(MAX_STAY, etMaxStay.getText().toString());
+                    }
 
                     edit.apply();
 
