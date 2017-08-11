@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dp"
-                android:text="You'll immediatley get a confirmation email with information like why they're coming, when theyre arriving, and who they're coming with." />
+                android:text="You'll immediatley get a confirmation email with information like why they're coming, when they're arriving, and who they're coming with." />
 
             <TextView
                 android:id="@+id/textView6"

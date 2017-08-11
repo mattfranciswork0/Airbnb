@@ -17,6 +17,7 @@ import com.example.toshiba.airbnb.Explore.ImageSliderPager;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.BookingFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.HouseRuleFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.PriceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
@@ -56,6 +57,10 @@ public class ProgressActivity extends AppCompatActivity {
         dialog.setCancelable(true);
         dialog.setTitle("Want to save your changes?");
         dialog.setMessage("You'll lose your changes if you continue without saving them.");
+
+        //PriceFragment
+        final SharedPreferences priceSP = getSharedPreferences(PriceFragment.PRICE_SP, Context.MODE_PRIVATE);
+        final EditText etPricePerNight = (EditText) currentFragment.getView().findViewById(R.id.etPricePerNight);
 
         dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
@@ -98,6 +103,12 @@ public class ProgressActivity extends AppCompatActivity {
                     edit.putString(BookingFragment.MAX_STAY, etMaxStay.getText().toString());
                     edit.putString(BookingFragment.MIN_STAY, etMinStay.getText().toString());
 
+                    edit.apply();
+                }
+                else if(currentFragment instanceof PriceFragment){
+                    SharedPreferences.Editor edit = priceSP.edit();
+                    edit.remove(PriceFragment.PRICE);
+                    edit.putString(PriceFragment.PRICE, etPricePerNight.getText().toString());
                     edit.apply();
                 }
 
@@ -156,6 +167,14 @@ public class ProgressActivity extends AppCompatActivity {
                 //if already saved/no saved needed to be make, go back
                 super.onBackPressed();
             }
+        }
+        else if(currentFragment instanceof PriceFragment){
+             if(!(etPricePerNight.getText().toString().equals(priceSP.getString(PriceFragment.PRICE, "")))){
+                dialog.create().show();
+            }else {
+                 //if already saved/no saved needed to be make, go back
+                 super.onBackPressed();
+             }
         }
         else {
             super.onBackPressed();

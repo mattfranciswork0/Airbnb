@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
@@ -50,6 +52,13 @@ public class HouseRuleFragment extends Fragment {
         return radioCanUnCheck;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+        basicProgressBar.setProgress(25);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,7 +78,7 @@ public class HouseRuleFragment extends Fragment {
                 editor.putString(ADDITIONAL_RULES, etAdditionalRules.getText().toString());
                 editor.apply();
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.progressFragment, new BookingFragment()).addToBackStack(null).commit();
+                        .replace(R.id.progressFragment, new HowGuestBookFragment()).addToBackStack(null).commit();
             }
         });
         final RadioButton rbChildren = (RadioButton) view.findViewById(R.id.rbChildren);
