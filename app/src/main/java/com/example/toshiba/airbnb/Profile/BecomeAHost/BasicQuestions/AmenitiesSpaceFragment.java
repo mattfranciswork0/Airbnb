@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
 import com.example.toshiba.airbnb.R;
 
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class AmenitiesSpaceFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    public static final String AMENITIES_SPACE_FRAGMENT_FINISHED = "AMENITIES_SPACE_FRAGMENT_FINISHED";
 
     private boolean rbKitchenCanUncheck = false;
     private boolean rbLaundryCanUncheck = false;
@@ -68,8 +70,12 @@ public class AmenitiesSpaceFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
+                SharedPreferences.Editor progressEdit = progressSP.edit();
+                progressEdit.putBoolean(AMENITIES_SPACE_FRAGMENT_FINISHED, true);
+                progressEdit.apply();
                 Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
-                intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

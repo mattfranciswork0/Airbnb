@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -19,7 +20,7 @@ import com.example.toshiba.airbnb.R;
  */
 
 public class PriceFragment extends Fragment {
-    SharedPreferences sharedPreferences;
+    SharedPreferences priceSP;
     SharedPreferences.Editor edit;
     public static String PRICE_SP = "PRICE_SP";
     public static String PRICE = "PRICE";
@@ -36,8 +37,8 @@ public class PriceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_price, container, false);
-        sharedPreferences = getActivity().getSharedPreferences(PRICE_SP, Context.MODE_PRIVATE);
-        edit = sharedPreferences.edit();
+        priceSP = getActivity().getSharedPreferences(PRICE_SP, Context.MODE_PRIVATE);
+        edit = priceSP.edit();
         return view;
     }
 
@@ -46,11 +47,12 @@ public class PriceFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final EditText etPricePerNight = (EditText) view.findViewById(R.id.etPricePerNight);
-        etPricePerNight.setText(sharedPreferences.getString(PRICE, ""));
+        etPricePerNight.setText(priceSP.getString(PRICE, ""));
 
         view.findViewById(R.id.bPublish).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
                 edit.putString(PRICE, etPricePerNight.getText().toString());
                 edit.apply();
                 getFragmentManager().beginTransaction()

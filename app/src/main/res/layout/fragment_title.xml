@@ -56,7 +56,8 @@
             android:textSize="18sp"
             android:gravity="left"
             android:focusable="true"
-            android:textColor="@android:color/tab_indicator_text">
+            android:textColor="@android:color/tab_indicator_text"
+            android:imeOptions="actionDone">
         </EditText>
 
 

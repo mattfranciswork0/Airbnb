@@ -75,14 +75,15 @@
                 android:textSize="15dp"/>
 
             <EditText
-                android:id="@+id/etAriveAfter"
+                android:id="@+id/etArriveAfter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:textSize="20dp"
                 android:paddingBottom="20dp"
                 android:hint="include AM/PM"
-                android:textColor="@android:color/tab_indicator_text"/>
+                android:textColor="@android:color/tab_indicator_text"
+                android:imeOptions="actionDone"/>
 
             <TextView
                 android:id="@+id/tvLeaveBefore"
@@ -98,7 +99,8 @@
                 android:textSize="20dp"
                 android:paddingBottom="20dp"
                 android:hint="include AM/PM"
-                android:textColor="@android:color/tab_indicator_text"/>
+                android:textColor="@android:color/tab_indicator_text"
+                android:imeOptions="actionDone"/>
 
             <TextView
                 android:id="@+id/tvTripLength"

@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="Be sure to include photos! Even photos from your phone work great."
                 android:textColor="@color/white"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -47,56 +47,41 @@
 
             <TextView
                 android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginBottom="50dp"
                 android:text="Are you ready to add photos?"
                 android:textSize="30sp"
-                android:textStyle="normal|bold"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="50dp"/>
+                android:textStyle="normal|bold" />
 
             <TextView
                 android:id="@+id/tvPhotoDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Guests love photos. They use it to imagine themselves at your place. Do you have time now to take them?"
-                android:textSize="18sp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="30dp"/>
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="30dp"
+                android:text="Guests love photos. They use it to imagine themselves at your place. Do you have time now to take them?"
+                android:textSize="18sp" />
 
             <Button
-                android:text="Add photos now  "
+                android:id="@+id/bAddPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/bAddPhoto"
-                android:background="@drawable/reg_host_proceed_button"
                 android:layout_marginBottom="20dp"
+                android:background="@drawable/reg_host_proceed_button"
+                android:padding="10dp"
+                android:text="Add photos now  "
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:padding="10dp"/>
+                android:textColor="@color/white" />
 
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/reg_host_proceed_button"
-            android:text="Next >"
-            android:textColor="@color/white"
-            android:layout_marginBottom="22dp"
-            android:layout_marginRight="29dp"
-            android:layout_marginEnd="29dp"
-            android:textSize="16sp"
-            android:textAllCaps="false"
-            android:layout_above="@+id/layoutCount"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 </FrameLayout>
 

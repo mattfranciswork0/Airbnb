@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -46,8 +47,10 @@ public class DescribePlaceFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         etDescribePlace = (EditText) view.findViewById(R.id.etDescribePlace);
+        bPreview = (Button) view.findViewById(R.id.bPreview);
+        bNext = (Button) view.findViewById(R.id.bNext);
+        registrationProceed();
         final TextView tvWordCount = (TextView) view.findViewById(R.id.tvWordCount);
 
         //get description stored in internal storage through sharedpreferences
@@ -55,12 +58,12 @@ public class DescribePlaceFragment extends Fragment {
         String savedEtDescribePlace = describePlaceSP.getString(DESCRIBE_PLACE_KEY, "");
         etDescribePlace.setText(savedEtDescribePlace);
 
-        bPreview = (Button) view.findViewById(R.id.bPreview);
-        bNext = (Button) view.findViewById(R.id.bNext);
+
 
         bPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
                 Intent intent = new Intent(getContext(), HomeDescActivity.class);
                 intent.putExtra(DESCRIBE_PREVIEW, etDescribePlace.getText().toString());
                 Bundle bundle = new Bundle();
@@ -72,6 +75,7 @@ public class DescribePlaceFragment extends Fragment {
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, new TitleFragment()).addToBackStack(null).commit();
                 //Save description
                 SharedPreferences.Editor editor = describePlaceSP.edit();
@@ -102,7 +106,7 @@ public class DescribePlaceFragment extends Fragment {
     }
 
     public void registrationProceed() {
-        if (etDescribePlace.getText().length() == 0) {
+        if (etDescribePlace.getText().toString().length() == 0) {
             bPreview.setEnabled(false);
             bNext.setEnabled(false);
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);

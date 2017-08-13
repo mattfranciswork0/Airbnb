@@ -82,13 +82,13 @@
                     android:layout_marginBottom="10dp"/>
 
                 <Button
-                    android:text="Continue >"
+                    android:id="@+id/bBasic"
                     android:layout_width="159dp"
                     android:layout_height="35dp"
-                    android:id="@+id/basicButton"
-                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"/>
+                    android:background="@drawable/reg_host_proceed_button"
+                    android:text="Continue >"
+                    android:textColor="@color/white" />
 
                 <View
                     android:layout_width="match_parent"
@@ -126,22 +126,23 @@
                     android:textColor="@color/lightGrey"/>
 
                 <Button
-                    android:text="Continue >"
+                    android:id="@+id/bScene"
                     android:layout_width="159dp"
                     android:layout_height="35dp"
-                    android:id="@+id/sceneButton"
-                    android:background="@drawable/reg_host_proceed_button"
                     android:layout_marginBottom="10dp"
+                    android:background="@drawable/reg_host_proceed_button"
+                    android:text="Continue >"
                     android:textColor="@color/white"
-                    />
+                    android:visibility="invisible"/>
 
                 <View
+                    android:id="@+id/sceneView"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:textColor="@color/lightGrey"
-                    android:id="@+id/sceneView">
+                    android:background="@color/lightRed">
 
                 </View>
+
             </LinearLayout>
 
             <LinearLayout
@@ -176,12 +177,13 @@
                     android:layout_marginBottom="100dp"
                     android:background="@drawable/reg_host_proceed_button"
                     android:text="Continue >"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="invisible"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:textColor="@color/lightGrey"
+                    android:background="@color/lightRed"
                     >
 
                 </View>

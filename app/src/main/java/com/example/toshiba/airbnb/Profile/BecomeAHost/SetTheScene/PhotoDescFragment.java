@@ -36,15 +36,18 @@ import java.io.File;
  */
 
 public class PhotoDescFragment extends Fragment {
-    private static final String PROGRESS_SP = "PROGRESS_SP";
     public static final String CAPTION_SP = "CAPTION_SP";
+    private static String IMAGE_URI;
     private SharedPreferences.Editor editor;
-    private static final String KEY_EDITTEXT = "KEY_EDITTEXT";
     private SharedPreferences captionSP;
     String stringImageUri;
     Uri imageUri;
     String savedCaption;
+    EditText etCaption;
 
+    public String getStringImageUri(){
+        return stringImageUri;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class PhotoDescFragment extends Fragment {
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
         basicProgressBar.setProgress(50);
         stringImageUri = getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URI);
+        getStringImageUri();
         imageUri = Uri.parse(stringImageUri);
 
         captionSP = getActivity().getSharedPreferences(CAPTION_SP, Context.MODE_PRIVATE);
@@ -62,19 +66,20 @@ public class PhotoDescFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
-
-
+        super.onViewCreated(view, savedInstanceState);
+        etCaption = (EditText) view.findViewById(R.id.etCaption);
+        etCaption.setText(captionSP.getString(stringImageUri, ""));
         ImageView ivClickedPhoto = (ImageView) view.findViewById(R.id.ivClickedPhoto);
         Glide.with(getActivity()).load(imageUri).into(ivClickedPhoto);
 
         view.findViewById(R.id.bSave).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText etCaption = (EditText) view.findViewById(R.id.etCaption);
                 //write captions to sharedpreferences
                 if (captionSP.contains(stringImageUri)) {
                     editor.remove(stringImageUri);
                     editor.putString(stringImageUri, etCaption.getText().toString());
+
                     Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
                 } else {
                     editor.putString(stringImageUri, etCaption.getText().toString());

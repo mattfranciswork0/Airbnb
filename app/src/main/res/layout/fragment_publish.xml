@@ -33,7 +33,7 @@
         android:layout_alignParentStart="true"/>
 
     <TextView
-        android:text="You;ll be able to welcome your first guest starting tommorow. If you'd like to update your calendar or house rules, you can easily do all that after you hit publish."
+        android:text="You'll be able to welcome your first guest starting tommorow. If you'd like to update your calendar or house rules, you can easily do all that after you hit publish."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"

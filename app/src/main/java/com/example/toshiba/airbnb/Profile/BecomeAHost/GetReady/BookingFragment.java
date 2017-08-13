@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.R;
 
@@ -60,7 +61,7 @@ public class BookingFragment extends Fragment {
 
         Button bNext = (Button) view.findViewById(R.id.bNext);
         final EditText etMaxMonth = (EditText) view.findViewById(R.id.etMaxMonth);
-        final EditText etArriveAfter = (EditText) view.findViewById(R.id.etAriveAfter);
+        final EditText etArriveAfter = (EditText) view.findViewById(R.id.etArriveAfter);
         final EditText etLeaveBefore = (EditText) view.findViewById(R.id.etLeaveBefore);
         final EditText etMinStay = (EditText) view.findViewById(R.id.etMinStay);
         final EditText etMaxStay = (EditText) view.findViewById(R.id.etMaxStay);
@@ -93,6 +94,7 @@ public class BookingFragment extends Fragment {
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
                 if(etMaxMonth.getText().length()> 0 &&
                         etArriveAfter.getText().length() > 0 &&
                         etLeaveBefore.getText().length()> 0 &&

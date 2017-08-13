@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.R;
 
@@ -75,6 +76,7 @@ public class HouseRuleFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
                 editor.putString(ADDITIONAL_RULES, etAdditionalRules.getText().toString());
                 editor.apply();
                 getFragmentManager().beginTransaction()

@@ -1,6 +1,8 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.example.toshiba.airbnb.Explore.MenuActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -19,6 +22,7 @@ import com.example.toshiba.airbnb.R;
  */
 
 public class PublishFragment extends Fragment {
+    public static final String PUBLISH_FRAGMENT_FINISHED = "PUBLISH_FRAGMENT_FINISHED";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ public class PublishFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
                 intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

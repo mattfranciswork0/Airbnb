@@ -13,11 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.R;
 
 
@@ -33,6 +35,8 @@ public class LocationFragment extends Fragment {
     EditText etCityInput;
     EditText etStateInput;
     View view;
+
+
     public void checkSavedData(){
             etCountryInput = (EditText) view.findViewById(R.id.etCountryInput);
             etCountryInput.setText(sharedPreferences.getString(LocationFilterAdapter.COUNTRY_NAME,""));
@@ -76,6 +80,7 @@ public class LocationFragment extends Fragment {
         view.findViewById(R.id.layoutStreet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               Keyboard.hideKeyboard(getActivity());
                 if(etCountryInput.getText().toString().length() > 0) {
                     SharedPreferences.Editor edit = sharedPreferences.edit();
                     edit.putString(COUNTRY, etCountryInput.getText().toString());
@@ -89,6 +94,8 @@ public class LocationFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
+
                 if(etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0 ){
                     if(etCityInput.getText().length() > 0 || etStateInput.getText().length() > 0){
                         MapFragment mapFragment = new MapFragment();

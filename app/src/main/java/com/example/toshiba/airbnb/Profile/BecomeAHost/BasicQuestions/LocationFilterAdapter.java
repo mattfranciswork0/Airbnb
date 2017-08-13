@@ -1,5 +1,6 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,10 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.POJOMap.GMapsPlaceDetails.POJOResult;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.POJOMap.GMapsPlaceDetails.POJOResults;
 import com.example.toshiba.airbnb.R;
@@ -34,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAdapter.LocationFilterViewHolder> {
-    public Context mActivity;
+    public Activity mActivity;
     private MapInterface retrofit;
     public static String LOCATION_SP = "LOCATION_SP";
     public static String LAT = "LAT";
@@ -55,7 +58,7 @@ public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAd
     public LocationFilterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.location_filter_adapter_item, parent, false);
-        mActivity = parent.getContext();
+        mActivity = (Activity) parent.getContext();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com/maps/api/place/details/")
@@ -105,6 +108,8 @@ public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAd
                     call.enqueue(new Callback<POJOResults>() {
                         @Override
                         public void onResponse(Call<POJOResults> call, Response<POJOResults> response) {
+                            //close keyboard
+                            Keyboard.hideKeyboard(mActivity);
                             POJOResult result = response.body().getResult();
                             SharedPreferences sharedPreferences = mActivity.getSharedPreferences(LOCATION_SP, Context.MODE_PRIVATE);
                             SharedPreferences.Editor edit = sharedPreferences.edit();

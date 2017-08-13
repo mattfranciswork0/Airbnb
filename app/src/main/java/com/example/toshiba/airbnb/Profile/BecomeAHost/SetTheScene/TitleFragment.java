@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
+import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -28,8 +32,8 @@ public class TitleFragment extends Fragment {
     public static final String TITLE_SP = "TITLE_SP";
     public static final String TITLE_KEY = "TITLE_KEY";
     public static final String TITLE_PREVIEW = "TITLE_PREVIEW";
+    public static final String TITLE_FRAGMENT_FINISHED = "TITLE_FRAGMENT_FINISHED";
     private SharedPreferences titleSP;
-    private SharedPreferences.Editor editor;
     Button bPreview;
     Button bNext;
     EditText etTitle;
@@ -48,8 +52,10 @@ public class TitleFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         etTitle = (EditText) view.findViewById(R.id.etTitle);
+        bPreview = (Button) view.findViewById(R.id.bPreview);
+        bNext = (Button) view.findViewById(R.id.bNext);
+        registrationProceed();
         final TextView tvWordCount = (TextView) view.findViewById(R.id.tvWordCount);
         //get title stored in internal storage thorugh sharedpreferences
         titleSP = getActivity().getSharedPreferences(TITLE_SP, Context.MODE_PRIVATE);
@@ -59,12 +65,12 @@ public class TitleFragment extends Fragment {
         }
         etTitle.setText(savedEtTitle);
 
-        bPreview = (Button) view.findViewById(R.id.bPreview);
-        bNext = (Button) view.findViewById(R.id.bNext);
+
 
         bPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Keyboard.hideKeyboard(getActivity());
                 Intent intent = new Intent(getContext(), HomeDescActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(TITLE_PREVIEW, etTitle.getText().toString());
@@ -76,9 +82,20 @@ public class TitleFragment extends Fragment {
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editor.remove(TITLE_KEY);
-                editor.putString(TITLE_KEY, etTitle.getText().toString());
-                editor.apply();
+                Keyboard.hideKeyboard(getActivity());
+                SharedPreferences.Editor titleEdit = titleSP.edit();
+                titleEdit.remove(TITLE_KEY);
+                titleEdit.putString(TITLE_KEY, etTitle.getText().toString());
+                titleEdit.apply();
+
+                SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
+                SharedPreferences.Editor progressEdit = progressSP.edit();
+                progressEdit.putBoolean(TITLE_FRAGMENT_FINISHED, true);
+                progressEdit.apply();
+
+                Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -99,17 +116,17 @@ public class TitleFragment extends Fragment {
     }
 
     public void registrationProceed() {
-        if (etTitle.getText().length() > 0) {
+        if (etTitle.getText().length() == 0) {
             bPreview.setEnabled(false);
             bNext.setEnabled(false);
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
-            bNext.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);;
+            bNext.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
 
 
         } else {
             bPreview.setEnabled(true);
-            bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button);
             bNext.setEnabled(true);
+            bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button);
         }
     }

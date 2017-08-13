@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
 import com.example.toshiba.airbnb.R;
 
 import java.io.File;
@@ -76,11 +77,11 @@ public class PhotoFragment extends Fragment {
                 bundle.putString(IMAGE_URI, imageUri.toString());
                 galleryFragment.setArguments(bundle);
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PHOTOFRAGMENT, Context.MODE_PRIVATE);
-                //GET EDITOR
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(PHOTOFRAGMENT_REMOVE, true);
-                editor.apply();
+                SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
+                SharedPreferences.Editor progressEdit = progressSP.edit();
+
+                progressEdit.putBoolean(PHOTOFRAGMENT_REMOVE, true);
+                progressEdit.apply();
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.progressFragment, galleryFragment).commit();
