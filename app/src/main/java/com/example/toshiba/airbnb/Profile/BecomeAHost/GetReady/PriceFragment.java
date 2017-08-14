@@ -29,7 +29,7 @@ public class PriceFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_holo_light));
+        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.tab_indicator_text));
         basicProgressBar.setProgress(100);
     }
 

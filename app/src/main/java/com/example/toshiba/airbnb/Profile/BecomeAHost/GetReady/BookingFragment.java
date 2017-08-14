@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.Keyboard;
@@ -49,14 +50,15 @@ public class BookingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_booking, container, false);;
+        View view = inflater.inflate(R.layout.fragment_booking, container, false);
+        ;
         sharedPreferences = getActivity().getSharedPreferences(BOOKING_SP, Context.MODE_PRIVATE);
         edit = sharedPreferences.edit();
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Button bNext = (Button) view.findViewById(R.id.bNext);
@@ -72,13 +74,17 @@ public class BookingFragment extends Fragment {
         etMinStay.setText(sharedPreferences.getString(MIN_STAY, ""));
         etMaxStay.setText(sharedPreferences.getString(MAX_STAY, ""));
 
-        TextWatcher textWatcher = new TextWatcher() {
+        TextWatcher monthTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                if(etMaxMonth.getText().length() > 0) {
+                if (etMaxMonth.getText().length() > 0) {
                     int val = Integer.parseInt(s.toString());
                     if (val > 12) {
                         s.replace(0, s.length(), "12", 0, 2);
                         Toast.makeText(getActivity(), "Months must be less or equal than to 12", Toast.LENGTH_LONG).show();
+                    }
+                    if (val == 0) {
+                        s.replace(0, s.length(), "1", 0, 1);
+                        Toast.makeText(getActivity(), "Cannot have an input of zero", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -89,16 +95,38 @@ public class BookingFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         };
-        etMaxMonth.addTextChangedListener(textWatcher);
+        etMaxMonth.addTextChangedListener(monthTextWatcher);
+
+        TextWatcher stayTextWatcher = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (etMaxMonth.getText().length() > 0) {
+                    int val = Integer.parseInt(s.toString());
+                    if (val == 0) {
+                        s.replace(0, s.length(), "1", 0, 1);
+                        Toast.makeText(getActivity(), "Cannot have an input of zero", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        };
+        etMaxMonth.addTextChangedListener(stayTextWatcher);
+        etMinStay.addTextChangedListener(stayTextWatcher);
+
 
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Keyboard.hideKeyboard(getActivity());
-                if(etMaxMonth.getText().length()> 0 &&
+                if (etMaxMonth.getText().length() > 0 &&
                         etArriveAfter.getText().length() > 0 &&
-                        etLeaveBefore.getText().length()> 0 &&
-                        etMinStay.getText().length()> 0){
+                        etLeaveBefore.getText().length() > 0 &&
+                        etMinStay.getText().length() > 0) {
+
 
                     edit.putString(MAX_MONTH, etMaxMonth.getText().toString());
                     edit.putString(ARRIVE_AFTER, etArriveAfter.getText().toString());
@@ -106,15 +134,32 @@ public class BookingFragment extends Fragment {
                     edit.putString(MIN_STAY, etMinStay.getText().toString());
 
                     //etMaxStay is optional
-                    if(etMaxStay.getText().length()> 0) {
-                        edit.putString(MAX_STAY, etMaxStay.getText().toString());
+                    if (etMaxStay.getText().length() > 0) {
+                        if (Integer.parseInt(etMaxStay.getText().toString()) >
+                                Integer.parseInt(etMinStay.getText().toString())) {
+                            edit.putString(MAX_STAY, etMaxStay.getText().toString());
+                        }else{
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                            dialog.setMessage("Maximum stay must be greater than minimum stay");
+                            dialog.setCancelable(false);
+                            dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                            return;
+                        }
+
                     }
 
                     edit.apply();
 
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.progressFragment, new PriceFragment()).addToBackStack(null).commit();;
-                }else{
+                            .replace(R.id.progressFragment, new PriceFragment()).addToBackStack(null).commit();
+                    ;
+                } else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setMessage("Please fill in the required fields");
                     dialog.setCancelable(false);

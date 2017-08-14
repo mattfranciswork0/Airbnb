@@ -98,7 +98,7 @@ public class BathroomFragment extends Fragment {
                 sharedRadio.setChecked(false);
                 edit.remove(SHARED_BATHROOM);
                 edit.remove(PRIVATE_BATHROOM);
-                edit.putBoolean(SHARED_BATHROOM, true);
+                edit.putBoolean(PRIVATE_BATHROOM, true);
                 edit.apply();
             }
         });
@@ -109,7 +109,7 @@ public class BathroomFragment extends Fragment {
                 privateRadio.setChecked(false);
                 edit.remove(SHARED_BATHROOM);
                 edit.remove(PRIVATE_BATHROOM);
-                edit.putBoolean(PRIVATE_BATHROOM, true);
+                edit.putBoolean(SHARED_BATHROOM, true);
                 edit.apply();
             }
         });
