@@ -72,12 +72,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             dialog.setContentView(view);
         }
 
-        if(getArguments().getBoolean(GuestFragment.KIND_OF_BED_BOTTOM_SHEET)){
-            BottomSheetAdapter bottomSheetAdapter = new BottomSheetAdapter(BottomSheetFragment.this);
-            bottomSheetAdapter.isKindOfBed(kindOfBeds);
-            recyclerView.setAdapter(bottomSheetAdapter);
-            dialog.setContentView(view);
-        }
 
         //Bathroom Fragment
         if(getArguments().getBoolean(BathroomFragment.BATHROOM_BOTTOM_SHEET)){

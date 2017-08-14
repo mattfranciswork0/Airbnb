@@ -214,20 +214,20 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/bContinue"
+            android:id="@+id/bNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/layoutTapInfo"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginRight="29dp"
             android:background="@drawable/reg_host_proceed_button"
             android:text="Next >"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:layout_marginBottom="20dp"
-            android:layout_above="@+id/layoutTapInfo"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="29dp"
-            android:layout_marginEnd="29dp"
-            android:textSize="16sp"
-            android:textAllCaps="false"/>
+            android:textSize="16sp" />
     </RelativeLayout>
 </FrameLayout>
 

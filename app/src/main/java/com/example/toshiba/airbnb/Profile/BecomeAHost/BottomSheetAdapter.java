@@ -2,6 +2,7 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +27,13 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     Context mContext;
     BottomSheetFragment bottomSheetFragment;
 
+    //PropertyTypeFragment
     boolean propertyTypeBottomSheet;
     String[] propertyTypeArray;
     int propertyTypeSize;
 
+    ///GuestFragment
+    SharedPreferences guestSP;
     boolean totalGuestBottomSheet;
     int totalGuestSize;
 
@@ -39,9 +43,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     boolean bedBottomSheet;
     int bedSize;
 
-    boolean kindOfBedBottomSheet;
-    String[] kindOfBedArray;
-    int kindOfBedSize;
 
     boolean bathroomBottomSheet;
     int bathroomSize = 16;
@@ -69,10 +70,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         bedBottomSheet = true;
     }
 
-    public void isKindOfBed(String[] array) {
-        kindOfBedArray = array;
-        kindOfBedBottomSheet = true;
-    }
+
 
     //BathroomFragment
     public void isBathroom() {
@@ -108,9 +106,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         } else if (bedBottomSheet) {
             bedSize = 16;
             return bedSize;
-        } else if (kindOfBedBottomSheet) {
-            kindOfBedSize = kindOfBedArray.length;
-            return kindOfBedArray.length;
         } else if (bathroomBottomSheet) {
             bathroomSize = 16;
             return bathroomSize;
@@ -142,7 +137,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
             //GuestFragment
             else if (totalGuestBottomSheet) {
-                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvtotalnput);
+                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvTotalGuestInput);
                 if (position == 0) {
                     tv.setText(String.valueOf(position + 1) + " guest");
                     tv.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +170,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
 
             } else if (bedRoomBottomSheet) {
-                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvBedRoomInput);
+                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvTotalBedRoomInput);
                 if (position == 0) {
                     tv.setText("Studio");
                     tv.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +210,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 }
 
             } else if (bedBottomSheet) {
-                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvBedInput);
+                final TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvTotalBedInput);
                 if (position == 0) {
                     tv.setText(String.valueOf(position + 1) + " bed");
                     tv.setOnClickListener(new View.OnClickListener() {
@@ -245,17 +240,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                     });
                 }
 
-            } else if (kindOfBedBottomSheet) {
-                tv.setText(kindOfBedArray[position]);
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TextView input = (TextView) GuestFragment.mView.findViewById(R.id.tvKindOfBedInput);
-                        input.setText(kindOfBedArray[position]);
-                        bottomSheetFragment.dismiss();
-                    }
-                });
-
             }
 
             //BathroomFragment
@@ -265,7 +249,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView input = (TextView) BathroomFragment.mView.findViewById(R.id.tvBathroomInput);
+                        TextView input = (TextView) BathroomFragment.mView.findViewById(R.id.tvTotalBathroomInput);
                         input.setText(Double.toString(val) + " bathrooms");
                         bottomSheetFragment.dismiss();
                     }

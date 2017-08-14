@@ -24,8 +24,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesIconMoreFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.MapFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
@@ -89,9 +91,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
     public int loadAmenitiesIcon(String glideIconLink, int showOtherIconsInt) {
         if (savedAmenities != null && layoutIconAmenities != null && params != null) {
-            Log.d("mattValue", "First if block");
+            getView().findViewById(R.id.tvAmenitiesNone).setVisibility(View.GONE);
             if (showOtherIconsInt > 0) {
-                Log.d("mattValue", "Second if block");
                 ImageView amenitiesIcon = new ImageView(getActivity());
                 Glide.with(getContext()).load(glideIconLink).into(amenitiesIcon);
                 amenitiesIcon.setLayoutParams(params);
@@ -132,6 +133,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         showOthersIconAddded = false;
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -194,6 +196,22 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         String savedEtTitle = titleSP.getString(TitleFragment.TITLE_KEY, "");
         tvPlaceTitle.setText(savedEtTitle);
 
+        //Load PropertyTypeFragment from shared preferences
+        SharedPreferences propertyTypeSP = getActivity().getSharedPreferences(PropertyTypeFragment.PROPERTY_TYPE_SP, Context.MODE_PRIVATE);
+        TextView tvPropertyType = (TextView) view.findViewById(R.id.tvPropertyType);
+        tvPropertyType.setText(propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, ""));
+
+        //Load PropertyTypeFragment from shared preferences
+        SharedPreferences guestSP = getActivity().getSharedPreferences(GuestFragment.GUEST_SP, Context.MODE_PRIVATE);
+        TextView tvGuest = (TextView) view.findViewById(R.id.tvGuest);
+        tvGuest.setText(guestSP.getString(GuestFragment.TOTAL_GUEST, "1 guest"));
+        TextView tvRoom = (TextView) view.findViewById(R.id.tvRoom);
+        tvRoom.setText(guestSP.getString(GuestFragment.TOTAL_BED_ROOM, "1 bedroom"));
+        TextView tvBed = (TextView) view.findViewById(R.id.tvBed);
+        tvBed.setText(guestSP.getString(GuestFragment.TOTAL_BED, "1 bed"));
+
+
+
         //Show preview that is not saved to shared preferences yet
         if (bundle != null) {
             //Show preview that is not saved to shared preferences yet
@@ -225,6 +243,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
 
         //-1 because loadAmenititesIcon() will create an additional + icon.
+        //if countdown reaches 0, it will show "Others icon int"
         int showOthersIconInt = 6 - 1;
         if (savedAmenities.containsKey(getResources().getString(R.string.rbEssentials))) {
             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.EssentialsIcon), showOthersIconInt);

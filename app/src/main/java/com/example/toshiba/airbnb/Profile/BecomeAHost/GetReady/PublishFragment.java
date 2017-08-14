@@ -27,7 +27,7 @@ public class PublishFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.lightRed));
+        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         basicProgressBar.setProgress(100);
     }
 

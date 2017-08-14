@@ -60,13 +60,21 @@
                         android:layout_height="wrap_content"
                         android:text="Place Title"
                         android:textSize="24sp"
-                        android:textStyle="normal|bold" />
-
+                        android:textStyle="normal|bold"
+                        android:layout_marginBottom="10dp"/>
+                    <TextView
+                        android:id="@+id/tvPropertyType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvPlaceTitle"
+                        android:text="Property Type"
+                        android:layout_marginBottom="3dp"
+                        android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/tvHostBy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/tvPlaceTitle"
+                        android:layout_below="@id/tvPropertyType"
                         android:text="Hosted by User" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -108,13 +116,12 @@
                             android:layout_gravity="center_horizontal"/>
 
                         <TextView
-                            android:id="@+id/tvGuests"
+                            android:id="@+id/tvGuest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:text="x guests"
-                            />
+                            android:text="x guests" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -130,13 +137,12 @@
                             android:layout_gravity="center_horizontal"/>
 
                         <TextView
-                            android:id="@+id/tvRooms"
+                            android:id="@+id/tvRoom"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:text="x rooms"
-                            />
+                            android:text="x rooms" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -152,13 +158,12 @@
                             android:layout_gravity="center_horizontal"/>
 
                         <TextView
-                            android:id="@+id/tvBeds"
+                            android:id="@+id/tvBed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:text="x bed"
-                            />
+                            android:text="x bed" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -219,13 +224,12 @@
                         android:text="TextView" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/nightsMin"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="x nights min"/>
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@color/lightRed"/>
 
                 <LinearLayout
                     android:id="@+id/layoutAmentities"
@@ -243,6 +247,14 @@
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="Amenities"
+                        android:textStyle="normal|bold" />
+                    <TextView
+                        android:id="@+id/tvAmenitiesNone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="None"
                         android:textStyle="normal|bold" />
 
                     <LinearLayout
