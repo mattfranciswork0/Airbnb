@@ -7,38 +7,38 @@
     android:padding="20dp">
 
     <RelativeLayout
+        android:id="@+id/layoutEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/layoutEditProfile"
-        android:layout_marginBottom="30dp">
-        <TextView
-            android:text="Matt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvName"
-            android:textStyle="normal|bold"
-            android:layout_marginBottom="10dp"
-            android:textSize="24sp"/>
+        android:layout_marginBottom="25dp">
 
         <TextView
-            android:text="View and edit profile"
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
+            android:layout_marginBottom="10dp"
+            android:text="Matt"
+            android:textSize="24sp"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/tvEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/tvEdit"/>
+            android:layout_below="@+id/tvName"
+            android:text="View and edit profile"
+            android:textSize="18dp" />
 
         <ImageView
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/presence_away"
-            android:id="@+id/imageView2"
-            android:layout_marginLeft="186dp"
-            android:layout_marginStart="186dp"
+            android:id="@+id/ivHostProfilePic"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/tvEdit"
-            android:layout_alignBottom="@+id/tvEdit"
-            android:layout_width="50dp"/>
+            app:srcCompat="@android:drawable/presence_away" />
 
 
     </RelativeLayout>
@@ -55,11 +55,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvBecomeAHost"
-            android:layout_marginBottom="10dp"/>
+            android:textSize="22dp"
+            android:layout_marginBottom="25dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightRed"
+            android:layout_marginBottom="25dp"/>
+
+        <TextView
+            android:text="View Listings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvListings"
+            android:textSize="22dp"
+            android:layout_marginBottom="25dp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/lightRed"/>
+
     </LinearLayout>
 </LinearLayout>

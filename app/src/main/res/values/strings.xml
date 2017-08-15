@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Airbnb</string>
+    <!--HostProfileView-->
+    <string name="PencilIcon">http://ryanboltondesign.com/wp-content/uploads/2015/01/graphicGrey1@2x.png</string>
+    <!--HostProfileEdit-->
+    <string name="GalleryIcon">http://www.iconsdb.com/icons/preview/gray/stack-of-photos-xxl.png</string>
     <!--tags in AmenitiesItemFramgnet xml-->
     <string name="rbEssentials">rbEssentials</string>
     <string name="rbInternet">rbInternet</string>

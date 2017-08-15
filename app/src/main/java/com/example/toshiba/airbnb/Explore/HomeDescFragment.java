@@ -26,12 +26,11 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesIc
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.MapFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
+import com.example.toshiba.airbnb.Profile.HostProfileViewFragment;
 import com.example.toshiba.airbnb.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +45,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -165,7 +163,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         ivHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HostProfileFragment()).
+                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HostProfileViewFragment()).
                         addToBackStack(null).commit();
             }
         });

@@ -19,22 +19,27 @@
 
         </activity>
         <activity android:name=".Explore.MenuActivity">
-       </activity>
+
+        </activity>
         <activity android:name=".Explore.SingleContentDescActivity">
 
         </activity>
-        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity">
+        <activity android:name=".Profile.HostProfileActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"></activity>
         <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
 
         </activity>
         <activity android:name=".Profile.BecomeAHost.ProgressActivity"></activity>
+
         <activity android:name=".Explore.HomeDescActivity"></activity>
 
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.example.newmapview.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />

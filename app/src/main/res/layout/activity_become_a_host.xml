@@ -174,16 +174,18 @@
                     android:id="@+id/bGetReady"
                     android:layout_width="159dp"
                     android:layout_height="35dp"
-                    android:layout_marginBottom="100dp"
+
                     android:background="@drawable/reg_host_proceed_button"
                     android:text="Continue >"
                     android:textColor="@color/white"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible"
+                    android:layout_marginBottom="10dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/lightRed"
+                    android:layout_marginBottom="100dp"
                     >
 
                 </View>

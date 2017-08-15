@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.R;
 
@@ -30,6 +32,17 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        view.findViewById(R.id.tvEdit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), HostProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView ivHostProfilePic = (ImageView) view.findViewById(R.id.ivHostProfilePic);
+        Glide.with(getActivity()).load("https://cdn.pixabay.com/photo/2014/03/04/12/55/people-279457_960_720.jpg").into(ivHostProfilePic);
 
         return view;
     }
