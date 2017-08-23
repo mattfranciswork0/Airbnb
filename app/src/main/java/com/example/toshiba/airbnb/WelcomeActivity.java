@@ -27,6 +27,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.checkLogin();
 
 //        TextView tvWelcome = (TextView) findViewById(R.id.tvWelcome);
 //        Typeface openSans = Typeface.createFromAsset(getAssets(), "fonts.opensans/OpenSans-Regular.ttf");
@@ -58,7 +60,8 @@ public class WelcomeActivity extends AppCompatActivity {
         });
 
         final DatabaseInterface retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.2.89:3000/")
+//                .baseUrl("http://192.168.2.89:3000/")
+                .baseUrl("http://192.168.1.109:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
         Button bPost = (Button) findViewById(R.id.bPost);
@@ -67,7 +70,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
                         RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
-                        RegisterPasswordFragment.sPassword, RegisterAgeFragment.sAge);
+                        RegisterPasswordFragment.sPassword, PhoneNumVerifyFragment.phoneNum);
 
                 Call<Void> call = retrofit.insertUserRegistration(userRegistrationRequest);
                 call.enqueue(new Callback<Void>() {
@@ -89,7 +92,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        Log.d("blue", "fail");
+                        Log.d("blue", "fail:" +t.getMessage());
                     }
                 });
 

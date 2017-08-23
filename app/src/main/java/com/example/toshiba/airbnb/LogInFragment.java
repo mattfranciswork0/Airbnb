@@ -6,6 +6,7 @@ package com.example.toshiba.airbnb;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.toshiba.airbnb.Explore.MenuActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +46,8 @@ public class LogInFragment extends Fragment {
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.2.89:3000/")
+                //                .baseUrl("http://192.168.2.89:3000/")
+                .baseUrl("http://192.168.1.109:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
 
@@ -85,7 +89,13 @@ public class LogInFragment extends Fragment {
                         public void onResponse(Call<PasswordMatch> call, Response<PasswordMatch> response) {
                             Log.d("blue", "on response login");
                             if (response.body().getPasswordMatch()) {
+                                //TODO: PROGRESSDIALOG
                                 Log.d("blue", "success login");
+                                PasswordMatch body = response.body();
+                                SessionManager sessionManager = new SessionManager(getActivity());
+                                sessionManager.createLoginSession(body.getEmail(), body.getFirstName(), body.getLastName(), body.getPhoneNum());
+                                Intent intent = new Intent(getActivity(), MenuActivity.class);
+                                startActivity(intent);
                             } else {
                                 Log.d("blue", "fail login");
                             }
@@ -93,7 +103,7 @@ public class LogInFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<PasswordMatch> call, Throwable t) {
-                            Log.d("blue", "fail login");
+                            Log.d("blue", "fail login:" + t.getMessage());
                         }
                     });
                 }

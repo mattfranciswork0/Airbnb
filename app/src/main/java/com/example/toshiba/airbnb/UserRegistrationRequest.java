@@ -10,14 +10,14 @@ public class UserRegistrationRequest {
     final String last_name;
     final String email;
     final String password;
-    final int age;
+    final String phoneNum;
 
-    UserRegistrationRequest(String first_name, String last_name, String email, String password, int age ){
+    UserRegistrationRequest(String first_name, String last_name, String email, String password, String phoneNum ){
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
         this.password = password;
-        this.age = age;
+        this.phoneNum = phoneNum;
     }
 
 }
