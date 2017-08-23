@@ -16,7 +16,10 @@
 
 
         <activity android:name=".WelcomeActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".Explore.MenuActivity">
 
@@ -25,10 +28,7 @@
 
         </activity>
         <activity android:name=".Profile.HostProfileActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"></activity>
         <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
