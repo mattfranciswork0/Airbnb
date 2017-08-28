@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
@@ -50,14 +52,14 @@ public class DescribePlaceFragment extends Fragment {
         etDescribePlace = (EditText) view.findViewById(R.id.etDescribePlace);
         bPreview = (Button) view.findViewById(R.id.bPreview);
         bNext = (Button) view.findViewById(R.id.bNext);
-        registrationProceed();
+
         final TextView tvWordCount = (TextView) view.findViewById(R.id.tvWordCount);
 
         //get description stored in internal storage through sharedpreferences
         describePlaceSP = getActivity().getSharedPreferences(DESCRIBE_SP, Context.MODE_PRIVATE);
         String savedEtDescribePlace = describePlaceSP.getString(DESCRIBE_PLACE_KEY, "");
         etDescribePlace.setText(savedEtDescribePlace);
-
+        registrationProceed();
 
 
         bPreview.setOnClickListener(new View.OnClickListener() {
@@ -101,16 +103,15 @@ public class DescribePlaceFragment extends Fragment {
         etDescribePlace.addTextChangedListener(textWatcher);
 
 
-
-
     }
 
     public void registrationProceed() {
-        if (etDescribePlace.getText().toString().length() == 0) {
+        if (etDescribePlace.getText().length() == 0) {
             bPreview.setEnabled(false);
             bNext.setEnabled(false);
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
+            Toast.makeText(getActivity(), "PROCEED FAIL", Toast.LENGTH_LONG).show();
 
 
         } else {
@@ -118,6 +119,8 @@ public class DescribePlaceFragment extends Fragment {
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button);
             bNext.setEnabled(true);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button);
+
+            Toast.makeText(getActivity(), "PROCEED", Toast.LENGTH_LONG).show();
         }
     }
 }

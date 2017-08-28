@@ -55,7 +55,6 @@ public class TitleFragment extends Fragment {
         etTitle = (EditText) view.findViewById(R.id.etTitle);
         bPreview = (Button) view.findViewById(R.id.bPreview);
         bNext = (Button) view.findViewById(R.id.bNext);
-        registrationProceed();
         final TextView tvWordCount = (TextView) view.findViewById(R.id.tvWordCount);
         //get title stored in internal storage thorugh sharedpreferences
         titleSP = getActivity().getSharedPreferences(TITLE_SP, Context.MODE_PRIVATE);
@@ -64,7 +63,7 @@ public class TitleFragment extends Fragment {
             etTitle.requestFocus();
         }
         etTitle.setText(savedEtTitle);
-
+        registrationProceed();
 
 
         bPreview.setOnClickListener(new View.OnClickListener() {
