@@ -33,7 +33,7 @@ public class RegisterNameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_name, container, false);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
-        etFirstName = (EditText) view.findViewById(R.id.etEmail);
+        etFirstName = (EditText) view.findViewById(R.id.etFirstName);
         etLastName = (EditText) view.findViewById(R.id.etLastName);
 
         //Check text changes in EditText

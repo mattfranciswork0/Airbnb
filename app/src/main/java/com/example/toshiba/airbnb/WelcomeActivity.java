@@ -61,16 +61,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
         final DatabaseInterface retrofit = new Retrofit.Builder()
 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.109:3000/")
+                .baseUrl("http://192.168.1.115:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
         Button bPost = (Button) findViewById(R.id.bPost);
         bPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
+//                        RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
+//                        RegisterPasswordFragment.sPassword, PhoneNumVerifyFragment.phoneNum);
+
                 UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
-                        RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
-                        RegisterPasswordFragment.sPassword, PhoneNumVerifyFragment.phoneNum);
+                        "Matt", "Francis", "q@gmail.com",
+                        "heyBestie123", "2897727436");
 
                 Call<Void> call = retrofit.insertUserRegistration(userRegistrationRequest);
                 call.enqueue(new Callback<Void>() {

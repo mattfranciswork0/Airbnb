@@ -30,11 +30,14 @@ import com.example.toshiba.airbnb.R;
 public class LocationFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     public static String COUNTRY = "COUNTRY";
+    public static String EXTRA_DETAILS = "EXTRA_DETAILS";
     private EditText etCountryInput;
     TextView tvStreetInput;
     EditText etCityInput;
     EditText etStateInput;
+    EditText etExtraDetailsInput;
     View view;
+    SharedPreferences.Editor edit;
 
 
     public void checkSavedData(){
@@ -44,6 +47,10 @@ public class LocationFragment extends Fragment {
             tvStreetInput = (TextView) view.findViewById(R.id.tvStreetInput);
             tvStreetInput.setText(sharedPreferences.getString(LocationFilterAdapter.STREET_NAME,""));
 
+            if(sharedPreferences.contains(EXTRA_DETAILS)) {
+                etExtraDetailsInput = (EditText) view.findViewById(R.id.etExtraDetailsInput);
+                etExtraDetailsInput.setText(sharedPreferences.getString(EXTRA_DETAILS, ""));
+            }
             etCityInput = (EditText) view.findViewById(R.id.etCityInput);
             etCityInput.setText(sharedPreferences.getString(LocationFilterAdapter.CITY_NAME,""));
 
@@ -57,6 +64,7 @@ public class LocationFragment extends Fragment {
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
         basicProgressBar.setProgress(80);
         sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
+        edit = sharedPreferences.edit();
     }
 
     @Nullable
@@ -70,7 +78,7 @@ public class LocationFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         //checkSavedData in OnViewCreated wont refresh the views when popBackStack is called in LocationFilterFragment
@@ -82,7 +90,7 @@ public class LocationFragment extends Fragment {
             public void onClick(View v) {
                Keyboard.hideKeyboard(getActivity());
                 if(etCountryInput.getText().toString().length() > 0) {
-                    SharedPreferences.Editor edit = sharedPreferences.edit();
+                    edit = sharedPreferences.edit();
                     edit.putString(COUNTRY, etCountryInput.getText().toString());
                     edit.apply();
                 }
@@ -95,7 +103,8 @@ public class LocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Keyboard.hideKeyboard(getActivity());
-
+                edit.putString(EXTRA_DETAILS, "");
+                edit.apply();
                 if(etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0 ){
                     if(etCityInput.getText().length() > 0 || etStateInput.getText().length() > 0){
                         MapFragment mapFragment = new MapFragment();

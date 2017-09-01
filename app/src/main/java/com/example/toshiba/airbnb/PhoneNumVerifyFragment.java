@@ -48,7 +48,7 @@ public class PhoneNumVerifyFragment extends Fragment {
                 if(etCode.getText().toString().equals(getArguments().getString(PhoneNumFragment.VERIFICATION_CODE))){
                     Toast.makeText(getActivity(), "Verification successfull", Toast.LENGTH_LONG).show();
                     phoneNum = getArguments().getString(PhoneNumFragment.USER_PHONE_NUM);
-                    Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
+                    Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }

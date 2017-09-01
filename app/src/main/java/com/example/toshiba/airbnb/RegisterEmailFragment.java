@@ -4,12 +4,14 @@ package com.example.toshiba.airbnb;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,7 @@ public class RegisterEmailFragment extends Fragment {
 
         retrofit = new Retrofit.Builder()
                 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.109:3000/")
+                .baseUrl("http://192.168.1.115:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
 
@@ -80,18 +82,24 @@ public class RegisterEmailFragment extends Fragment {
             bRegProceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage("Checking if email already existed");
+                    progressDialog.show();
 
                     sEmail = etEmail.getText().toString();
                     retrofit.findUser(sEmail).enqueue(new Callback<EmailResult>() {
                         @Override
                         public void onResponse(Call<EmailResult> call, Response<EmailResult> response) {
-                            if(!(response.body().getEmail().equals("null"))) {
+                            if(response.body().getEmail().equals("null")) {
+                                progressDialog.dismiss();
                                 FragmentManager fragmentManager = getFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 RegisterPasswordFragment registerPasswordFragment = new RegisterPasswordFragment();
                                 fragmentTransaction.replace(R.id.activity_welcome, registerPasswordFragment);
                                 fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.commit();
+                                progressDialog.dismiss();
+
                             } else{
                                 Toast.makeText(getActivity(), "Email already existed", Toast.LENGTH_LONG).show();
                             }
@@ -99,7 +107,7 @@ public class RegisterEmailFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<EmailResult> call, Throwable t) {
-
+                            Log.d("heyBestie", "emailFail");
                         }
                     });
 

@@ -25,10 +25,10 @@ import com.example.toshiba.airbnb.R;
 
 public class BathroomFragment extends Fragment {
     public static final String BATHROOM_BOTTOM_SHEET = "BATHROOM_BOTTOM_SHEET";
-    private static final String BATHROOM_SP = "BATHROOM_SP";
-    private static final String TOTAL_BATHROOM = "TOTAL_BATHROOM";
-    private static final String PRIVATE_BATHROOM = "PRIVATE_BATHROOM";
-    private static final String SHARED_BATHROOM = "SHARED_BATHROOM";
+    public static final String BATHROOM_SP = "BATHROOM_SP";
+    public static final String TOTAL_BATHROOM = "TOTAL_BATHROOM";
+    public static final String PRIVATE_BATHROOM = "PRIVATE_BATHROOM";
+    public static final String SHARED_BATHROOM = "SHARED_BATHROOM";
     public static View mView;
     SharedPreferences bathroomSP;
     SharedPreferences.Editor edit;
