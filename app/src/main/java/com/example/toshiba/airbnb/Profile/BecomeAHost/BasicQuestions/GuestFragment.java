@@ -168,7 +168,9 @@ public class GuestFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(!(guestSP.contains(TOTAL_GUEST))) edit.putString(TOTAL_GUEST,tvTotalGuestInput.getText().toString()).apply();
+                if(!(guestSP.contains(TOTAL_BED_ROOM))) edit.putString(TOTAL_BED_ROOM, tvTotalBedRoomInput.getText().toString()).apply();
+                if(!(guestSP.contains(TOTAL_BED)))  edit.putString(TOTAL_BED, tvTotalBedInput.getText().toString()).apply();
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, new BathroomFragment()).addToBackStack(null).commit();
             }
         });

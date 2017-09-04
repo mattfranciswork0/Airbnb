@@ -85,9 +85,11 @@ public class PropertyTypeFragment extends Fragment {
             }
         });
 
+        final TextView tvTypeInput = (TextView) view.findViewById(R.id.tvTypeInput);
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!(propertyTypeSP.contains(PROPERTY_TYPE)))  edit.putString(PROPERTY_TYPE, tvTypeInput.getText().toString()).apply();
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, new GuestFragment()).addToBackStack(null).commit();
             }
         });
@@ -153,7 +155,6 @@ public class PropertyTypeFragment extends Fragment {
             }
         });
 
-        final TextView tvTypeInput = (TextView) view.findViewById(R.id.tvTypeInput);
         if(propertyTypeSP.contains(PROPERTY_TYPE)) tvTypeInput.setText(propertyTypeSP.getString(PROPERTY_TYPE, ""));
 
         tvTypeInput.addTextChangedListener(new TextWatcher() {

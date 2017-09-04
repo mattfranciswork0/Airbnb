@@ -66,6 +66,7 @@ public class BathroomFragment extends Fragment {
         });
 
         final RadioButton privateRadio = (RadioButton) view.findViewById(R.id.privateRadio);
+        if(bathroomSP.getAll().isEmpty()) privateRadio.setChecked(true);
         final RadioButton sharedRadio = (RadioButton) view.findViewById(R.id.sharedRadio);
 
         final TextView tvTotalBathroomInput = (TextView) view.findViewById(R.id.tvTotalBathroomInput);
@@ -117,6 +118,7 @@ public class BathroomFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!(bathroomSP.contains(TOTAL_BATHROOM))) edit.putString(TOTAL_BATHROOM, tvTotalBathroomInput.getText().toString()).apply();
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, new LocationFragment()).addToBackStack(null).commit();
             }
         });
