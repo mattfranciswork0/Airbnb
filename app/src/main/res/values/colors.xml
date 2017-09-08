@@ -10,5 +10,6 @@
     <color name="searchLayoutColor">#FF9999</color>
     <color name="background_holo_light">#fff3f3f3</color>
     <color name="lightPink">#FFB6C1</color>
+    <color name="defaultLayoutColor">#FAFAFA</color>
 
 </resources>

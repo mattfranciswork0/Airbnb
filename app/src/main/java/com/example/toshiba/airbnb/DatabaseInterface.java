@@ -7,6 +7,7 @@ package com.example.toshiba.airbnb;
 
 
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
 
 import retrofit2.Call;
@@ -37,5 +38,13 @@ public interface DatabaseInterface {
     @Headers("Content-Type: application/json")
     @POST("/insertListingData")
     Call<IdListing> insertListingData(@Body PublishListingDataRequest body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/insertListingImages")
+    Call<Void> insertListingImages(@Body ImageListingRequest body);
+
+    @Headers("Content-Type: application/json")
+    @GET("/hi")
+    Call<Void> hi();
 
 }

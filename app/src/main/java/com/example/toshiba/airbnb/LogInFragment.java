@@ -48,7 +48,7 @@ public class LogInFragment extends Fragment {
 
         retrofit = new Retrofit.Builder()
                 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.106:3000/")
+                .baseUrl("http://192.168.1.115:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
 

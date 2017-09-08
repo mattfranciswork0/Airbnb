@@ -4,7 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.MenuActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
@@ -24,9 +29,16 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFil
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +60,23 @@ public class PublishFragment extends Fragment {
     private SharedPreferences locationSP;
     private SharedPreferences amenitiesSP;
     private SharedPreferences sessionSP;
+    private SharedPreferences listingIdSP;
+    private SharedPreferences latchPublishSP;
+    private SharedPreferences.Editor latchEdit;
+    private static final String LATCH_COUNTDOWN_SP = "LATCH_COUNTDOWN_SP";
+    private static final String LATCH_COUNTDOWN_COUNT = "LATCH_COUNTDOWN_COUNT";
+    private SharedPreferences insertImagesSP;
+    private SharedPreferences.Editor insertImagesEdit;
+    private SharedPreferences cloudinaryUploadSP;
+    private SharedPreferences.Editor cloudinaryEdit;
+    private static final String INSERT_IMAGES_SP = "INSERT_IMAGES_SP";
+    private static final String INSERT_IMAGES_COUNT = "INSERT_IMAGES_COUNT";
+    private static final String CLOUDINARY_UPLOAD_SP = "CLOUDINARY_UPLOAD_SP";
+    private static final String CLOUDINARY_UPLOAD_COUNT = "CLOUDINARY_UPLOAD_COUNT";
+    private DatabaseInterface retrofit;
+    private CountDownLatch latch;
+    ProgressDialog progressDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,31 +89,193 @@ public class PublishFragment extends Fragment {
         locationSP = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
         amenitiesSP = getActivity().getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
         sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
+        listingIdSP = getActivity().getSharedPreferences(LISTING_ID_SP, Context.MODE_PRIVATE);
+        //CountDownLatch for publish button
+        latchPublishSP = getActivity().getSharedPreferences(LATCH_COUNTDOWN_SP, Context.MODE_PRIVATE);
+        latchEdit = latchPublishSP.edit();
+//        latchEdit.clear();
+        //Save latchCountdown to sp just in case if user clicks publish and app crashes/closes; there won't be any repeated actions.
+        if (latchPublishSP.getAll().isEmpty()) {
+            latch = new CountDownLatch(2);
+            latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
+        } else {
+            latch = new CountDownLatch(latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 2));
+        }
+
+
+        retrofit = new Retrofit.Builder()
+//                .baseUrl("http://192.168.2.89:3000/")
+                .baseUrl("http://192.168.0.34:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(DatabaseInterface.class);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_publish, container, false);
+        progressDialog = new ProgressDialog(getActivity());
         return view;
     }
-    public String checkPropertyOwnership(){
+
+    public String checkPropertyOwnership() {
         if (propertyTypeSP.contains(PropertyTypeFragment.ENTIRE_RADIO))
             return "Entire";
-       if (propertyTypeSP.contains(PropertyTypeFragment.SHARED_RADIO))
-           return "Shared";
+        if (propertyTypeSP.contains(PropertyTypeFragment.SHARED_RADIO))
+            return "Shared";
         if (propertyTypeSP.contains(PropertyTypeFragment.PRIVATE_RADIO))
             return "Private";
-       return "ERROR";
+        return "ERROR";
     }
 
-    public String checkBathroomType(){
-        if(bathroomFragmentSP.contains(BathroomFragment.PRIVATE_BATHROOM))
+    public String checkBathroomType() {
+        if (bathroomFragmentSP.contains(BathroomFragment.PRIVATE_BATHROOM))
             return "Private";
-        else if(bathroomFragmentSP.contains(BathroomFragment.SHARED_BATHROOM))
+        else if (bathroomFragmentSP.contains(BathroomFragment.SHARED_BATHROOM))
             return "Shared";
         return "ERROR";
     }
+
+    public void insertImagesToDatabase() {
+        File sdCardDirectory = Environment.getExternalStorageDirectory();
+        File file = new File(sdCardDirectory.getAbsolutePath() + GalleryAdapter.airBnbDirectory);
+        final File[] listFile = file.listFiles();
+
+        insertImagesSP = getActivity().getSharedPreferences(INSERT_IMAGES_COUNT, Context.MODE_PRIVATE);
+        insertImagesEdit = insertImagesSP.edit();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog.setMessage("Inserting images...");
+                progressDialog.show();
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(), "Hey Matt", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                int uploadLeftOff;
+                if (!(insertImagesSP.contains(INSERT_IMAGES_COUNT))) {
+                    uploadLeftOff = 0;
+                } else {
+                    uploadLeftOff = insertImagesSP.getInt(INSERT_IMAGES_COUNT, 0);
+                }
+
+                for (int i = uploadLeftOff; i < listFile.length; i++) {
+                    ImageListingRequest imageListingRequest = new ImageListingRequest(listFile[i].getAbsolutePath(),
+                            listingIdSP.getInt(LISTING_ID, 0));
+
+                    retrofit.insertListingImages(imageListingRequest).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(getActivity(), "Hi :)", Toast.LENGTH_LONG).show();
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Failed to insert image", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    });
+                }
+
+                latch.countDown();
+                latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
+                Toast.makeText(getActivity(), latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) + "", Toast.LENGTH_LONG).show();
+                insertImagesEdit.clear();
+
+                return null;
+            }
+        }.execute();
+    }
+
+    public void uploadImageToCloudinary() {
+        cloudinaryUploadSP = getActivity().getSharedPreferences(CLOUDINARY_UPLOAD_SP, Context.MODE_PRIVATE);
+        cloudinaryEdit = cloudinaryUploadSP.edit();
+        progressDialog.setMessage("Uploading your images...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        File sdCardDirectory = Environment.getExternalStorageDirectory();
+        File file = new File(sdCardDirectory.getAbsolutePath() + GalleryAdapter.airBnbDirectory);
+        final File[] listFile = file.listFiles();
+
+        new AsyncTask<Void, Void, Void>() {
+            SharedPreferences finishedUploadingSP;
+            SharedPreferences.Editor finishedUploadingEdit;
+            public String FINISHED_UPLOADING_SP = "FINISHED_UPLOADING_SP";
+            public String FINISHED_UPLOADING = "FINISHED_UPLOADING";
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog.setMessage("Uploading your images...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                finishedUploadingSP = getActivity().getSharedPreferences(FINISHED_UPLOADING_SP, Context.MODE_PRIVATE);
+                finishedUploadingEdit = finishedUploadingSP.edit();
+                //Create uploadLeftOff just in case if an image can't be uploaded during the process (lost connection, etc)
+                int uploadLeftOff;
+                if (!(cloudinaryUploadSP.contains(CLOUDINARY_UPLOAD_COUNT))) {
+                    uploadLeftOff = 0;
+                } else {
+                    uploadLeftOff = cloudinaryUploadSP.getInt(CLOUDINARY_UPLOAD_COUNT, 0);
+                }
+
+                final Cloudinary cloudinary =
+                        new Cloudinary("cloudinary://847239287961448:P2LUOMMTrMRij1Ny5ay8lWZHHUk@du8n2aa4p");
+
+                for (int i = uploadLeftOff; i < listFile.length; i++) {
+                    try {
+                        cloudinary.uploader().upload(listFile[i].getAbsolutePath(), ObjectUtils.emptyMap());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_LONG).show();
+                        //to avoid uploaidng repeating images when publish is clicked again
+                        cloudinaryEdit.putInt(CLOUDINARY_UPLOAD_COUNT, i).apply();
+                        return null;
+                    }
+                }
+                finishedUploadingEdit.putBoolean(FINISHED_UPLOADING, true).apply();
+                cloudinaryEdit.clear();
+
+                return null;
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                progressDialog.dismiss();
+                if (finishedUploadingSP.getBoolean(FINISHED_UPLOADING, false)) {
+                    finishedUploadingEdit.clear();
+                    latchEdit.clear();
+                    Intent intent = new Intent(getActivity(), MenuActivity.class);
+                    intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+
+            }
+
+        }.execute();
+    }
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -95,75 +286,74 @@ public class PublishFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.bPublish).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("Listing your place...");
-                progressDialog.show();
-                PublishListingDataRequest publishListingDataRequest = new PublishListingDataRequest(
-                        sessionSP.getInt(SessionManager.USER_ID, 0),
-                        checkPropertyOwnership(),
-                        propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, "ERROR"),
-                        guestFragmentSP.getString(GuestFragment.TOTAL_GUEST, "ERROR"),
-                        guestFragmentSP.getString(GuestFragment.TOTAL_BED_ROOM, "ERROR"),
-                        guestFragmentSP.getString(GuestFragment.TOTAL_BED, "ERROR"),
-                        bathroomFragmentSP.getString(BathroomFragment.TOTAL_BATHROOM, "ERROR"),
-                        checkBathroomType(),
-                        locationSP.getString(LocationFilterAdapter.COUNTRY_NAME, "ERROR"),
-                        locationSP.getString(LocationFilterAdapter.STREET_NAME, "ERROR"),
-                        locationSP.getString(LocationFragment.EXTRA_DETAILS, "ERROR"),
-                        locationSP.getString(LocationFilterAdapter.CITY_NAME, "ERROR"),
-                        locationSP.getString(LocationFilterAdapter.STATE_NAME, "ERROR"),
-                        locationSP.getString(LocationFilterAdapter.LNG, "ERROR"),
-                        locationSP.getString(LocationFilterAdapter.LAT, "ERROR"),
-                        //AmenitiesItem
-                        amenitiesSP.contains(getResources().getString(R.string.rbEssentials)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbInternet)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbShampoo)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbHangers)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbTV)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbHeating)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbAirConditioning)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbBreakfast)),
-                        //AmenitiesPlace
-                        amenitiesSP.contains(getResources().getString(R.string.rbKitchen)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbLaundry)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbParking)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbElevator)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbPool)),
-                        amenitiesSP.contains(getResources().getString(R.string.rbGym))
-                );
-                final DatabaseInterface retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                        .baseUrl("http://192.168.1.115:3000/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build().create(DatabaseInterface.class);
-                retrofit.insertListingData(publishListingDataRequest).enqueue(new Callback<IdListing>() {
-                    @Override
-                    public void onResponse(Call<IdListing> call, Response<IdListing> response) {
-                        Log.d("heyBestie", "The listing id is " + response.body().getId());
-                        SharedPreferences listingIdSP = getActivity().getSharedPreferences(LISTING_ID_SP, Context.MODE_PRIVATE);
-                        listingIdSP.edit().putInt(LISTING_ID, response.body().getId());
-                        progressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Place successfully listed", Toast.LENGTH_LONG).show();
-                    }
+        view.findViewById(R.id.bPublish).
 
+                setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFailure(Call<IdListing> call, Throwable t) {
-                        Log.d("heyBestie", "fail " + t.getMessage() + " or " + t.toString() );
-                        progressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Failed to list your place, try again", Toast.LENGTH_LONG).show();
+                    public void onClick(View v) {
+                        Log.d("publish", latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) + " ");
+                        if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 2) {
+                            progressDialog.setMessage("Listing your place...");
+                            progressDialog.show();
+                            PublishListingDataRequest publishListingDataRequest = new PublishListingDataRequest(
+                                    sessionSP.getInt(SessionManager.USER_ID, 0),
+                                    checkPropertyOwnership(),
+                                    propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, "ERROR"),
+                                    guestFragmentSP.getString(GuestFragment.TOTAL_GUEST, "ERROR"),
+                                    guestFragmentSP.getString(GuestFragment.TOTAL_BED_ROOM, "ERROR"),
+                                    guestFragmentSP.getString(GuestFragment.TOTAL_BED, "ERROR"),
+                                    bathroomFragmentSP.getString(BathroomFragment.TOTAL_BATHROOM, "ERROR"),
+                                    checkBathroomType(),
+                                    locationSP.getString(LocationFilterAdapter.COUNTRY_NAME, "ERROR"),
+                                    locationSP.getString(LocationFilterAdapter.STREET_NAME, "ERROR"),
+                                    locationSP.getString(LocationFragment.EXTRA_DETAILS, "ERROR"),
+                                    locationSP.getString(LocationFilterAdapter.CITY_NAME, "ERROR"),
+                                    locationSP.getString(LocationFilterAdapter.STATE_NAME, "ERROR"),
+                                    locationSP.getString(LocationFilterAdapter.LNG, "ERROR"),
+                                    locationSP.getString(LocationFilterAdapter.LAT, "ERROR"),
+                                    //AmenitiesItem
+                                    amenitiesSP.contains(getResources().getString(R.string.rbEssentials)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbInternet)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbShampoo)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbHangers)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbTV)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbHeating)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbAirConditioning)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbBreakfast)),
+                                    //AmenitiesPlace
+                                    amenitiesSP.contains(getResources().getString(R.string.rbKitchen)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbLaundry)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbParking)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbElevator)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbPool)),
+                                    amenitiesSP.contains(getResources().getString(R.string.rbGym))
+                            );
+
+                            retrofit.insertListingData(publishListingDataRequest).enqueue(new Callback<IdListing>() {
+                                @Override
+                                public void onResponse(Call<IdListing> call, Response<IdListing> response) {
+                                    Log.d("heyBestie", "The listing id is " + response.body().getId());
+                                    progressDialog.dismiss();
+                                    latch.countDown();
+                                    latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
+                                    listingIdSP.edit().putInt(LISTING_ID, response.body().getId()).apply();
+                                }
+
+                                @Override
+                                public void onFailure(Call<IdListing> call, Throwable t) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getActivity(), "Failed to list your place, try again", Toast.LENGTH_LONG).show();
+
+                                }
+                            });
+
+                        } else if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 1) {
+                            insertImagesToDatabase();
+                        } else if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 0) {
+                            uploadImageToCloudinary();
+                        }
 
                     }
                 });
-
-                Intent intent = new Intent(getActivity(), MenuActivity.class);
-                intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-
-            }
-        });
     }
 }
