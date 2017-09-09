@@ -31,7 +31,9 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTyp
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
 
@@ -59,6 +61,13 @@ public class PublishFragment extends Fragment {
     private SharedPreferences bathroomFragmentSP;
     private SharedPreferences locationSP;
     private SharedPreferences amenitiesSP;
+
+    private SharedPreferences describePlaceSP;
+    private SharedPreferences titleSP;
+    private SharedPreferences houseRuleSP;
+    private SharedPreferences bookingSP;
+    private SharedPreferences priceSP;
+
     private SharedPreferences sessionSP;
     private SharedPreferences listingIdSP;
     private SharedPreferences latchPublishSP;
@@ -88,6 +97,14 @@ public class PublishFragment extends Fragment {
         bathroomFragmentSP = getActivity().getSharedPreferences(BathroomFragment.BATHROOM_SP, Context.MODE_PRIVATE);
         locationSP = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
         amenitiesSP = getActivity().getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
+
+        describePlaceSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
+        titleSP = getActivity().getSharedPreferences(TitleFragment. TITLE_SP, Context.MODE_PRIVATE);
+
+        houseRuleSP = getActivity().getSharedPreferences(HouseRuleFragment.HOUSE_RULE_SP, Context.MODE_PRIVATE);
+        bookingSP = getActivity().getSharedPreferences(BookingFragment.BOOKING_SP, Context.MODE_PRIVATE);
+        priceSP = getActivity().getSharedPreferences(PriceFragment.PRICE_SP, Context.MODE_PRIVATE);
+
         sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
         listingIdSP = getActivity().getSharedPreferences(LISTING_ID_SP, Context.MODE_PRIVATE);
         //CountDownLatch for publish button
@@ -156,7 +173,6 @@ public class PublishFragment extends Fragment {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), "Hey Matt", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -263,7 +279,7 @@ public class PublishFragment extends Fragment {
                 progressDialog.dismiss();
                 if (finishedUploadingSP.getBoolean(FINISHED_UPLOADING, false)) {
                     finishedUploadingEdit.clear();
-                    latchEdit.clear();
+                    latchEdit.clear().apply();
                     Intent intent = new Intent(getActivity(), MenuActivity.class);
                     intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -326,7 +342,31 @@ public class PublishFragment extends Fragment {
                                     amenitiesSP.contains(getResources().getString(R.string.rbParking)),
                                     amenitiesSP.contains(getResources().getString(R.string.rbElevator)),
                                     amenitiesSP.contains(getResources().getString(R.string.rbPool)),
-                                    amenitiesSP.contains(getResources().getString(R.string.rbGym))
+                                    amenitiesSP.contains(getResources().getString(R.string.rbGym)),
+
+                                    describePlaceSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, ""),
+                                    titleSP.getString(TitleFragment.TITLE_KEY, ""),
+
+//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbChildren), false),
+//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbInfants), false),
+//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbPets), false),
+//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbSmoking), false),
+//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbParties), false),
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    houseRuleSP.getString(HouseRuleFragment.ADDITIONAL_RULES, ""),
+
+                                    bookingSP.getString(BookingFragment.MAX_MONTH, "ERROR"),
+                                    bookingSP.getString(BookingFragment.ARRIVE_AFTER, "ERROR"),
+                                    bookingSP.getString(BookingFragment.LEAVE_BEFORE, "ERROR"),
+                                    bookingSP.getString(BookingFragment.MIN_STAY, "ERROR"),
+                                    bookingSP.getString(BookingFragment.MAX_STAY, ""),
+
+                                    priceSP.getString(PriceFragment.PRICE, "ERROR")
+
                             );
 
                             retrofit.insertListingData(publishListingDataRequest).enqueue(new Callback<IdListing>() {
@@ -342,6 +382,7 @@ public class PublishFragment extends Fragment {
                                 @Override
                                 public void onFailure(Call<IdListing> call, Throwable t) {
                                     progressDialog.dismiss();
+                                    Log.d("heyBestie", t.toString());
                                     Toast.makeText(getActivity(), "Failed to list your place, try again", Toast.LENGTH_LONG).show();
 
                                 }
