@@ -70,6 +70,7 @@ public class SessionManager {
         // Check login status
         if (isLoggedIn()) {
             Intent intent = new Intent(context, MenuActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
     }

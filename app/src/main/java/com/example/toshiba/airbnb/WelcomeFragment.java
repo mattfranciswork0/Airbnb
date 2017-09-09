@@ -68,7 +68,7 @@ public class WelcomeFragment extends Fragment {
 
         final DatabaseInterface retrofit = new Retrofit.Builder()
 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.115:3000/")
+                .baseUrl("http://192.168.0.34:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
         Button bPost = (Button) view.findViewById(R.id.bPost);

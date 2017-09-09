@@ -48,7 +48,7 @@ public class LogInFragment extends Fragment {
 
         retrofit = new Retrofit.Builder()
                 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.115:3000/")
+                .baseUrl("http://192.168.0.34:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
 
@@ -88,7 +88,6 @@ public class LogInFragment extends Fragment {
                     call.enqueue(new Callback<PasswordMatch>() {
                         @Override
                         public void onResponse(Call<PasswordMatch> call, Response<PasswordMatch> response) {
-                            Log.d("blue", "on response login");
                             if (response.body().getPasswordMatch()) {
                                 //TODO: PROGRESSDIALOG
                                 Log.d("blue", "success login");
@@ -96,6 +95,7 @@ public class LogInFragment extends Fragment {
                                 SessionManager sessionManager = new SessionManager(getActivity());
                                 sessionManager.createLoginSession(body.getUserId(), body.getEmail(), body.getFirstName(), body.getLastName(), body.getPhoneNum());
                                 Intent intent = new Intent(getActivity(), MenuActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getActivity(), "Invalid login creddientals", Toast.LENGTH_LONG).show();
