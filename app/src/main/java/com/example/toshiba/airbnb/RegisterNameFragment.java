@@ -33,8 +33,8 @@ public class RegisterNameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_name, container, false);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
-        etFirstName = (EditText) view.findViewById(R.id.etFirstName);
-        etLastName = (EditText) view.findViewById(R.id.etLastName);
+//        etFirstName = (EditText) view.findViewById(R.id.etFirstName);
+//        etLastName = (EditText) view.findViewById(R.id.etLastName);
 
         //Check text changes in EditText
         TextWatcher textWatcher = new TextWatcher() {
@@ -74,7 +74,7 @@ public class RegisterNameFragment extends Fragment {
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     RegisterEmailFragment registerEmailFragment = new RegisterEmailFragment();
-                    fragmentTransaction.replace(R.id.activity_welcome, registerEmailFragment);
+                    fragmentTransaction.replace(R.id.container, registerEmailFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

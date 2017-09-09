@@ -95,7 +95,7 @@ public class RegisterEmailFragment extends Fragment {
                                 FragmentManager fragmentManager = getFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 RegisterPasswordFragment registerPasswordFragment = new RegisterPasswordFragment();
-                                fragmentTransaction.replace(R.id.activity_welcome, registerPasswordFragment);
+                                fragmentTransaction.replace(R.id.container, registerPasswordFragment);
                                 fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.commit();
                                 progressDialog.dismiss();

@@ -94,7 +94,7 @@ public class RegisterPasswordFragment extends Fragment {
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         RegisterAgeFragment registerAgeFragment = new RegisterAgeFragment();
-                        fragmentTransaction.replace(R.id.activity_welcome, registerAgeFragment);
+                        fragmentTransaction.replace(R.id.container, registerAgeFragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesIconMoreFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BathroomFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
@@ -207,6 +208,11 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         tvRoom.setText(guestSP.getString(GuestFragment.TOTAL_BED_ROOM, "1 bedroom"));
         TextView tvBed = (TextView) view.findViewById(R.id.tvBed);
         tvBed.setText(guestSP.getString(GuestFragment.TOTAL_BED, "1 bed"));
+
+        //Load BathroomFragment
+        SharedPreferences bathroomSP = getActivity().getSharedPreferences(BathroomFragment.BATHROOM_SP, Context.MODE_PRIVATE);
+        TextView tvBathroom = (TextView) view.findViewById(R.id.tvBathroom);
+        tvBathroom.setText(bathroomSP.getString(BathroomFragment.TOTAL_BATHROOM, "1 bathroom"));
 
 
 
