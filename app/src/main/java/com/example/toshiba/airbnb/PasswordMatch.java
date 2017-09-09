@@ -8,10 +8,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class PasswordMatch {
-
     @SerializedName("passwordMatch")
     @Expose
     private Boolean passwordMatch;
+    @SerializedName("user_id")
+    @Expose
+    private Integer userId;
     @SerializedName("email")
     @Expose
     private String email;
@@ -31,6 +33,14 @@ public class PasswordMatch {
 
     public void setPasswordMatch(Boolean passwordMatch) {
         this.passwordMatch = passwordMatch;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {

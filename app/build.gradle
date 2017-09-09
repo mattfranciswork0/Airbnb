@@ -48,4 +48,7 @@ dependencies {
     //CardView
     compile 'com.android.support:cardview-v7:25.3.1'
 
+    //Cloudinary
+    compile 'com.cloudinary:cloudinary-android:1.14.0'
+
 }

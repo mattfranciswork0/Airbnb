@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.toshiba.airbnb.Explore.MenuActivity;
 
@@ -47,7 +48,7 @@ public class LogInFragment extends Fragment {
 
         retrofit = new Retrofit.Builder()
                 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.109:3000/")
+                .baseUrl("http://192.168.1.115:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
 
@@ -93,11 +94,11 @@ public class LogInFragment extends Fragment {
                                 Log.d("blue", "success login");
                                 PasswordMatch body = response.body();
                                 SessionManager sessionManager = new SessionManager(getActivity());
-                                sessionManager.createLoginSession(body.getEmail(), body.getFirstName(), body.getLastName(), body.getPhoneNum());
+                                sessionManager.createLoginSession(body.getUserId(), body.getEmail(), body.getFirstName(), body.getLastName(), body.getPhoneNum());
                                 Intent intent = new Intent(getActivity(), MenuActivity.class);
                                 startActivity(intent);
                             } else {
-                                Log.d("blue", "fail login");
+                                Toast.makeText(getActivity(), "Invalid login creddientals", Toast.LENGTH_LONG).show();
                             }
                         }
 

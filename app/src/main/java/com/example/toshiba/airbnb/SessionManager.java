@@ -18,6 +18,7 @@ public class SessionManager {
     public static final String SESSION_SP = "SESSION_SP";
 
     private final String IS_LOGIN = "IS_LOGIN";
+    public static final String USER_ID = "USER_ID";
     public static final String EMAIL = "EMAIL";
     public static final String FIRST_NAME = "FIRST_NAME";
     public static final String LAST_NAME = "LAST_NAME";
@@ -29,8 +30,10 @@ public class SessionManager {
         editor = sessionSP.edit();
     }
 
-    public void createLoginSession(String email, String firstName, String lastName, String phoneNum){
+    public void createLoginSession(int id, String email, String firstName, String lastName, String phoneNum){
         editor.putBoolean(IS_LOGIN, true);
+
+        editor.putInt(USER_ID, id);
 
         editor.putString(EMAIL, email);
 

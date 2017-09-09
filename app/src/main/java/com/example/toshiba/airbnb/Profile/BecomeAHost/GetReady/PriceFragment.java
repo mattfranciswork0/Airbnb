@@ -25,13 +25,6 @@ public class PriceFragment extends Fragment {
     public static String PRICE_SP = "PRICE_SP";
     public static String PRICE = "PRICE";
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.tab_indicator_text));
-        basicProgressBar.setProgress(100);
-    }
 
     @Nullable
     @Override
@@ -45,7 +38,9 @@ public class PriceFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+        basicProgressBar.setBackgroundColor(0);
+        basicProgressBar.setProgress(100);
         final EditText etPricePerNight = (EditText) view.findViewById(R.id.etPricePerNight);
         etPricePerNight.setText(priceSP.getString(PRICE, ""));
 

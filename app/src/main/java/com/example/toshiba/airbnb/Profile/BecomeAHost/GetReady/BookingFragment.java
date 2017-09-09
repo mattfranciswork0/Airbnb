@@ -99,7 +99,7 @@ public class BookingFragment extends Fragment {
 
         TextWatcher stayTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                if (etMaxMonth.getText().length() > 0) {
+                if (etMinStay.getText().length() > 0) {
                     int val = Integer.parseInt(s.toString());
                     if (val == 0) {
                         s.replace(0, s.length(), "1", 0, 1);
@@ -114,7 +114,7 @@ public class BookingFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         };
-        etMaxMonth.addTextChangedListener(stayTextWatcher);
+//        etMaxMonth.addTextChangedListener(stayTextWatcher);
         etMinStay.addTextChangedListener(stayTextWatcher);
 
 

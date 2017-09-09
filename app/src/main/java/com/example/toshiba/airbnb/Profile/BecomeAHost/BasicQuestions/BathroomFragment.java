@@ -25,10 +25,10 @@ import com.example.toshiba.airbnb.R;
 
 public class BathroomFragment extends Fragment {
     public static final String BATHROOM_BOTTOM_SHEET = "BATHROOM_BOTTOM_SHEET";
-    private static final String BATHROOM_SP = "BATHROOM_SP";
-    private static final String TOTAL_BATHROOM = "TOTAL_BATHROOM";
-    private static final String PRIVATE_BATHROOM = "PRIVATE_BATHROOM";
-    private static final String SHARED_BATHROOM = "SHARED_BATHROOM";
+    public static final String BATHROOM_SP = "BATHROOM_SP";
+    public static final String TOTAL_BATHROOM = "TOTAL_BATHROOM";
+    public static final String PRIVATE_BATHROOM = "PRIVATE_BATHROOM";
+    public static final String SHARED_BATHROOM = "SHARED_BATHROOM";
     public static View mView;
     SharedPreferences bathroomSP;
     SharedPreferences.Editor edit;
@@ -66,6 +66,7 @@ public class BathroomFragment extends Fragment {
         });
 
         final RadioButton privateRadio = (RadioButton) view.findViewById(R.id.privateRadio);
+        if(bathroomSP.getAll().isEmpty()) privateRadio.setChecked(true);
         final RadioButton sharedRadio = (RadioButton) view.findViewById(R.id.sharedRadio);
 
         final TextView tvTotalBathroomInput = (TextView) view.findViewById(R.id.tvTotalBathroomInput);
@@ -117,6 +118,7 @@ public class BathroomFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!(bathroomSP.contains(TOTAL_BATHROOM))) edit.putString(TOTAL_BATHROOM, tvTotalBathroomInput.getText().toString()).apply();
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, new LocationFragment()).addToBackStack(null).commit();
             }
         });
