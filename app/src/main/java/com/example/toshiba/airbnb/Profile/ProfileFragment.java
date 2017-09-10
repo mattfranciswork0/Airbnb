@@ -57,6 +57,13 @@ public class ProfileFragment extends Fragment {
         ImageView ivHostProfilePic = (ImageView) view.findViewById(R.id.ivHostProfilePic);
         Glide.with(getActivity()).load("https://cdn.pixabay.com/photo/2014/03/04/12/55/people-279457_960_720.jpg").into(ivHostProfilePic);
 
+        ivHostProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), HostProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         view.findViewById(R.id.tvLogOut).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

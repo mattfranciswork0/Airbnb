@@ -52,6 +52,8 @@ public class PublishListingDataRequest {
     String max_stay;
     String price;
 
+    String date_listed;
+
     public PublishListingDataRequest(int user_id, String property_ownership, String property_type,
                                      String total_guest, String total_bedrooms, String total_beds, String total_bathrooms,
                                      String bathroom_type, String country, String street, String extra_place_details,
@@ -66,7 +68,9 @@ public class PublishListingDataRequest {
 
                                      boolean suitable_for_children, boolean suitable_for_infants, boolean suitable_for_pets, boolean smoking_allowed,
                                      boolean parties_allowed, String additional_rules, String listing_length, String arrive_after, String leave_before,
-                                     String min_stay, String max_stay, String price)
+                                     String min_stay, String max_stay, String price,
+
+                                     String date_listed)
 
     {
         this.user_id = user_id;
@@ -115,5 +119,7 @@ public class PublishListingDataRequest {
         this.min_stay = min_stay;
         this.max_stay = max_stay;
         this.price = price;
+
+        this.date_listed = date_listed;
     }
 }

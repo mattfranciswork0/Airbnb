@@ -16,6 +16,6 @@ public class HostProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_profile);
         getSupportFragmentManager()
-                .beginTransaction().replace(R.id.hostProfileLayout, new HostProfileViewFragment()).addToBackStack(null).commit();
+                .beginTransaction().replace(R.id.hostProfileLayout, new HostProfileViewFragment()).commit();
     }
 }

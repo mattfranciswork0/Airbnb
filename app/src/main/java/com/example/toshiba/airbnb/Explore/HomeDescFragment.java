@@ -211,7 +211,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
         //Load BathroomFragment
         SharedPreferences bathroomSP = getActivity().getSharedPreferences(BathroomFragment.BATHROOM_SP, Context.MODE_PRIVATE);
-        TextView tvBathroom = (TextView) view.findViewById(R.id.tvBathroom);
+        TextView tvBathroom = (TextView) view.findViewById(R.id.tvBaths);
         tvBathroom.setText(bathroomSP.getString(BathroomFragment.TOTAL_BATHROOM, "1 bathroom"));
 
 

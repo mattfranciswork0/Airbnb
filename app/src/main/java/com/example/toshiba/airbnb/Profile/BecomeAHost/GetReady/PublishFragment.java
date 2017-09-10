@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ import com.example.toshiba.airbnb.SessionManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -85,6 +88,7 @@ public class PublishFragment extends Fragment {
     private DatabaseInterface retrofit;
     private CountDownLatch latch;
     ProgressDialog progressDialog;
+    private Button bPublish;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +103,7 @@ public class PublishFragment extends Fragment {
         amenitiesSP = getActivity().getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
 
         describePlaceSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
-        titleSP = getActivity().getSharedPreferences(TitleFragment. TITLE_SP, Context.MODE_PRIVATE);
+        titleSP = getActivity().getSharedPreferences(TitleFragment.TITLE_SP, Context.MODE_PRIVATE);
 
         houseRuleSP = getActivity().getSharedPreferences(HouseRuleFragment.HOUSE_RULE_SP, Context.MODE_PRIVATE);
         bookingSP = getActivity().getSharedPreferences(BookingFragment.BOOKING_SP, Context.MODE_PRIVATE);
@@ -162,17 +166,12 @@ public class PublishFragment extends Fragment {
         insertImagesSP = getActivity().getSharedPreferences(INSERT_IMAGES_COUNT, Context.MODE_PRIVATE);
         insertImagesEdit = insertImagesSP.edit();
         new AsyncTask<Void, Void, Void>() {
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 progressDialog.setMessage("Inserting images...");
                 progressDialog.show();
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                progressDialog.dismiss();
             }
 
             @Override
@@ -191,25 +190,31 @@ public class PublishFragment extends Fragment {
                     retrofit.insertListingImages(imageListingRequest).enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(getActivity(), "Hi :)", Toast.LENGTH_LONG).show();
-
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            Toast.makeText(getActivity(), "Failed to insert image", Toast.LENGTH_LONG).show();
-                            return;
                         }
                     });
+
                 }
 
                 latch.countDown();
                 latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
-                Toast.makeText(getActivity(), latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) + "", Toast.LENGTH_LONG).show();
                 insertImagesEdit.clear();
 
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                progressDialog.dismiss();
+                bPublish.performClick();
+
+            }
+
+
         }.execute();
     }
 
@@ -291,6 +296,11 @@ public class PublishFragment extends Fragment {
         }.execute();
     }
 
+    public String getCurrentDate() {
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        Date todayDate = new Date();
+        return currentDate.format(todayDate);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -301,9 +311,8 @@ public class PublishFragment extends Fragment {
                 getFragmentManager().popBackStack();
             }
         });
-
+        bPublish = (Button) view.findViewById(R.id.bPublish);
         view.findViewById(R.id.bPublish).
-
                 setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -347,16 +356,12 @@ public class PublishFragment extends Fragment {
                                     describePlaceSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, ""),
                                     titleSP.getString(TitleFragment.TITLE_KEY, ""),
 
-//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbChildren), false),
-//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbInfants), false),
-//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbPets), false),
-//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbSmoking), false),
-//                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbParties), false),
-                                    false,
-                                    false,
-                                    false,
-                                    false,
-                                    false,
+                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbChildren), false),
+                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbInfants), false),
+                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbPets), false),
+                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbSmoking), false),
+                                    houseRuleSP.getBoolean(getResources().getString(R.string.rbParties), false),
+
                                     houseRuleSP.getString(HouseRuleFragment.ADDITIONAL_RULES, ""),
 
                                     bookingSP.getString(BookingFragment.MAX_MONTH, "ERROR"),
@@ -364,9 +369,9 @@ public class PublishFragment extends Fragment {
                                     bookingSP.getString(BookingFragment.LEAVE_BEFORE, "ERROR"),
                                     bookingSP.getString(BookingFragment.MIN_STAY, "ERROR"),
                                     bookingSP.getString(BookingFragment.MAX_STAY, ""),
+                                    priceSP.getString(PriceFragment.PRICE, "ERROR"),
 
-                                    priceSP.getString(PriceFragment.PRICE, "ERROR")
-
+                                    getCurrentDate()
                             );
 
                             retrofit.insertListingData(publishListingDataRequest).enqueue(new Callback<IdListing>() {
@@ -375,6 +380,7 @@ public class PublishFragment extends Fragment {
                                     Log.d("heyBestie", "The listing id is " + response.body().getId());
                                     progressDialog.dismiss();
                                     latch.countDown();
+                                    bPublish.performClick();
                                     latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
                                     listingIdSP.edit().putInt(LISTING_ID, response.body().getId()).apply();
                                 }
@@ -396,5 +402,12 @@ public class PublishFragment extends Fragment {
 
                     }
                 });
+
+        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertImagesToDatabase();
+            }
+        });
     }
 }
