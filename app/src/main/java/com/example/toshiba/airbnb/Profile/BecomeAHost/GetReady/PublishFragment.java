@@ -111,10 +111,11 @@ public class PublishFragment extends Fragment {
 
         sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
         listingIdSP = getActivity().getSharedPreferences(LISTING_ID_SP, Context.MODE_PRIVATE);
+
         //CountDownLatch for publish button
         latchPublishSP = getActivity().getSharedPreferences(LATCH_COUNTDOWN_SP, Context.MODE_PRIVATE);
         latchEdit = latchPublishSP.edit();
-//        latchEdit.clear();
+
         //Save latchCountdown to sp just in case if user clicks publish and app crashes/closes; there won't be any repeated actions.
         if (latchPublishSP.getAll().isEmpty()) {
             latch = new CountDownLatch(2);
@@ -122,6 +123,10 @@ public class PublishFragment extends Fragment {
         } else {
             latch = new CountDownLatch(latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 2));
         }
+
+        //Track insertImages progress, if data failes to be inserted, this will keep track of the leftover data
+        insertImagesSP = getActivity().getSharedPreferences(INSERT_IMAGES_COUNT, Context.MODE_PRIVATE);
+        insertImagesEdit = insertImagesSP.edit();
 
 
         retrofit = new Retrofit.Builder()
@@ -163,8 +168,6 @@ public class PublishFragment extends Fragment {
         File file = new File(sdCardDirectory.getAbsolutePath() + GalleryAdapter.airBnbDirectory);
         final File[] listFile = file.listFiles();
 
-        insertImagesSP = getActivity().getSharedPreferences(INSERT_IMAGES_COUNT, Context.MODE_PRIVATE);
-        insertImagesEdit = insertImagesSP.edit();
         new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -182,18 +185,22 @@ public class PublishFragment extends Fragment {
                 } else {
                     uploadLeftOff = insertImagesSP.getInt(INSERT_IMAGES_COUNT, 0);
                 }
+                Log.d("checkLengthInsert", listFile.length + "");
 
                 for (int i = uploadLeftOff; i < listFile.length; i++) {
-                    ImageListingRequest imageListingRequest = new ImageListingRequest(listFile[i].getAbsolutePath(),
+                    Log.d("insertListingCalled", i + "");
+                    ImageListingRequest imageListingRequest = new ImageListingRequest(listFile[i].getAbsolutePath().replaceFirst("/", ""),
                             listingIdSP.getInt(LISTING_ID, 0));
 
                     retrofit.insertListingImages(imageListingRequest).enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
+                            Log.d("InsertListingCalled", "insertListingCalled");
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
+                            Log.d("InsertListingCalled", t.toString());
                         }
                     });
 
@@ -219,6 +226,7 @@ public class PublishFragment extends Fragment {
     }
 
     public void uploadImageToCloudinary() {
+        insertImagesEdit.clear();
         cloudinaryUploadSP = getActivity().getSharedPreferences(CLOUDINARY_UPLOAD_SP, Context.MODE_PRIVATE);
         cloudinaryEdit = cloudinaryUploadSP.edit();
         progressDialog.setMessage("Uploading your images...");
@@ -256,14 +264,25 @@ public class PublishFragment extends Fragment {
                 }
 
                 final Cloudinary cloudinary =
-                        new Cloudinary("cloudinary://847239287961448:P2LUOMMTrMRij1Ny5ay8lWZHHUk@du8n2aa4p");
+                        new Cloudinary(getResources().getString(R.string.cloudinaryEnviornmentVariable));
 
+                Log.d("checkLengthUpload", listFile.length + "");
                 for (int i = uploadLeftOff; i < listFile.length; i++) {
                     try {
-                        cloudinary.uploader().upload(listFile[i].getAbsolutePath(), ObjectUtils.emptyMap());
+                        //make cloudinary file name, or public id, into local file name
+                        Log.d("cloudEror", listFile[i].getAbsolutePath());
+                        String filePath =  listFile[i].getAbsolutePath();
+                        //"public_id" in cloudParam cannot start with /
+                        String filePathAsName =  filePath.substring(0, filePath.indexOf(".")).replaceFirst("/" , "");
+                        Map cloudParam = ObjectUtils.asMap("public_id", filePathAsName);
+                        //upload it
+
+                        cloudinary.uploader().upload(filePath, cloudParam);
 
                     } catch (IOException e) {
+                        Log.d("cloudError", e.toString());
                         e.printStackTrace();
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_LONG).show();
                         //to avoid uploaidng repeating images when publish is clicked again
                         cloudinaryEdit.putInt(CLOUDINARY_UPLOAD_COUNT, i).apply();
@@ -380,9 +399,10 @@ public class PublishFragment extends Fragment {
                                     Log.d("heyBestie", "The listing id is " + response.body().getId());
                                     progressDialog.dismiss();
                                     latch.countDown();
-                                    bPublish.performClick();
+                                    Log.d("publishOnResponse", latch.getCount() + "");
                                     latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
                                     listingIdSP.edit().putInt(LISTING_ID, response.body().getId()).apply();
+                                    bPublish.performClick();
                                 }
 
                                 @Override
@@ -394,20 +414,17 @@ public class PublishFragment extends Fragment {
                                 }
                             });
 
+
                         } else if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 1) {
                             insertImagesToDatabase();
                         } else if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 0) {
                             uploadImageToCloudinary();
+//                            Toast.makeText(getActivity(), "Miss you bestie", Toast.LENGTH_LONG).show();
+//                            latchEdit.clear();
                         }
 
                     }
                 });
 
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insertImagesToDatabase();
-            }
-        });
     }
 }
