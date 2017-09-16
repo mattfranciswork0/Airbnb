@@ -34,6 +34,7 @@
         <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
 
         </activity>
+        <activity android:name=".Profile.ViewListingActivity"></activity>
         <activity android:name=".Profile.BecomeAHost.ProgressActivity"></activity>
 
         <activity android:name=".Explore.HomeDescActivity"></activity>

@@ -9,6 +9,7 @@ package com.example.toshiba.airbnb;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.POJOImageAndListingGetResult;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -42,6 +43,10 @@ public interface DatabaseInterface {
     @Headers("Content-Type: application/json")
     @POST("/insertListingImages")
     Call<Void> insertListingImages(@Body ImageListingRequest body);
+
+    @Headers("Content-Type: application/json")
+    @GET("/listingImageAndTitle/{user_id}")
+    Call<POJOImageAndListingGetResult> getListingImageAndTitle(@Path("user_id") int user_id);
 
     @Headers("Content-Type: application/json")
     @GET("/hi")

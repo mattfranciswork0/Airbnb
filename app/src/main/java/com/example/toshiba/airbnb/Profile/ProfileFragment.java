@@ -64,6 +64,14 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        view.findViewById(R.id.tvListings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ViewListingActivity.class);
+                startActivity(intent);
+            }
+        });
         view.findViewById(R.id.tvLogOut).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
