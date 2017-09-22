@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb.Profile;
+package com.example.toshiba.airbnb.Profile.ViewListing;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -53,14 +53,12 @@ public class ViewListingFragment extends Fragment {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+        progressDialog.show();
 
-//        RecyclerView rvListing = (RecyclerView) view.findViewById(R.id.rvListing);
-//        rvListing.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        rvListing.setAdapter(new ViewListingAdapter(1, getActivity()));
         retrofit.getListingImageAndTitle(getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
-                .getInt(SessionManager.USER_ID, 0)).enqueue(new Callback<POJOImageAndListingGetResult>() {
+                .getInt(SessionManager.USER_ID, 0)).enqueue(new Callback<POJOListingImageAndTitleGetResult>() {
             @Override
-            public void onResponse(Call<POJOImageAndListingGetResult> call, Response<POJOImageAndListingGetResult> response) {
+            public void onResponse(Call<POJOListingImageAndTitleGetResult> call, Response<POJOListingImageAndTitleGetResult> response) {
                 RecyclerView rvListing = (RecyclerView) view.findViewById(R.id.rvListing);
                 rvListing.setLayoutManager(new LinearLayoutManager(getActivity()));
                 rvListing.setAdapter(new ViewListingAdapter(response.body().getResult().size(), getActivity()));
@@ -68,7 +66,7 @@ public class ViewListingFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<POJOImageAndListingGetResult> call, Throwable t) {
+            public void onFailure(Call<POJOListingImageAndTitleGetResult> call, Throwable t) {
                 progressDialog.dismiss();
                 Log.d("missYou", t.toString());
                 Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();

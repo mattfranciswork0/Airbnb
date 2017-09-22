@@ -4,7 +4,6 @@ package com.example.toshiba.airbnb.Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInstaller;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
+import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingActivity;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
 

@@ -1,9 +1,10 @@
-package com.example.toshiba.airbnb.Profile;
+package com.example.toshiba.airbnb.Profile.ViewListing;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingFragment;
 import com.example.toshiba.airbnb.R;
 
 /**

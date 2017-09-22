@@ -1,9 +1,7 @@
-package com.example.toshiba.airbnb.Profile;
+package com.example.toshiba.airbnb.Profile.ViewListing;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.HomeDescActivity;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
 
@@ -31,8 +30,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ViewListingAdapter extends RecyclerView.Adapter<ViewListingAdapter.ViewListingViewHolder> {
     DatabaseInterface retrofit;
     Context context;
-    ProgressDialog progressDialog;
     int size;
+    public static String LISTING_ID = "LISTING_ID";
     public ViewListingAdapter(int size, Context context){
         retrofit = new Retrofit.Builder()
 //                .baseUrl("http://192.168.2.89:3000/")
@@ -72,17 +71,26 @@ public class ViewListingAdapter extends RecyclerView.Adapter<ViewListingAdapter.
         }
         public void bindView(final int position){
             retrofit.getListingImageAndTitle(context.getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
-                    .getInt(SessionManager.USER_ID, 0)).enqueue(new Callback<POJOImageAndListingGetResult>() {
+                    .getInt(SessionManager.USER_ID, 0)).enqueue(new Callback<POJOListingImageAndTitleGetResult>() {
                 @Override
-                public void onResponse(Call<POJOImageAndListingGetResult> call, Response<POJOImageAndListingGetResult> response) {
+                public void onResponse(Call<POJOListingImageAndTitleGetResult> call, final Response<POJOListingImageAndTitleGetResult> response) {
                     tvTitle.setText(response.body().getResult().get(position).getPlaceTitle());
                     Cloudinary cloudinary = new Cloudinary(context.getResources().getString(R.string.cloudinaryEnviornmentVariable)); //configured using an environment variable
                     Glide.with(context).
                             load(cloudinary.url().generate(response.body().getResult().get(position).getImagePath())).into(ivListing);
+                    itemView.findViewById(R.id.listingLayout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, HomeDescActivity.class);
+                            intent.putExtra(LISTING_ID, response.body().getResult().get(position).getId());
+                            context.startActivity(intent);
+                        }
+                    });
+
                 }
 
                 @Override
-                public void onFailure(Call<POJOImageAndListingGetResult> call, Throwable t) {
+                public void onFailure(Call<POJOListingImageAndTitleGetResult> call, Throwable t) {
                     Log.d("missYouAdapter", t.toString());
 
                 }

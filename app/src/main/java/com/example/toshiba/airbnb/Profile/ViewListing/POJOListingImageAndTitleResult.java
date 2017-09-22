@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb.Profile;
+package com.example.toshiba.airbnb.Profile.ViewListing;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by TOSHIBA on 15/09/2017.
  */
 
-public class POJOImageAndListingResult {
+public class POJOListingImageAndTitleResult {
 
     @SerializedName("id")
     @Expose
