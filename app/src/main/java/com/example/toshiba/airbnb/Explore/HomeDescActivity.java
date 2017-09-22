@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
 import com.example.toshiba.airbnb.R;
 
 
@@ -38,7 +40,17 @@ public class HomeDescActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_desc);
         HomeDescFragment homeDescFragment = new HomeDescFragment();
-        homeDescFragment.setArguments(getIntent().getExtras());
+        if(getIntent().getExtras() != null) {
+            if (getIntent().getExtras().containsKey(ViewListingAdapter.LISTING_ID)) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(ViewListingAdapter.LISTING_ID,
+                        getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID));
+                homeDescFragment.setArguments(bundle);
+                Toast.makeText(HomeDescActivity.this, getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID) +"",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
         getSupportFragmentManager().beginTransaction().replace(R.id.homeDescLayout, homeDescFragment).commit();
     }
 }

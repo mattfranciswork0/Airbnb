@@ -13,6 +13,7 @@
     <string name="rbHeating">rbHeating</string>
     <string name="rbAirConditioning">rbAirConditioning</string>
     <string name="rbBreakfast">rbBreakfast</string>
+    <string name="additionalRules">additionalRules</string>
 
     <string name="EssentialsIcon">https://cdn1.iconfinder.com/data/icons/hotel-restaurant/512/39-512.png</string>
     <string name="InternetIcon">http://www.iconsdb.com/icons/preview/gray/wireless-xxl.png</string>
