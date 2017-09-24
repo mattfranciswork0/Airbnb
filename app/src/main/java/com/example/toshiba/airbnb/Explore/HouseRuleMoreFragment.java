@@ -59,72 +59,73 @@ public class HouseRuleMoreFragment extends Fragment {
         TextView tvParties = (TextView) view.findViewById(R.id.tvParties);
 
         final EditText etAdditionalRules = (EditText) view.findViewById(R.id.etAdditionalRules);
-
-        if (getArguments().containsKey(ViewListingAdapter.LISTING_ID)) {
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Getting data...");
-            dialog.show();
-            retrofit = new Retrofit.Builder()
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAdapter.LISTING_ID)) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Getting data...");
+                dialog.show();
+                retrofit = new Retrofit.Builder()
 //                .baseUrl("http://192.168.2.89:3000/")
-                    .baseUrl("http://192.168.0.34:3000/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(DatabaseInterface.class);
-            retrofit.getListingData(getArguments().getInt(ViewListingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
-                @Override
-                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                    POJOListingData body = response.body();
-                    //1 == true
-                    //2 == false
-                    if(body.getSuitableForChildren() == 1){
-                        tvSuitableForChildren.setVisibility(View.VISIBLE);
-                    }
-                    if(body.getSuitableForInfants() == 1){
-                        tvSuitableForInfants.setVisibility(View.VISIBLE);
-                    }
-                    if(body.getSuitableForPets() == 1){
-                        tvSuitableForPets.setVisibility(View.VISIBLE);
-                    }
-                    if(body.getSmokingAllowed() == 1){
-                        tvSmoking.setVisibility(View.VISIBLE);
-                    }
-                    if(body.getPartiesAllowed() == 1){
-                        tvSmoking.setVisibility(View.VISIBLE);
+                        .baseUrl("http://192.168.0.34:3000/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build().create(DatabaseInterface.class);
+                retrofit.getListingData(getArguments().getInt(ViewListingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                        POJOListingData body = response.body();
+                        //1 == true
+                        //2 == false
+                        if (body.getSuitableForChildren() == 1) {
+                            tvSuitableForChildren.setVisibility(View.VISIBLE);
+                        }
+                        if (body.getSuitableForInfants() == 1) {
+                            tvSuitableForInfants.setVisibility(View.VISIBLE);
+                        }
+                        if (body.getSuitableForPets() == 1) {
+                            tvSuitableForPets.setVisibility(View.VISIBLE);
+                        }
+                        if (body.getSmokingAllowed() == 1) {
+                            tvSmoking.setVisibility(View.VISIBLE);
+                        }
+                        if (body.getPartiesAllowed() == 1) {
+                            tvSmoking.setVisibility(View.VISIBLE);
+                        }
+
+                        etAdditionalRules.setText(body.getAdditionalRules());
+
+                        dialog.dismiss();
+
                     }
 
-                    etAdditionalRules.setText(body.getAdditionalRules());
-
-                    dialog.dismiss();
-
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(),
+                                "Data retrieval failed, make sure your internet connection is stable, try again", Toast.LENGTH_LONG).show();
+                        getActivity().onBackPressed();
+                    }
+                });
+            } else {
+                if (!(sharedPreferences.contains(getString(R.string.rbChildren)))) {
+                    tvSuitableForChildren.setVisibility(View.VISIBLE);
                 }
-
-                @Override
-                public void onFailure(Call<POJOListingData> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(getActivity(),
-                            "Data retrieval failed, make sure your internet connection is stable, try again",Toast.LENGTH_LONG).show();
-                    getActivity().onBackPressed();
+                if (!(sharedPreferences.contains(getString(R.string.rbInfants)))) {
+                    tvSuitableForInfants.setVisibility(View.VISIBLE);
                 }
-            });
-        } else {
-            if (!(sharedPreferences.contains(getString(R.string.rbChildren)))) {
-                tvSuitableForChildren.setVisibility(View.VISIBLE);
+                if (!(sharedPreferences.contains(getString(R.string.rbPets)))) {
+                    tvSuitableForPets.setVisibility(View.VISIBLE);
+                }
+                if (!(sharedPreferences.contains(getString(R.string.rbSmoking)))) {
+                    tvSmoking.setVisibility(View.VISIBLE);
+                }
+                if (!(sharedPreferences.contains(getString(R.string.rbParties)))) {
+                    tvParties.setVisibility(View.VISIBLE);
+                }
+                if (sharedPreferences.contains(getResources().getString(R.string.additionalRules))) {
+                    etAdditionalRules.setText(sharedPreferences.getString(HouseRuleFragment.ADDITIONAL_RULES, ""));
+                }
             }
-            if (!(sharedPreferences.contains(getString(R.string.rbInfants)))) {
-                tvSuitableForInfants.setVisibility(View.VISIBLE);
-            }
-            if (!(sharedPreferences.contains(getString(R.string.rbPets)))) {
-                tvSuitableForPets.setVisibility(View.VISIBLE);
-            }
-            if (!(sharedPreferences.contains(getString(R.string.rbSmoking)))) {
-                tvSmoking.setVisibility(View.VISIBLE);
-            }
-            if (!(sharedPreferences.contains(getString(R.string.rbParties)))) {
-                tvParties.setVisibility(View.VISIBLE);
-            }
-            if(sharedPreferences.contains(getResources().getString(R.string.additionalRules))){
-                etAdditionalRules.setText(sharedPreferences.getString(HouseRuleFragment.ADDITIONAL_RULES, ""));
-            }
+
         }
-
     }
 }

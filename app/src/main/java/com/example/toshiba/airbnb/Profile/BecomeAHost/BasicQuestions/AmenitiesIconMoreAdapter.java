@@ -27,12 +27,20 @@ public class AmenitiesIconMoreAdapter extends RecyclerView.Adapter<AmenitiesIcon
     Activity activity;
     SharedPreferences amenitiesSP;
     private Map<String, ?> savedAmenities;
-    private ArrayList<String> icons = new ArrayList<>();
+    private ArrayList<String> icons;
+    boolean getFromDatabase;
 
-    public AmenitiesIconMoreAdapter(Activity activity) {
+    public AmenitiesIconMoreAdapter(Activity activity, boolean getFromDatabase, ArrayList<String> icons) {
         this.activity = activity;
         amenitiesSP = activity.getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
-
+        this.getFromDatabase = getFromDatabase;
+        this.icons = icons;
+        if (!getFromDatabase) {
+            savedAmenities = amenitiesSP.getAll();
+            for (String key : savedAmenities.keySet()) {
+                icons.add(key);
+            }
+        }
     }
 
     @Override
@@ -40,10 +48,6 @@ public class AmenitiesIconMoreAdapter extends RecyclerView.Adapter<AmenitiesIcon
         Log.d("recyclerAdapter", "onCreateViewHolder");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_amenities_icon_more_item, parent, false);
-        savedAmenities = amenitiesSP.getAll();
-        for (String key : savedAmenities.keySet()) {
-            icons.add(key);
-        }
 
 
         return new AmenitiesIconMoreAdapter.AmenitiesIconMoreViewHolder(view);
@@ -56,8 +60,7 @@ public class AmenitiesIconMoreAdapter extends RecyclerView.Adapter<AmenitiesIcon
 
     @Override
     public int getItemCount() {
-        Log.d("recyclerAdapter", "itemCount");
-        return amenitiesSP.getAll().size();
+        return icons.size();
     }
 
     public class AmenitiesIconMoreViewHolder extends RecyclerView.ViewHolder {
@@ -72,6 +75,9 @@ public class AmenitiesIconMoreAdapter extends RecyclerView.Adapter<AmenitiesIcon
         }
 
         public void bindView(int position) {
+            if(getFromDatabase){
+                icons.get(position).equals(activity.getResources().getString(R.string.rbEssentials));
+            }
             if (icons.get(position).equals(activity.getResources().getString(R.string.rbEssentials))) {
                 tvIconName.setText("Essentials");
                 Glide.with(activity).load(activity.getResources().getString(R.string.EssentialsIcon)).into(ivIcon);

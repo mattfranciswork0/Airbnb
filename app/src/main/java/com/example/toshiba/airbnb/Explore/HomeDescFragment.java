@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -65,8 +66,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
-    public static String LAT = "LAT";
-    public static String LNG = "LNG";
+    Double LAT;
+    Double LNG;
+    public static String AMENITIES_FROM_DATABASE = "AMENITIES_FROM_DATABASE";
     private ArrayList<Uri> imageUriArrayList = new ArrayList<>();
     private ImageSliderPager imageSliderPager;
     //Amenities
@@ -157,7 +159,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         showOthersIconAddded = false;
@@ -216,20 +218,15 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         final TextView tvBathroom = (TextView) view.findViewById(R.id.tvBaths);
         layoutIconAmenities = (LinearLayout) view.findViewById(R.id.layoutIconAmenities);
         final RelativeLayout layoutHouseRule = (RelativeLayout) view.findViewById(R.id.layoutHouseRule);
+        final LinearLayout layoutAmentities = (LinearLayout) view.findViewById(R.id.layoutAmentities);
+
         showOthersIconInt = 6 - 1;
         //Layout params for amenities icons
+
         float widthAndHeight = getResources().getDimension(R.dimen.amenities_icon_height_and_width);
         params = new LinearLayout.LayoutParams((int) widthAndHeight,
                 (int) widthAndHeight);
         params.weight = 1;
-
-        view.findViewById(R.id.layoutAmentities).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null)
-                .commit();
-            }
-        });
 
 
         layoutHouseRule.setOnClickListener(new View.OnClickListener() {
@@ -254,8 +251,6 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                     public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
                         POJOListingData body = response.body();
                         //TODO: PRICE, add property_ownership and property_type in view listing
-                        //TODO: programtically add map to layout for setArgument
-                        //TODO: layoutIconMore ameniteis
 
                         tvGuest.setText(body.getTotalGuest());
                         tvRoom.setText(body.getTotalBedrooms());
@@ -263,52 +258,78 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                         tvBathroom.setText(body.getTotalBathrooms());
 
 
-                        //TODO:Handle MAP
-                        Bundle mapBundle = new Bundle();
-                        mapBundle.putString(LAT, body.getLat());
-                        mapBundle.putString(LNG, body.getLng());
+                        LAT = Double.parseDouble(body.getLat());
+                        LNG = Double.parseDouble(body.getLng());
                         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-//                        mapFragment.setArguments(mapBundle);
                         mapFragment.getMapAsync(HomeDescFragment.this);
-                        Log.d("thisObj", HomeDescFragment.class + "");
-                        Log.d("thisObj", HomeDescFragment.this + "");
-                        Log.d("thisObj", getActivity() + "");
-
-
                         //Load AmenitiesIcon
                         //1 is true
                         //2 is false
                         retrieveAmenitiesFromData = true;
-                        if (body.getEssentials() == 1)
-                            Log.d("loveYa", "essential if block");
+                        final ArrayList<String> amenitiesFromDatabase = new ArrayList<String>();
+                        if (body.getEssentials() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.EssentialsIcon), showOthersIconInt);
-                        if (body.getInternet() == 1)
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbEssentials));
+                        }
+                        if (body.getInternet() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.InternetIcon), showOthersIconInt);
-                        if (body.getShampoo() == 1)
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbInternet));
+                        }
+                        if (body.getShampoo() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ShampooIcon), showOthersIconInt);
-                        if (body.getHangers() == 1)
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbShampoo));
+                        }
+                        if (body.getHangers() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HangersIcon), showOthersIconInt);
-                        if (body.getTv() == 1)
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbHangers));
+                        }
+                        if (body.getTv() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.TVIcon), showOthersIconInt);
-                        if (body.getHeating() == 1)
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbTV));
+                        }
+                        if (body.getHeating() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HeatingIcon), showOthersIconInt);
-                        if (body.getAirConditioning() == 1)
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbHeating));
+                        }
+                        if (body.getAirConditioning() == 1) {
                             showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.AirConditioningIcon), showOthersIconInt);
-                        if (body.getBreakfast() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.BreakfastIcon), showOthersIconInt);
-                        if (body.getKitchen() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.KitchenIcon), showOthersIconInt);
-                        if (body.getLaundry() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.LaundryIcon), showOthersIconInt);
-                        if (body.getParking() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ParkingIcon), showOthersIconInt);
-                        if (body.getElevator() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ElevatorIcon), showOthersIconInt);
-                        if (body.getPool() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.PoolIcon), showOthersIconInt);
-                        if (body.getGym() == 1)
-                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbAirConditioning));
 
+                        }
+                        if (body.getBreakfast() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.BreakfastIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbBreakfast));
+
+                        }
+                        if (body.getKitchen() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.KitchenIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbKitchen));
+
+                        }
+                        if (body.getLaundry() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.LaundryIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbLaundry));
+
+                        }
+                        if (body.getParking() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ParkingIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbParking));
+                        }
+                        if (body.getElevator() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ElevatorIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbAirConditioning));
+
+                        }
+                        if (body.getPool() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.PoolIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbPool));
+
+                        }
+                        if (body.getGym() == 1) {
+                            showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
+                            amenitiesFromDatabase.add(getResources().getString(R.string.rbGym));
+
+                        }
 
                         tvDesc.setText(body.getPlaceDescription());
                         tvPlaceTitle.setText(body.getPlaceTitle());
@@ -325,6 +346,20 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             }
                         });
 
+                        layoutAmentities.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AmenitiesIconMoreFragment amenitiesIconMoreFragment = new AmenitiesIconMoreFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putStringArrayList(AMENITIES_FROM_DATABASE,
+                                        amenitiesFromDatabase);
+                                amenitiesIconMoreFragment.setArguments(bundle);
+                                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, amenitiesIconMoreFragment).addToBackStack(null)
+                                        .commit();
+                            }
+                        });
+
+
                         dialog.dismiss();
 
 
@@ -338,136 +373,137 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                         getActivity().onBackPressed();
                     }
                 });
-            } else {
-                //Initalize map fragment
-                mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                mapFragment.getMapAsync(this);
-
-                //get data from sharedpreferences since listing HAS NOT BEEN PUBLISHED
-
-                Log.d("HomeDescFragment", "out of get arguments scope");
-                Bundle bundle = getArguments();
-
-                //Load description from shared preferences if user did not make any changes
-                SharedPreferences describeSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
-                String savedEtDescribePlace = describeSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, "");
-                tvDesc.setText(savedEtDescribePlace);
-
-                //Load title from shared preferences
-                SharedPreferences titleSP = getActivity().getSharedPreferences(TitleFragment.TITLE_SP, Context.MODE_PRIVATE);
-                String savedEtTitle = titleSP.getString(TitleFragment.TITLE_KEY, "");
-                tvPlaceTitle.setText(savedEtTitle);
-
-                //Load PropertyTypeFragment from shared preferences
-                SharedPreferences propertyTypeSP = getActivity().getSharedPreferences(PropertyTypeFragment.PROPERTY_TYPE_SP, Context.MODE_PRIVATE);
-                tvPropertyType.setText(propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, ""));
-
-                //Load PropertyTypeFragment from shared preferences
-                SharedPreferences guestSP = getActivity().getSharedPreferences(GuestFragment.GUEST_SP, Context.MODE_PRIVATE);
-                tvGuest.setText(guestSP.getString(GuestFragment.TOTAL_GUEST, "1 guest"));
-                tvRoom.setText(guestSP.getString(GuestFragment.TOTAL_BED_ROOM, "1 bedroom"));
-                tvBed.setText(guestSP.getString(GuestFragment.TOTAL_BED, "1 bed"));
-
-                //Load BathroomFragment
-                SharedPreferences bathroomSP = getActivity().getSharedPreferences(BathroomFragment.BATHROOM_SP, Context.MODE_PRIVATE);
-                tvBathroom.setText(bathroomSP.getString(BathroomFragment.TOTAL_BATHROOM, "1 bathroom"));
-
 
                 //Show preview that is not saved to shared preferences yet
-                //Show preview that is not saved to shared preferences yet
-                if (bundle.containsKey(DescribePlaceFragment.DESCRIBE_PREVIEW)) {
+                if (getArguments().containsKey(DescribePlaceFragment.DESCRIBE_PREVIEW)) {
                     tvDesc.setText(getArguments().getString(DescribePlaceFragment.DESCRIBE_PREVIEW));
-                } else if (bundle.containsKey(TitleFragment.TITLE_PREVIEW)) {
+                } else if (getArguments().containsKey(TitleFragment.TITLE_PREVIEW)) {
                     tvPlaceTitle.setText(getArguments().getString(TitleFragment.TITLE_PREVIEW));
                 }
 
-
-                //Load amenities icon from sharedpreferences
-                amenitiesSP = getActivity().getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
-                savedAmenities = amenitiesSP.getAll();
-                Map<String, ?> keys = amenitiesSP.getAll();
-
-                for (Map.Entry<String, ?> entry : keys.entrySet()) {
-                    Log.d("map values", entry.getKey() + ": " +
-                            entry.getValue().toString());
-                }
-
-
-
-
-                //-1 because loadAmenititesIcon() will create an additional + icon.
-                //if countdown reaches 0, it will show "Others icon int"
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbEssentials))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.EssentialsIcon), showOthersIconInt);
-                }
-
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbInternet))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.InternetIcon), showOthersIconInt);
-                }
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbShampoo))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ShampooIcon), showOthersIconInt);
-                }
-
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbHangers))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HangersIcon), showOthersIconInt);
-                }
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbTV))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.TVIcon), showOthersIconInt);
-                }
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbHeating))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HeatingIcon), showOthersIconInt);
-                }
-
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbAirConditioning))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.AirConditioningIcon), showOthersIconInt);
-                }
-
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbBreakfast))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.BreakfastIcon), showOthersIconInt);
-                }
-
-                layoutIconAmenities.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null).commit();
-                    }
-                });
-
-                //AmenitiesSpaceFragment
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbKitchen))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.KitchenIcon), showOthersIconInt);
-                }
-
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbLaundry))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.LaundryIcon), showOthersIconInt);
-                }
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbParking))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ParkingIcon), showOthersIconInt);
-                }
-
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbElevator))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ElevatorIcon), showOthersIconInt);
-                }
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbPool))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.PoolIcon), showOthersIconInt);
-                }
-                if (savedAmenities.containsKey(getResources().getString(R.string.rbGym))) {
-                    showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
-                }
-
             }
+        } else {
+            SharedPreferences locationSP = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP,
+                    Context.MODE_PRIVATE);
+            LAT = Double.parseDouble(locationSP.getString(LocationFilterAdapter.LAT, "0.000000"));
+            LNG = Double.parseDouble(locationSP.getString(LocationFilterAdapter.LNG, "0.000000"));
+            mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(HomeDescFragment.this);
+            //get data from sharedpreferences since listing HAS NOT BEEN PUBLISHED
+
+            Log.d("HomeDescFragment", "out of get arguments scope");
+
+            //Load description from shared preferences if user did not make any changes
+            SharedPreferences describeSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
+            String savedEtDescribePlace = describeSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, "");
+            tvDesc.setText(savedEtDescribePlace);
+
+            //Load title from shared preferences
+            SharedPreferences titleSP = getActivity().getSharedPreferences(TitleFragment.TITLE_SP, Context.MODE_PRIVATE);
+            String savedEtTitle = titleSP.getString(TitleFragment.TITLE_KEY, "");
+            tvPlaceTitle.setText(savedEtTitle);
+
+            //Load PropertyTypeFragment from shared preferences
+            SharedPreferences propertyTypeSP = getActivity().getSharedPreferences(PropertyTypeFragment.PROPERTY_TYPE_SP, Context.MODE_PRIVATE);
+            tvPropertyType.setText(propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, ""));
+
+            //Load PropertyTypeFragment from shared preferences
+            SharedPreferences guestSP = getActivity().getSharedPreferences(GuestFragment.GUEST_SP, Context.MODE_PRIVATE);
+            tvGuest.setText(guestSP.getString(GuestFragment.TOTAL_GUEST, "1 guest"));
+            tvRoom.setText(guestSP.getString(GuestFragment.TOTAL_BED_ROOM, "1 bedroom"));
+            tvBed.setText(guestSP.getString(GuestFragment.TOTAL_BED, "1 bed"));
+
+            //Load BathroomFragment
+            SharedPreferences bathroomSP = getActivity().getSharedPreferences(BathroomFragment.BATHROOM_SP, Context.MODE_PRIVATE);
+            tvBathroom.setText(bathroomSP.getString(BathroomFragment.TOTAL_BATHROOM, "1 bathroom"));
+
+
+            //Load amenities icon from sharedpreferences
+            amenitiesSP = getActivity().getSharedPreferences(AmenitiesItemFragment.AMENITIES_SP, Context.MODE_PRIVATE);
+            savedAmenities = amenitiesSP.getAll();
+            Map<String, ?> keys = amenitiesSP.getAll();
+
+            for (Map.Entry<String, ?> entry : keys.entrySet()) {
+                Log.d("map values", entry.getKey() + ": " +
+                        entry.getValue().toString());
+            }
+
+
+            //-1 because loadAmenititesIcon() will create an additional + icon.
+            //if countdown reaches 0, it will show "Others icon int"
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbEssentials))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.EssentialsIcon), showOthersIconInt);
+            }
+
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbInternet))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.InternetIcon), showOthersIconInt);
+            }
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbShampoo))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ShampooIcon), showOthersIconInt);
+            }
+
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbHangers))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HangersIcon), showOthersIconInt);
+            }
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbTV))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.TVIcon), showOthersIconInt);
+            }
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbHeating))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.HeatingIcon), showOthersIconInt);
+            }
+
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbAirConditioning))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.AirConditioningIcon), showOthersIconInt);
+            }
+
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbBreakfast))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.BreakfastIcon), showOthersIconInt);
+            }
+
+            layoutIconAmenities.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null).commit();
+                }
+            });
+
+            //AmenitiesSpaceFragment
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbKitchen))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.KitchenIcon), showOthersIconInt);
+            }
+
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbLaundry))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.LaundryIcon), showOthersIconInt);
+            }
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbParking))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ParkingIcon), showOthersIconInt);
+            }
+
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbElevator))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.ElevatorIcon), showOthersIconInt);
+            }
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbPool))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.PoolIcon), showOthersIconInt);
+            }
+            if (savedAmenities.containsKey(getResources().getString(R.string.rbGym))) {
+                showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
+            }
+            layoutAmentities.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null)
+                            .commit();
+                }
+            });
+
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
-
-        Double LAT = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LAT, "0.000000"));
-        Double LNG = Double.parseDouble(sharedPreferences.getString(LocationFilterAdapter.LNG, "0.000000"));
         LatLng latLng = new LatLng(LAT, LNG);
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
+        markerOptions.position(new LatLng(LAT, LNG));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -481,10 +517,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                 .radius(300)
                 .strokeWidth(0f)
                 .fillColor(0x550000FF));
-
-        //Load data saved in dataabase if it exist
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
