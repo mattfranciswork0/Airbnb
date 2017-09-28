@@ -36,6 +36,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTyp
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.HouseRuleFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.Profile.HostProfileViewFragment;
 import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
@@ -69,7 +70,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     Double LAT;
     Double LNG;
     public static String AMENITIES_FROM_DATABASE = "AMENITIES_FROM_DATABASE";
-    private ArrayList<Uri> imageUriArrayList = new ArrayList<>();
+    private ArrayList<String> imageArrayList = new ArrayList<>();
+    private ArrayList<String> captionArrayList = new ArrayList<>();
     private ImageSliderPager imageSliderPager;
     //Amenities
     SharedPreferences amenitiesSP;
@@ -101,7 +103,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
             if (listFile != null) {
                 for (int i = 0; i < listFile.length; i++) {
                     //Convert file path to Uri, then add to arrayList
-                    imageUriArrayList.add(Uri.fromFile(new File(listFile[i].getAbsolutePath())));
+                    imageArrayList.add(String.valueOf(Uri.fromFile(new File(listFile[i].getAbsolutePath()))));
                 }
             }
         }
@@ -140,7 +142,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadSDCard();
+;
         retrofit = new Retrofit.Builder()
 //                .baseUrl("http://192.168.2.89:3000/")
                 .baseUrl("http://192.168.0.34:3000/")
@@ -162,31 +164,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         showOthersIconAddded = false;
-
-
-        //TODO: send img to imagesliderpager
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
-        imageSliderPager = new ImageSliderPager(getActivity(), imageUriArrayList, HomeDescFragment.this, viewPager);
-        viewPager.setAdapter(imageSliderPager);
-
-        tvSize.setText(1 + " of " + imageUriArrayList.size() + " - " + imageSliderPager.getFirstCaption());
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                tvSize.setText((position + 1) + " of " + imageUriArrayList.size() + " - " + imageSliderPager.getOtherCaptions(position));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
 
         ImageView ivHost = (ImageView) view.findViewById(R.id.ivHost);
         ivHost.setOnClickListener(new View.OnClickListener() {
@@ -245,13 +224,48 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                 dialog.setMessage("Getting data...");
                 dialog.show();
                 Log.d("HomeDescFragment", "getArgument scope");
-                Toast.makeText(getActivity(), "Hi", Toast.LENGTH_LONG).show();
                 retrofit.getListingData(getArguments().getInt(ViewListingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
                     @Override
                     public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                        POJOListingData body = response.body();
+                        final POJOListingData body = response.body();
                         //TODO: PRICE, add property_ownership and property_type in view listing
 
+
+                        //Handle slide images
+                        if (body.getImageData().size() == 0) {
+                            viewPager.setVisibility(View.GONE);
+                        } else {
+
+                            Log.d("ILoveYou", String.valueOf(new Integer(getArguments().getInt(ViewListingAdapter.LISTING_ID) + "")));
+                            final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
+                            for (int i = 0; i < body.getImageData().size(); i++) {
+                                imageArrayList.add(body.getImageData().get(i).getImagePath());
+                                captionArrayList.add(response.body().getImageData().get(i).getCaption().toString());
+                                Log.d("HeyBestie", "Love ya" + imageArrayList.get(i));
+                            }
+                            imageSliderPager = new ImageSliderPager(getActivity(), HomeDescFragment.this,
+                                    imageArrayList,
+                                    body.getImageData().size(), true);
+                            viewPager.setAdapter(imageSliderPager);
+                            Log.d("LoveYou", String.valueOf(body.getImageData().size()));
+                            tvSize.setText(1 + " of " + body.getImageData().size() + " - " + body.getImageData().get(0));
+                            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                                @Override
+                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                }
+
+                                @Override
+                                public void onPageSelected(int position) {
+                                    tvSize.setText((position + 1) + " of " + imageArrayList.size() + " - " + body.getImageData().get(position).getCaption());
+                                }
+
+                                @Override
+                                public void onPageScrollStateChanged(int state) {
+                                }
+                            });
+
+                        }
                         tvGuest.setText(body.getTotalGuest());
                         tvRoom.setText(body.getTotalBedrooms());
                         tvBed.setText(body.getTotalBeds());
@@ -383,6 +397,41 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
             }
         } else {
+            loadSDCard();
+            //Handle images
+            SharedPreferences captionSP = getActivity().getSharedPreferences(PhotoDescFragment.CAPTION_SP, Context.MODE_PRIVATE);
+
+            for (Map.Entry<String, ?> entry : captionSP.getAll().entrySet()) {
+                captionArrayList.add(String.valueOf(entry.getValue()));
+            }
+            if (imageArrayList.isEmpty()) {
+                viewPager.setVisibility(View.GONE);
+            } else {
+
+                final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
+                imageSliderPager = new ImageSliderPager(getActivity(), HomeDescFragment.this, imageArrayList,
+                        captionArrayList.size(), false);
+                viewPager.setAdapter(imageSliderPager);
+
+                tvSize.setText(1 + " of " + imageArrayList.size() + " - " + imageSliderPager.getFirstCaption());
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        tvSize.setText((position + 1) + " of " + imageArrayList.size() + " - " + imageSliderPager.getOtherCaptions(position));
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+                    }
+                });
+            }
+
+
             SharedPreferences locationSP = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP,
                     Context.MODE_PRIVATE);
             LAT = Double.parseDouble(locationSP.getString(LocationFilterAdapter.LAT, "0.000000"));
@@ -518,6 +567,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                 .strokeWidth(0f)
                 .fillColor(0x550000FF));
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

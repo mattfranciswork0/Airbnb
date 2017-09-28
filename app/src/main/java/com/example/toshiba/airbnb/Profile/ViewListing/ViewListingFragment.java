@@ -2,6 +2,7 @@ package com.example.toshiba.airbnb.Profile.ViewListing;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,11 +53,13 @@ public class ViewListingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.show();
 
-        retrofit.getListingImageAndTitle(getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
-                .getInt(SessionManager.USER_ID, 0)).enqueue(new Callback<POJOListingImageAndTitleGetResult>() {
+        final Call<POJOListingImageAndTitleGetResult> call = retrofit.getListingImageAndTitle(getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
+                .getInt(SessionManager.USER_ID, 0));
+
+        call.enqueue(new Callback<POJOListingImageAndTitleGetResult>() {
             @Override
             public void onResponse(Call<POJOListingImageAndTitleGetResult> call, Response<POJOListingImageAndTitleGetResult> response) {
                 RecyclerView rvListing = (RecyclerView) view.findViewById(R.id.rvListing);
@@ -73,5 +76,15 @@ public class ViewListingFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                call.cancel();
+                getActivity().onBackPressed();
+                //close socket connection
+            }
+        });
+
     }
 }

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cloudinary.Cloudinary;
+import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
+import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
 import com.example.toshiba.airbnb.R;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -34,17 +44,16 @@ import java.util.Objects;
 public class ImageSliderPager extends PagerAdapter {
     public static boolean FULL_SCREEN_MODE = false;
     private Context context;
-    private ArrayList<Uri> imageUriArrayList;
+    private ArrayList<String> imageArrayList;
     private LayoutInflater layoutInflater;
-    private View view;
     private HomeDescFragment homeDescFragment;
     SharedPreferences captionSP;
-    private String savedCaption;
     TextView tvSize;
-    ViewPager viewPager;
+    int size;
+    boolean getFromData;
 
 
-    public void getOutOfFullScreen(){
+    public void getOutOfFullScreen() {
         FULL_SCREEN_MODE = false;
         homeDescFragment.getView().findViewById(R.id.layoutDesc).setVisibility(View.VISIBLE);
 
@@ -62,32 +71,34 @@ public class ImageSliderPager extends PagerAdapter {
         layoutParams.gravity = Gravity.NO_GRAVITY;
         scrollViewChild.setLayoutParams(layoutParams);
 
-        Toast.makeText(context, "Out of full screen" , Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Out of full screen", Toast.LENGTH_LONG).show();
 
     }
 
-    public String getFirstCaption(){
+    public String getFirstCaption() {
         //ViewPager Listener in HomeDesFragment would not be triggered unless user slide the image, therefore, savedCaption would return null on the first image
-        return savedCaption = captionSP.getString(imageUriArrayList.get(0).toString(), "NO CAPTION");
+        return captionSP.getString(imageArrayList.get(0).toString(), "NO CAPTION");
     }
 
-    public String getOtherCaptions(int position){
-        return savedCaption= captionSP.getString(imageUriArrayList.get(position).toString(), "NO CAPTION");
+    public String getOtherCaptions(int position) {
+        return captionSP.getString(imageArrayList.get(position).toString(), "NO CAPTION");
     }
 
-    public ImageSliderPager(Context context, ArrayList<Uri> imageUriArrayList,
-                            HomeDescFragment homeDescFragment, ViewPager viewPager) {
+
+    public ImageSliderPager(final Context context, HomeDescFragment homeDescFragment, final ArrayList imageArrayList, int size, boolean getFromData) {
         this.context = context;
-        this.imageUriArrayList = imageUriArrayList;
-        this.homeDescFragment =homeDescFragment;
-        this.viewPager = viewPager;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         captionSP = homeDescFragment.getActivity().getSharedPreferences(PhotoDescFragment.CAPTION_SP, Context.MODE_PRIVATE);
+        this.homeDescFragment = homeDescFragment;
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.imageArrayList = imageArrayList;
+        this.size = size;
+        this.getFromData = getFromData;
     }
+
 
     @Override
     public int getCount() {
-        return imageUriArrayList.size();
+        return size;
     }
 
     //identifies return value in instantiateItem
@@ -100,12 +111,21 @@ public class ImageSliderPager extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = layoutInflater.inflate(R.layout.image_slider_item, container, false);
         container.addView(itemView);
-        view = itemView;
         ImageView ivHomePhoto = (ImageView) itemView.findViewById(R.id.ivHomePhoto);
+        Log.d("Hello", imageArrayList.get(position).toString());
 
-        Glide.with(context)
-                .load(Uri.parse(imageUriArrayList.get(position).toString()))
-                .into(ivHomePhoto);
+        if(getFromData){
+            Cloudinary cloudinary = new Cloudinary(context.getResources().getString(R.string.cloudinaryEnviornmentVariable)); //configured using an environment variable
+            Glide.with(context).
+                    load(cloudinary.url().generate(imageArrayList.get(position)))
+                    .into(ivHomePhoto);
+        }else{
+            Glide.with(context)
+                    .load(Uri.parse(imageArrayList.get(position).toString()))
+                    .into(ivHomePhoto);
+        }
+
+
         tvSize = (TextView) homeDescFragment.getView().findViewById(R.id.tvSize);
 
         //listening to image click

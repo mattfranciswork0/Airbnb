@@ -46,8 +46,8 @@ public class HomeDescActivity extends AppCompatActivity {
                 bundle.putInt(ViewListingAdapter.LISTING_ID,
                         getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID));
                 homeDescFragment.setArguments(bundle);
-                Toast.makeText(HomeDescActivity.this, getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID) +"",
-                        Toast.LENGTH_LONG).show();
+//                Toast.makeText(HomeDescActivity.this, getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID) +"",
+//                        Toast.LENGTH_LONG).show();
             }
         }
 
