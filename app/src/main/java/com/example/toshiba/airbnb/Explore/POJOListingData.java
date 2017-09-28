@@ -3,11 +3,16 @@ package com.example.toshiba.airbnb.Explore;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by TOSHIBA on 18/09/2017.
  */
 
 public class POJOListingData {
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("property_ownership")
     @Expose
     private String propertyOwnership;
@@ -137,6 +142,17 @@ public class POJOListingData {
     @SerializedName("date_listed")
     @Expose
     private String dateListed;
+    @SerializedName("image_data")
+    @Expose
+    private List<POJOListingImageData> imageData = null;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getPropertyOwnership() {
         return propertyOwnership;
@@ -480,5 +496,13 @@ public class POJOListingData {
 
     public void setDateListed(String dateListed) {
         this.dateListed = dateListed;
+    }
+
+    public List<POJOListingImageData> getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(List<POJOListingImageData> imageData) {
+        this.imageData = imageData;
     }
 }

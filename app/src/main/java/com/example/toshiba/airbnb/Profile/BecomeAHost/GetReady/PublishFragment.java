@@ -34,6 +34,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
@@ -41,6 +42,7 @@ import com.example.toshiba.airbnb.SessionManager;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -168,61 +170,56 @@ public class PublishFragment extends Fragment {
         File file = new File(sdCardDirectory.getAbsolutePath() + GalleryAdapter.airBnbDirectory);
         final File[] listFile = file.listFiles();
 
-        new AsyncTask<Void, Void, Void>() {
 
+        progressDialog.setMessage("Inserting images...");
+        progressDialog.show();
+
+        Log.d("checkLengthInsert", listFile.length + "");
+        SharedPreferences captionSP = getActivity().getSharedPreferences(PhotoDescFragment.CAPTION_SP,
+                Context.MODE_PRIVATE);
+
+        ArrayList<String> captionArrayList = new ArrayList<>();
+        for (Map.Entry<String, ?> entry : captionSP.getAll().entrySet()) {
+            captionArrayList.add(entry.getValue().toString());
+        }
+        String[] captionArray = new String[captionArrayList.size()];
+        captionArrayList.toArray(captionArray);
+
+        ArrayList<String> imagePathArrayList = new ArrayList<>();
+        for (int i = 0; i < listFile.length; i++) {
+            imagePathArrayList.add(listFile[i].getAbsolutePath().replaceFirst("/", ""));
+        }
+        String[] imagePathArray = new String[imagePathArrayList.size()];
+        imagePathArrayList.toArray(imagePathArray);
+
+
+        ImageListingRequest imageListingRequest = new ImageListingRequest(
+                imagePathArray,
+                captionArray, //retrieve key of captionSP, which is the image uri
+                listingIdSP.getInt(LISTING_ID, 0));
+
+        retrofit.insertListingImages(imageListingRequest).enqueue(new Callback<Void>() {
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressDialog.setMessage("Inserting images...");
-                progressDialog.show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                int uploadLeftOff;
-                if (!(insertImagesSP.contains(INSERT_IMAGES_COUNT))) {
-                    uploadLeftOff = 0;
-                } else {
-                    uploadLeftOff = insertImagesSP.getInt(INSERT_IMAGES_COUNT, 0);
-                }
-                Log.d("checkLengthInsert", listFile.length + "");
-
-                for (int i = uploadLeftOff; i < listFile.length; i++) {
-                    Log.d("insertListingCalled", i + "");
-                    ImageListingRequest imageListingRequest = new ImageListingRequest(listFile[i].getAbsolutePath().replaceFirst("/", ""),
-                            listingIdSP.getInt(LISTING_ID, 0));
-
-                    retrofit.insertListingImages(imageListingRequest).enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            Log.d("InsertListingCalled", "insertListingCalled");
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            Log.d("InsertListingCalled", t.toString());
-                        }
-                    });
-
-                }
-
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("ILoveYou", "so much :)");
+                progressDialog.dismiss();
                 latch.countDown();
                 latchEdit.putInt(LATCH_COUNTDOWN_COUNT, (int) latch.getCount()).apply();
                 insertImagesEdit.clear();
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
                 progressDialog.dismiss();
                 bPublish.performClick();
 
             }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_LONG).show();
+                Log.d("ILoveYou", "Didnt work :C " + t.toString());
+            }
 
-        }.execute();
+
+        });
     }
 
     public void uploadImageToCloudinary() {
@@ -271,9 +268,9 @@ public class PublishFragment extends Fragment {
                     try {
                         //make cloudinary file name, or public id, into local file name
                         Log.d("cloudEror", listFile[i].getAbsolutePath());
-                        String filePath =  listFile[i].getAbsolutePath();
+                        String filePath = listFile[i].getAbsolutePath();
                         //"public_id" in cloudParam cannot start with /
-                        String filePathAsName =  filePath.substring(0, filePath.indexOf(".")).replaceFirst("/" , "");
+                        String filePathAsName = filePath.substring(0, filePath.indexOf(".")).replaceFirst("/", "");
                         Map cloudParam = ObjectUtils.asMap("public_id", filePathAsName);
                         //upload it
 
@@ -330,6 +327,23 @@ public class PublishFragment extends Fragment {
                 getFragmentManager().popBackStack();
             }
         });
+
+//        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                retrofit.insertTestData("Matthew").enqueue(new Callback<Void>() {
+//                    @Override
+//                    public void onResponse(Call<Void> call, Response<Void> response) {
+//                        Toast.makeText(getActivity(), "Falling deeper in love with you", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<Void> call, Throwable t) {
+//                        Toast.makeText(getActivity(), "Whoa", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//            }
+//        });
         bPublish = (Button) view.findViewById(R.id.bPublish);
         view.findViewById(R.id.bPublish).
                 setOnClickListener(new View.OnClickListener() {
@@ -396,7 +410,6 @@ public class PublishFragment extends Fragment {
                             retrofit.insertListingData(publishListingDataRequest).enqueue(new Callback<IdListing>() {
                                 @Override
                                 public void onResponse(Call<IdListing> call, Response<IdListing> response) {
-                                    Log.d("heyBestie", "The listing id is " + response.body().getId());
                                     progressDialog.dismiss();
                                     latch.countDown();
                                     Log.d("publishOnResponse", latch.getCount() + "");
@@ -408,7 +421,6 @@ public class PublishFragment extends Fragment {
                                 @Override
                                 public void onFailure(Call<IdListing> call, Throwable t) {
                                     progressDialog.dismiss();
-                                    Log.d("heyBestie", t.toString());
                                     Toast.makeText(getActivity(), "Failed to list your place, try again", Toast.LENGTH_LONG).show();
 
                                 }
@@ -417,6 +429,7 @@ public class PublishFragment extends Fragment {
 
                         } else if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 1) {
                             insertImagesToDatabase();
+                            Log.d("InsertListingCalled", "wtf");
                         } else if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 0) {
                             uploadImageToCloudinary();
 //                            Toast.makeText(getActivity(), "Miss you bestie", Toast.LENGTH_LONG).show();
