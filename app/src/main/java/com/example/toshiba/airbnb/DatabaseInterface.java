@@ -10,6 +10,7 @@ import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.POJOUserData;
 import com.example.toshiba.airbnb.Profile.ViewListing.POJOListingImageAndTitleGetResult;
 
 import retrofit2.Call;
@@ -50,6 +51,13 @@ public interface DatabaseInterface {
 
     @GET("/listingData/{id}")
     Call<POJOListingData> getListingData(@Path("id") int user_id);
+
+    @Headers("Content-Type: application/json")
+    @POST("/insertProfileImagePath/{id}/{profile_image_path}")
+    Call<Void> insertProfileImagePath(@Path("id") int user_id, @Path("profile_image_path") String profile_image_path);
+
+    @GET("/getUserData/{id}")
+    Call<POJOUserData> getUserData(@Path("id") int user_id);
 
     @Headers("Content-Type: application/json")
     @GET("/hi")

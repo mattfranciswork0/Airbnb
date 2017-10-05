@@ -45,4 +45,7 @@
     <string name="rbSmoking">rbSmoking</string>
     <string name="rbParties">rbParties</string>
 
+    <!--default pic for profile picture-->
+    <string name="defaultProfilePicture">http://626.nz/sites/default/files/pictures/picture-95-1501497724.png</string>
+
 </resources>
