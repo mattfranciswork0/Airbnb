@@ -29,15 +29,15 @@ public class POJOUserData {
     @SerializedName("profile_image_path")
     @Expose
     private Object profileImagePath;
-    @SerializedName("gender")
+    @SerializedName("languages")
     @Expose
-    private Object gender;
+    private String languages;
     @SerializedName("location")
     @Expose
-    private Object location;
+    private String location;
     @SerializedName("work")
     @Expose
-    private Object work;
+    private String work;
 
     public Integer getId() {
         return id;
@@ -95,27 +95,27 @@ public class POJOUserData {
         this.profileImagePath = profileImagePath;
     }
 
-    public Object getGender() {
-        return gender;
+    public String getLanguages() {
+        return languages;
     }
 
-    public void setGender(Object gender) {
-        this.gender = gender;
+    public void setLanguages(String languages) {
+        this.languages = languages;
     }
 
-    public Object getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Object location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public Object getWork() {
+    public String getWork() {
         return work;
     }
 
-    public void setWork(Object work) {
+    public void setWork(String work) {
         this.work = work;
     }
 

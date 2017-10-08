@@ -10,6 +10,9 @@ import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
+import com.example.toshiba.airbnb.Profile.DTO.LocationDetailDTO;
+import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.POJOUserData;
 import com.example.toshiba.airbnb.Profile.ViewListing.POJOListingImageAndTitleGetResult;
 
@@ -52,12 +55,25 @@ public interface DatabaseInterface {
     @GET("/listingData/{id}")
     Call<POJOListingData> getListingData(@Path("id") int user_id);
 
+    @GET("/getUserData/{id}")
+    Call<POJOUserData> getUserData(@Path("id") int user_id);
+
     @Headers("Content-Type: application/json")
     @POST("/insertProfileImagePath/{id}/{profile_image_path}")
     Call<Void> insertProfileImagePath(@Path("id") int user_id, @Path("profile_image_path") String profile_image_path);
 
-    @GET("/getUserData/{id}")
-    Call<POJOUserData> getUserData(@Path("id") int user_id);
+    @Headers("Content-Type: application/json")
+    @POST("/insertLocationDetailEdit/{id}")
+    Call<Void> insertLocationDetailEdit(@Path("id") int user_id, @Body LocationDetailDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/insertWorkDetailEdit/{id}")
+    Call<Void> insertWorkDetailEdit(@Path("id") int user_id, @Body WorkDetailEditDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/insertLanguagesDetailEdit/{id}")
+    Call<Void> insertLanguagesDetailEdit(@Path("id") int user_id, @Body LanguagesDetailEditDTO body);
+
 
     @Headers("Content-Type: application/json")
     @GET("/hi")

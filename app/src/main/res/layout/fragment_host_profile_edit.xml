@@ -127,34 +127,6 @@
                         android:orientation="vertical"
                         android:padding="10dp">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Gender"
-                                android:textSize="15dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:text=">"
-                                android:textSize="15dp"
-                                android:textStyle="bold"
-                                android:textColor="@color/lightRed"/>
-
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lightRed" />
-
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -240,6 +212,7 @@
                         android:padding="10dp">
 
                         <RelativeLayout
+                            android:id="@+id/layoutLocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp">
@@ -249,7 +222,11 @@
                                 android:layout_height="wrap_content"
                                 android:text="Location"
                                 android:textSize="15dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:id="@+id/tvLocation"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -268,6 +245,7 @@
                             android:background="@color/lightRed" />
 
                         <RelativeLayout
+                            android:id="@+id/layoutWork"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp">
@@ -277,7 +255,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Work"
                                 android:textSize="15dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -295,6 +273,7 @@
                             android:background="@color/lightRed" />
 
                         <RelativeLayout
+                            android:id="@+id/layoutLanguages"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp">
@@ -304,7 +283,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="Languanges"
                                 android:textSize="15dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                />
 
                             <TextView
                                 android:layout_width="wrap_content"

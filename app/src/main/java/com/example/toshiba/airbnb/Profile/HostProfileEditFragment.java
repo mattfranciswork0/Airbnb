@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
 
@@ -50,6 +51,9 @@ public class HostProfileEditFragment extends Fragment {
     ImageView ivProfilePic;
     Cloudinary cloudinary;
     Call<POJOUserData> getUserDataCall;
+    public static final String LOCATION_EDIT = "LOCATION_EDIT";
+    public static final String WORK_EDIT = "WORK_EDIT";
+    public static final String LANGUAGES_EDIT = "LANGUAGES_EDIT";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +64,7 @@ public class HostProfileEditFragment extends Fragment {
                 .build().create(DatabaseInterface.class);
         userId = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
                 .getInt(SessionManager.USER_ID, 0);
-
+        Keyboard.hideKeyboard(getActivity());
     }
 
     @Nullable
@@ -125,6 +129,43 @@ public class HostProfileEditFragment extends Fragment {
         });
 
 
+        view.findViewById(R.id.layoutLocation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HostProfileEditDetailFragment hostProfileEditDetailFragment = new HostProfileEditDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(LOCATION_EDIT, true);
+                hostProfileEditDetailFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.hostProfileLayout, hostProfileEditDetailFragment).addToBackStack(null).commit();
+            }
+        });
+        view.findViewById(R.id.layoutWork).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HostProfileEditDetailFragment hostProfileEditDetailFragment = new HostProfileEditDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(WORK_EDIT, true);
+                hostProfileEditDetailFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.hostProfileLayout, hostProfileEditDetailFragment).addToBackStack(null).commit();
+            }
+        });
+
+        view.findViewById(R.id.layoutLanguages).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HostProfileEditDetailFragment hostProfileEditDetailFragment = new HostProfileEditDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(LANGUAGES_EDIT, true);
+                hostProfileEditDetailFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.hostProfileLayout, hostProfileEditDetailFragment).addToBackStack(null).commit();
+            }
+        });
+
+
+
+
+
+
     }
 
     //when pic is clicked in gallery
@@ -180,9 +221,11 @@ public class HostProfileEditFragment extends Fragment {
                                     @Override
                                     public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
                                         Log.d("HostProfileEdit", response.body().getProfileImagePath().toString());
-                                        Glide.with(getActivity()).
-                                                load(cloudinary.url().generate(response.body().getProfileImagePath().
-                                                        toString())).into(ivProfilePic);
+                                        if(response.body().getProfileImagePath() != null) {
+                                            Glide.with(getActivity()).
+                                                    load(cloudinary.url().generate(response.body().getProfileImagePath().
+                                                            toString())).into(ivProfilePic);
+                                        }
 
                                         Log.d("HostProfileEdit", "success retrieve image");
                                         dialog.dismiss();

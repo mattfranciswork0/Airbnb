@@ -48,4 +48,8 @@
     <!--default pic for profile picture-->
     <string name="defaultProfilePicture">http://626.nz/sites/default/files/pictures/picture-95-1501497724.png</string>
 
+    <string name="location">Location</string>
+    <string name="work">Work</string>
+    <string name="languages">Languages</string>
+
 </resources>

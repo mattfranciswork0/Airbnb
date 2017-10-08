@@ -97,9 +97,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
                 Log.d("ProfileFragment", "ProfileFragment pic");
-                Glide.with(getActivity()).
-                        load(cloudinary.url().generate(response.body().getProfileImagePath().
-                                toString())).into(ivProfilePic);
+                if(response.body().getProfileImagePath() != null){
+                    Glide.with(getActivity()).
+                            load(cloudinary.url().generate(response.body().getProfileImagePath().
+                                    toString())).into(ivProfilePic);
+                }
+
             }
 
             @Override
