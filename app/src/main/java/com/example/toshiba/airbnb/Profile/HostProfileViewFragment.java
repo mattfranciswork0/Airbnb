@@ -54,7 +54,7 @@ public class HostProfileViewFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SessionManager sessionManager = new SessionManager(getActivity());
         if (sessionManager.isLoggedIn()) {
@@ -80,10 +80,35 @@ public class HostProfileViewFragment extends Fragment {
             @Override
             public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
                 Log.d("HostProfileView", "HostProfileView pic");
-                if(response.body().getProfileImagePath() != null) {
+                if (response.body().getProfileImagePath() != null) {
+                    TextView tvName = (TextView) view.findViewById(R.id.tvName);
+                    tvName.setText(response.body().getFirstName() + " " + response.body().getLastName());
+
+                    TextView tvLocation = (TextView) view.findViewById(R.id.tvLocation);
+                    tvLocation.setText(response.body().getLocation());
+
+
+                    if (response.body().getAboutMe() != null) {
+                        view.findViewById(R.id.layoutAboutMe).setVisibility(View.GONE);
+                        TextView tvAboutMe = (TextView) view.findViewById(R.id.tvAboutMe);
+                        tvAboutMe.setText(response.body().getAboutMe());
+                    }
+                    if (response.body().getWork() != null) {
+                        view.findViewById(R.id.layoutWork).setVisibility(View.VISIBLE);
+                        TextView tvWorkDesc = (TextView) view.findViewById(R.id.tvWorkDesc);
+                        tvWorkDesc.setText(response.body().getWork());
+                    }
+
+
+                    if (response.body().getLanguages() != null) {
+                        view.findViewById(R.id.layoutLanguage).setVisibility(View.VISIBLE);
+                        TextView tvLanguagesDesc = (TextView) view.findViewById(R.id.tvLanguagseDesc);
+                        tvLanguagesDesc.setText(response.body().getLanguages());
+                    }
+
+
                     Glide.with(getActivity()).
-                            load(cloudinary.url().generate(response.body().getProfileImagePath().
-                                    toString())).into(ivProfilePic);
+                            load(cloudinary.url().generate(response.body().getProfileImagePath())).into(ivProfilePic);
                 }
             }
 

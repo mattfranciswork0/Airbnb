@@ -10,6 +10,7 @@ import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.DTO.AboutMeDTO;
 import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
@@ -64,6 +65,10 @@ public interface DatabaseInterface {
     @Headers("Content-Type: application/json")
     @POST("/insertProfileImagePath/{id}/{profile_image_path}")
     Call<Void> insertProfileImagePath(@Path("id") int user_id, @Path("profile_image_path") String profile_image_path);
+
+    @Headers("Content-Type: application/json")
+    @POST("/insertAboutMe/{id}")
+    Call<Void> insertAboutMe(@Path("id") int user_id, @Body AboutMeDTO body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertEmailDetailEdit/{id}")

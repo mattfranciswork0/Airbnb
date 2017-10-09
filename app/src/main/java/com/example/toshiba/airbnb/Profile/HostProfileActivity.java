@@ -45,8 +45,20 @@ public class HostProfileActivity extends AppCompatActivity {
             TextView tvEdit = (TextView) fragment.getView().findViewById(R.id.tvEdit);
             EditText etEdit = (EditText) fragment.getView().findViewById(R.id.etEdit);
 
+            if(tvEdit.getText().toString().equals(getResources().getString(R.string.aboutMe))) {
+                String etText;
+                if(etEdit.getText().toString().equals("")){
+                    etText = null;
+                } else{
+                    etText = etEdit.getText().toString();
+                }
+                if (!(HostProfileEditDetailFragment.aboutMeText + "").equals(etText + ""))
+                    dialog.show();
+                else
+                    super.onBackPressed();
+            }
 
-            if(tvEdit.getText().toString().equals(getResources().getString(R.string.email))){
+            else if(tvEdit.getText().toString().equals(getResources().getString(R.string.email))){
                 String etText;
                 if(etEdit.getText().toString().equals("")){
                     etText = null;

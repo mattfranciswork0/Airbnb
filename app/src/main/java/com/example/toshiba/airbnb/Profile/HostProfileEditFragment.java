@@ -53,6 +53,7 @@ public class HostProfileEditFragment extends Fragment {
     ImageView ivProfilePic;
     Cloudinary cloudinary;
     Call<POJOUserData> getUserDataCall;
+    public static final String ABOUT_ME_EDIT = "ABOUT_ME_EDIT";
     public static final String EMAIL_EDIT = "EMAIL_EDIT";
     public static final String PHONE_NUM_EDIT = "PHONE_NUM_EDIT";
     public static final String LOCATION_EDIT = "LOCATION_EDIT";
@@ -80,7 +81,7 @@ public class HostProfileEditFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sessionManager = new SessionManager(getActivity());
         ivProfilePic = (ImageView) view.findViewById(R.id.ivProfilePic);
@@ -96,6 +97,9 @@ public class HostProfileEditFragment extends Fragment {
                     Glide.with(getActivity()).
                             load(cloudinary.url().generate(response.body().getProfileImagePath().
                                     toString())).into(ivProfilePic);
+                    TextView tvAboutMeInput = (TextView) view.findViewById(R.id.tvAboutMeInput);
+                    tvAboutMeInput.setText(response.body().getAboutMe());
+
                 } else{
                     Log.d("HostProfileEdit", "default profile pic");
                     Glide.with(getActivity()).load(getResources().getString(R.string.defaultProfilePicture));}
@@ -115,6 +119,19 @@ public class HostProfileEditFragment extends Fragment {
             tvEmail.setText(sessionSP.getString(sessionManager.EMAIL, ""));
             TextView tvPhoneNum = (TextView) view.findViewById(R.id.tvPhoneNum);
             tvPhoneNum.setText(sessionSP.getString(sessionManager.PHONE_NUM, ""));
+
+
+            TextView tvEditAboutMe = (TextView) view.findViewById(R.id.tvEditAboutMe);
+            tvEditAboutMe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HostProfileEditDetailFragment hostProfileEditDetailFragment = new HostProfileEditDetailFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(ABOUT_ME_EDIT, true);
+                    hostProfileEditDetailFragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.hostProfileLayout, hostProfileEditDetailFragment).addToBackStack(null).commit();
+                }
+            });
 
             RelativeLayout layoutEmail = (RelativeLayout) view.findViewById(R.id.layoutEmail);
             layoutEmail.setOnClickListener(new View.OnClickListener() {

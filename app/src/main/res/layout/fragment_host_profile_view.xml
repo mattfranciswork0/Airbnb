@@ -78,7 +78,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:text="Barcelona, Spain"
                     android:textSize="18sp" />
 
                 <View
@@ -86,7 +85,7 @@
                     android:layout_height="1dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/tvLanguage"
+                    android:layout_below="@+id/tvLanguages"
                     android:background="@color/lightRed" />
             </LinearLayout>
 
@@ -95,7 +94,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="7dp">
+                android:padding="7dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                     android:layout_height="1dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/tvLanguage"
+                    android:layout_below="@+id/tvLanguages"
                     android:background="@color/lightRed" />
 
             </LinearLayout>
@@ -125,7 +125,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="7dp">
+                android:padding="7dp"
+                android:visibility="gone">
 
 
                 <TextView
@@ -158,20 +159,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="7dp">
+                android:padding="7dp"
+                android:visibility="gone">
 
 
                 <TextView
-                    android:id="@+id/tvLanguage"
+                    android:id="@+id/tvLanguages"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Language"
+                    android:text="Languages"
                     android:textSize="18sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
-                    android:id="@+id/tvWhereDesc"
+                    android:id="@+id/tvLanguagseDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"

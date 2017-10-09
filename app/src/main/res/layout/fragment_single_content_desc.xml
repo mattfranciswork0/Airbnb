@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightRed"
-                android:layout_below="@+id/tvLanguage"
+                android:layout_below="@+id/tvLanguages"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
         </LinearLayout>
@@ -107,7 +107,7 @@
                     android:layout_below="@+id/tvGiven"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:id="@+id/tvLanguage"
+                    android:id="@+id/tvLanguages"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="5dp"/>
@@ -129,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/lightRed"
-                    android:layout_below="@+id/tvLanguage"
+                    android:layout_below="@+id/tvLanguages"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"/>
 
@@ -178,7 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightRed"
-                android:layout_below="@+id/tvLanguage"
+                android:layout_below="@+id/tvLanguages"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
 

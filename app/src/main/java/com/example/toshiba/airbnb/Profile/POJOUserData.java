@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class POJOUserData {
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -28,16 +29,19 @@ public class POJOUserData {
     private String phoneNum;
     @SerializedName("profile_image_path")
     @Expose
-    private Object profileImagePath;
-    @SerializedName("languages")
+    private String profileImagePath;
+    @SerializedName("about_me")
     @Expose
-    private String languages;
+    private String aboutMe;
     @SerializedName("location")
     @Expose
     private String location;
     @SerializedName("work")
     @Expose
     private String work;
+    @SerializedName("languages")
+    @Expose
+    private String languages;
 
     public Integer getId() {
         return id;
@@ -87,20 +91,20 @@ public class POJOUserData {
         this.phoneNum = phoneNum;
     }
 
-    public Object getProfileImagePath() {
+    public String getProfileImagePath() {
         return profileImagePath;
     }
 
-    public void setProfileImagePath(Object profileImagePath) {
+    public void setProfileImagePath(String profileImagePath) {
         this.profileImagePath = profileImagePath;
     }
 
-    public String getLanguages() {
-        return languages;
+    public String getAboutMe() {
+        return aboutMe;
     }
 
-    public void setLanguages(String languages) {
-        this.languages = languages;
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getLocation() {
@@ -117,6 +121,14 @@ public class POJOUserData {
 
     public void setWork(String work) {
         this.work = work;
+    }
+
+    public String getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(String languages) {
+        this.languages = languages;
     }
 
 }

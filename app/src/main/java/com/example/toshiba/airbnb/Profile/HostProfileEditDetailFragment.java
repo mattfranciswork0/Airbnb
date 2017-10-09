@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Keyboard;
 import com.example.toshiba.airbnb.PhoneNumFragment;
 import com.example.toshiba.airbnb.PhoneNumVerifyFragment;
+import com.example.toshiba.airbnb.Profile.DTO.AboutMeDTO;
 import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
@@ -39,13 +41,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HostProfileEditDetailFragment extends Fragment {
     ProgressDialog dialog;
+    public static String aboutMeText;
     public static String locationText;
     public static String workText;
     public static String languagesText;
     public static String emailText;
     public static String phoneNumText;
     public static String PHONE_NUM_EDIT;
-
 
 
     public void uploadDialog() {
@@ -92,12 +94,43 @@ public class HostProfileEditDetailFragment extends Fragment {
             retrofit.getUserData(USER_ID).enqueue(new Callback<POJOUserData>() {
                 @Override
                 public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
+                    aboutMeText = response.body().getAboutMe();
                     locationText = response.body().getLocation();
                     workText = response.body().getWork();
                     languagesText = response.body().getLanguages();
                     emailText = response.body().getEmail();
                     phoneNumText = response.body().getPhoneNum();
+                    if (getArguments().getBoolean(HostProfileEditFragment.ABOUT_ME_EDIT)) {
+                        tvEdit.setText(getResources().getString(R.string.aboutMe));
+                        etEdit.setHint(getResources().getString(R.string.aboutMe));
 
+                        if (aboutMeText != null)
+                            etEdit.setText(aboutMeText);
+
+                        tvSave.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String email = etEdit.getText().toString();
+                                uploadDialog();
+                                retrofit.insertAboutMe(USER_ID, new AboutMeDTO(email)).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Keyboard.hideKeyboard(getActivity());
+                                        dialog.dismiss();
+                                        getFragmentManager().popBackStack();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        dialog.dismiss();
+                                        Toast.makeText(getActivity(), "Failed to upload user data, try again", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+                        });
+
+                    }
                     if (getArguments().getBoolean(HostProfileEditFragment.EMAIL_EDIT)) {
                         tvEdit.setText(getResources().getString(R.string.email));
                         etEdit.setHint(getResources().getString(R.string.email));
@@ -108,7 +141,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 String email = etEdit.getText().toString();
-                                if(RegisterEmailFragment.isValidEmail(email)) {
+                                if (RegisterEmailFragment.isValidEmail(email)) {
                                     uploadDialog();
                                     retrofit.insertEmailDetailEdit(USER_ID, new EmailDetailEditDTO(email)).enqueue(new Callback<Void>() {
                                         @Override
@@ -120,6 +153,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                                 editor.putString(sessionManager.EMAIL, etEdit.getText().toString());
                                                 editor.apply();
                                             }
+                                            Keyboard.hideKeyboard(getActivity());
                                             dialog.dismiss();
                                             getFragmentManager().popBackStack();
                                         }
@@ -130,7 +164,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                             Toast.makeText(getActivity(), "Failed to upload user data, try again", Toast.LENGTH_LONG).show();
                                         }
                                     });
-                                } else{
+                                } else {
                                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                                     dialog.setCancelable(true);
                                     dialog.setTitle("Unable to save");
@@ -145,11 +179,10 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 }
                             }
                         });
-                    }
-                    else if (getArguments().getBoolean(HostProfileEditFragment.LOCATION_EDIT)) {
+                    } else if (getArguments().getBoolean(HostProfileEditFragment.LOCATION_EDIT)) {
                         tvEdit.setText(getResources().getString(R.string.location));
                         etEdit.setHint(getResources().getString(R.string.location));
-                        if(locationText != null)
+                        if (locationText != null)
                             etEdit.setText(locationText);
 
                         tvSave.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +193,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertLocationDetailEdit(USER_ID, new LocationDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Keyboard.hideKeyboard(getActivity());
                                         dialog.dismiss();
                                         getFragmentManager().popBackStack();
                                     }
@@ -173,12 +207,10 @@ public class HostProfileEditDetailFragment extends Fragment {
                         });
 
 
-                    }
-
-                    else if (getArguments().getBoolean(HostProfileEditFragment.WORK_EDIT)) {
+                    } else if (getArguments().getBoolean(HostProfileEditFragment.WORK_EDIT)) {
                         tvEdit.setText("Work");
                         etEdit.setHint("Work");
-                        if(workText != null)
+                        if (workText != null)
                             etEdit.setText(workText);
                         tvSave.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -187,8 +219,9 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertWorkDetailEdit(USER_ID, new WorkDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Keyboard.hideKeyboard(getActivity());
                                         dialog.dismiss();
-                                        getFragmentManager().popBackStack();;
+                                        getFragmentManager().popBackStack();
                                     }
 
                                     @Override
@@ -199,14 +232,11 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 });
                             }
                         });
-                    }
-
-
-                    else if (getArguments().getBoolean(HostProfileEditFragment.LANGUAGES_EDIT)) {
+                    } else if (getArguments().getBoolean(HostProfileEditFragment.LANGUAGES_EDIT)) {
                         tvEdit.setText(getResources().getString(R.string.languages));
                         etEdit.setHint(getResources().getString(R.string.languages));
-                        if(languagesText != null)
-                            etEdit.setText(languagesText );
+                        if (languagesText != null)
+                            etEdit.setText(languagesText);
 
                         tvSave.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -215,6 +245,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertLanguagesDetailEdit(USER_ID, new LanguagesDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Keyboard.hideKeyboard(getActivity());
                                         dialog.dismiss();
                                         getFragmentManager().popBackStack();
                                     }
@@ -228,7 +259,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                             }
                         });
                     }
-                    
+
                     dialog.dismiss();
                 }
 
@@ -240,7 +271,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                 }
             });
 
-           
+
         }
     }
 

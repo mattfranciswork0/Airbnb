@@ -49,6 +49,7 @@
     <string name="defaultProfilePicture">http://626.nz/sites/default/files/pictures/picture-95-1501497724.png</string>
 
     <!--edit profile detail-->
+    <string name="aboutMe">About Me</string>
     <string name="email">Email</string>
     <string name="phoneNum">Phone Number</string>
     <string name="location">Location</string>
