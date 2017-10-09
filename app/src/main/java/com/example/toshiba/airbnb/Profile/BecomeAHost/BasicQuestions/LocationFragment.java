@@ -8,18 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
 
 
@@ -88,7 +84,7 @@ public class LocationFragment extends Fragment {
         view.findViewById(R.id.layoutStreet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Keyboard.hideKeyboard(getActivity());
+               KeyboardUtil.hideKeyboard(getActivity());
                 if(etCountryInput.getText().toString().length() > 0) {
                     edit = sharedPreferences.edit();
                     edit.putString(COUNTRY, etCountryInput.getText().toString());
@@ -102,7 +98,7 @@ public class LocationFragment extends Fragment {
         view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyboard.hideKeyboard(getActivity());
+                KeyboardUtil.hideKeyboard(getActivity());
                 edit.putString(EXTRA_DETAILS, "");
                 edit.apply();
                 if(etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0 ){

@@ -15,13 +15,12 @@ import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by TOSHIBA on 15/09/2017.
@@ -33,11 +32,7 @@ public class ViewListingAdapter extends RecyclerView.Adapter<ViewListingAdapter.
     int size;
     public static String LISTING_ID = "LISTING_ID";
     public ViewListingAdapter(int size, Context context){
-        retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         this.size = size;
         this.context = context;
     }

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
-import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
 import com.example.toshiba.airbnb.R;
@@ -69,7 +68,7 @@ public class TitleFragment extends Fragment {
         bPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyboard.hideKeyboard(getActivity());
+                KeyboardUtil.hideKeyboard(getActivity());
                 Intent intent = new Intent(getContext(), HomeDescActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(TITLE_PREVIEW, etTitle.getText().toString());
@@ -81,7 +80,7 @@ public class TitleFragment extends Fragment {
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyboard.hideKeyboard(getActivity());
+                KeyboardUtil.hideKeyboard(getActivity());
                 SharedPreferences.Editor titleEdit = titleSP.edit();
                 titleEdit.remove(TITLE_KEY);
                 titleEdit.putString(TITLE_KEY, etTitle.getText().toString());

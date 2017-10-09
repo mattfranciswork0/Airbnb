@@ -23,12 +23,11 @@ import android.widget.Toast;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.MenuActivity;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Owner on 2017-06-23.
@@ -48,11 +47,7 @@ public class LogInFragment extends Fragment {
         etPassword = (EditText) view.findViewById(R.id.etPassword);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
 
-        retrofit = new Retrofit.Builder()
-                //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
 
 
         TextWatcher textWatcher = new TextWatcher() {

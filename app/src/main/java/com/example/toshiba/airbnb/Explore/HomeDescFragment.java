@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,7 +32,6 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BathroomFra
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.HouseRuleFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
@@ -41,6 +39,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.Profile.HostProfileViewFragment;
 import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -58,8 +57,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -143,11 +140,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 ;
-        retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         Log.d("HomeDescFragment", "onCreate");
     }
 

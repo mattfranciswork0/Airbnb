@@ -23,7 +23,9 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
+import com.example.toshiba.airbnb.Util.RealPathUtil;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.example.toshiba.airbnb.UserAuthentication.PhoneNumFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
@@ -35,8 +37,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -62,14 +62,10 @@ public class HostProfileEditFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         userId = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
                 .getInt(SessionManager.USER_ID, 0);
-        Keyboard.hideKeyboard(getActivity());
+        KeyboardUtil.hideKeyboard(getActivity());
     }
 
     @Nullable

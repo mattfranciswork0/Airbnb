@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb.Profile;
+package com.example.toshiba.airbnb.Util;
 
 /**
  * Created by TOSHIBA on 02/10/2017.

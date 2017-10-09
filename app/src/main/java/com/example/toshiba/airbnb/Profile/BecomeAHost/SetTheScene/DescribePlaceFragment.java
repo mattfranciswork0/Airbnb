@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,7 @@ import android.widget.Toast;
 
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
-import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -65,7 +64,7 @@ public class DescribePlaceFragment extends Fragment {
         bPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyboard.hideKeyboard(getActivity());
+                KeyboardUtil.hideKeyboard(getActivity());
                 Intent intent = new Intent(getContext(), HomeDescActivity.class);
                 intent.putExtra(DESCRIBE_PREVIEW, etDescribePlace.getText().toString());
                 Bundle bundle = new Bundle();
@@ -77,7 +76,7 @@ public class DescribePlaceFragment extends Fragment {
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyboard.hideKeyboard(getActivity());
+                KeyboardUtil.hideKeyboard(getActivity());
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, new TitleFragment()).addToBackStack(null).commit();
                 //Save description
                 SharedPreferences.Editor editor = describePlaceSP.edit();

@@ -16,21 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Profile.DTO.AboutMeDTO;
 import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.example.toshiba.airbnb.UserAuthentication.RegisterEmailFragment;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by TOSHIBA on 05/10/2017.
@@ -59,11 +58,7 @@ public class HostProfileEditDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
     }
 
     @Nullable
@@ -112,7 +107,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertAboutMe(USER_ID, new AboutMeDTO(email)).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Keyboard.hideKeyboard(getActivity());
+                                        KeyboardUtil.hideKeyboard(getActivity());
                                         dialog.dismiss();
                                         getFragmentManager().popBackStack();
                                     }
@@ -150,7 +145,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                                 editor.putString(sessionManager.EMAIL, etEdit.getText().toString());
                                                 editor.apply();
                                             }
-                                            Keyboard.hideKeyboard(getActivity());
+                                            KeyboardUtil.hideKeyboard(getActivity());
                                             dialog.dismiss();
                                             getFragmentManager().popBackStack();
                                         }
@@ -190,7 +185,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertLocationDetailEdit(USER_ID, new LocationDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Keyboard.hideKeyboard(getActivity());
+                                        KeyboardUtil.hideKeyboard(getActivity());
                                         dialog.dismiss();
                                         getFragmentManager().popBackStack();
                                     }
@@ -216,7 +211,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertWorkDetailEdit(USER_ID, new WorkDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Keyboard.hideKeyboard(getActivity());
+                                        KeyboardUtil.hideKeyboard(getActivity());
                                         dialog.dismiss();
                                         getFragmentManager().popBackStack();
                                     }
@@ -242,7 +237,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                                 retrofit.insertLanguagesDetailEdit(USER_ID, new LanguagesDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Keyboard.hideKeyboard(getActivity());
+                                        KeyboardUtil.hideKeyboard(getActivity());
                                         dialog.dismiss();
                                         getFragmentManager().popBackStack();
                                     }

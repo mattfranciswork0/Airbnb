@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.UserAuthentication.LogInFragment;
-import com.example.toshiba.airbnb.UserAuthentication.RegisterNameFragment;
-import com.example.toshiba.airbnb.UserAuthentication.UserRegistrationRequest;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +24,6 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by TOSHIBA on 10/09/2017.
@@ -72,11 +68,8 @@ public class WelcomeFragment extends Fragment {
             }
         });
 
-        final DatabaseInterface retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+
+        final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         Button bPost = (Button) view.findViewById(R.id.bPost);
         bPost.setOnClickListener(new View.OnClickListener() {
             @Override

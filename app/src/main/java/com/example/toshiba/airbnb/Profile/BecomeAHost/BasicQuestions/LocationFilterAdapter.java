@@ -4,26 +4,22 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.POJOMap.GMapsPlaceDetails.POJOResult;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.POJOMap.GMapsPlaceDetails.POJOResults;
 import com.example.toshiba.airbnb.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -109,7 +105,7 @@ public class LocationFilterAdapter extends RecyclerView.Adapter<LocationFilterAd
                         @Override
                         public void onResponse(Call<POJOResults> call, Response<POJOResults> response) {
                             //close keyboard
-                            Keyboard.hideKeyboard(mActivity);
+                            KeyboardUtil.hideKeyboard(mActivity);
                             POJOResult result = response.body().getResult();
                             SharedPreferences sharedPreferences = mActivity.getSharedPreferences(LOCATION_SP, Context.MODE_PRIVATE);
                             SharedPreferences.Editor edit = sharedPreferences.edit();

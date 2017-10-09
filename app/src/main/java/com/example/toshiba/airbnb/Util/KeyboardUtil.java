@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.Util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFra
  * Created by TOSHIBA on 12/08/2017.
  */
 
-public class Keyboard {
+public class KeyboardUtil {
         public static void hideKeyboard(@NonNull Activity activity) {
             View view = activity.getCurrentFocus();
             if (view != null) {

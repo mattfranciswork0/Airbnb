@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,8 +28,6 @@ import java.util.regex.Pattern;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Owner on 2017-06-09.
@@ -47,11 +46,7 @@ public class RegisterEmailFragment extends Fragment {
         etEmail = (EditText) view.findViewById(R.id.etEmail);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
 
-        retrofit = new Retrofit.Builder()
-                //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.1.115:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
 
         TextWatcher textWatcher = new TextWatcher() {
             //Check if email is valid

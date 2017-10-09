@@ -36,6 +36,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import java.io.File;
@@ -49,8 +50,6 @@ import java.util.concurrent.CountDownLatch;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by TOSHIBA on 11/08/2017.
@@ -130,11 +129,7 @@ public class PublishFragment extends Fragment {
         insertImagesEdit = insertImagesSP.edit();
 
 
-        retrofit = new Retrofit.Builder()
-//                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(DatabaseInterface.class);
+        retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
 
     }
 
