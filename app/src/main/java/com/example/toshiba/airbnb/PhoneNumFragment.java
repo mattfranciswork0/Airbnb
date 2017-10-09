@@ -1,8 +1,10 @@
 package com.example.toshiba.airbnb;
 
+import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberUtils;
@@ -15,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+
+import com.example.toshiba.airbnb.Profile.HostProfileEditDetailFragment;
 
 import java.util.Random;
 
@@ -32,16 +36,16 @@ public class PhoneNumFragment extends Fragment {
 
 
     public void proceed() {
-        if(etPhone.getText().length() > 10){
-            if(etPhone.getText().toString().contains("+")
-                    && PhoneNumberUtils.isGlobalPhoneNumber(etPhone.getText().toString())){
+        if (etPhone.getText().length() > 10) {
+            if (etPhone.getText().toString().contains("+")
+                    && PhoneNumberUtils.isGlobalPhoneNumber(etPhone.getText().toString())) {
                 userPhoneNum = etPhone.getText().toString();
                 bRegProceed.setEnabled(true);
                 bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button);
                 bRegProceed.setTextColor(Color.parseColor("#ff6666"));
             }
 
-        }else{
+        } else {
             bRegProceed.setEnabled(false);
             bRegProceed.setBackgroundResource(R.drawable.reg_proceed_button_fail);
             bRegProceed.setTextColor(Color.parseColor("#ff6666"));
@@ -52,8 +56,10 @@ public class PhoneNumFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.lightRed));
-        basicProgressBar.setProgress(100);
+        if (basicProgressBar != null) {
+            basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.lightRed));
+            basicProgressBar.setProgress(100);
+        }
 
     }
 
@@ -78,12 +84,19 @@ public class PhoneNumFragment extends Fragment {
                 int max = 999999;
                 String randomNum = String.valueOf(random.nextInt((max - min) + 1) + min);
                 SmsManager sm = SmsManager.getDefault();
-                sm.sendTextMessage(userPhoneNum, null, "Airbnb security code: " + randomNum +". Use this to finish verification", null, null);
+                sm.sendTextMessage(userPhoneNum, null, "Airbnb security code: " + randomNum + ". Use this to finish verification", null, null);
 
                 PhoneNumVerifyFragment phoneNumVerifyFragment = new PhoneNumVerifyFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(USER_PHONE_NUM, userPhoneNum);
                 bundle.putString(VERIFICATION_CODE, randomNum);
+                if (getArguments() != null) {
+                    if (getArguments().containsKey(HostProfileEditDetailFragment.PHONE_NUM_EDIT)) {
+                        bundle.putBoolean(HostProfileEditDetailFragment.PHONE_NUM_EDIT,
+                                getArguments().getBoolean(HostProfileEditDetailFragment.PHONE_NUM_EDIT));
+                    }
+                }
+                phoneNumVerifyFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.progressFragment, phoneNumVerifyFragment).addToBackStack(null).commit();
             }
         });
@@ -102,7 +115,7 @@ public class PhoneNumFragment extends Fragment {
             }
         };
         etPhone.addTextChangedListener(textWatcher);
-
-
     }
+
+
 }
