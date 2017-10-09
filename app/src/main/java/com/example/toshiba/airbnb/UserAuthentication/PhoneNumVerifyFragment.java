@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
+import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.DTO.PhoneNumDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.HostProfileEditDetailFragment;
+import com.example.toshiba.airbnb.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -9,7 +9,7 @@ package com.example.toshiba.airbnb;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequestDTO;
 import com.example.toshiba.airbnb.Profile.DTO.AboutMeDTO;
 import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
@@ -18,6 +18,10 @@ import com.example.toshiba.airbnb.Profile.DTO.PhoneNumDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.POJOUserData;
 import com.example.toshiba.airbnb.Profile.ViewListing.POJOListingImageAndTitleGetResult;
+import com.example.toshiba.airbnb.UserAuthentication.EmailResult;
+import com.example.toshiba.airbnb.UserAuthentication.LogInRequest;
+import com.example.toshiba.airbnb.UserAuthentication.PasswordMatch;
+import com.example.toshiba.airbnb.UserAuthentication.UserRegistrationRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -46,7 +50,7 @@ public interface DatabaseInterface {
 
     @Headers("Content-Type: application/json")
     @POST("/insertListingData")
-    Call<IdListing> insertListingData(@Body PublishListingDataRequest body);
+    Call<IdListing> insertListingData(@Body PublishListingDataRequestDTO body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertListingImages")

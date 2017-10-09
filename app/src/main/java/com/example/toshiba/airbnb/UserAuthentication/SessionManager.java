@@ -1,9 +1,8 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.example.toshiba.airbnb.Explore.MenuActivity;
 

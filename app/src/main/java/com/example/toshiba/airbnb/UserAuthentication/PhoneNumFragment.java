@@ -1,10 +1,8 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
-import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberUtils;
@@ -19,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.toshiba.airbnb.Profile.HostProfileEditDetailFragment;
+import com.example.toshiba.airbnb.R;
 
 import java.util.Random;
 

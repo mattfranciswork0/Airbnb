@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,6 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.UserAuthentication.LogInFragment;
+import com.example.toshiba.airbnb.UserAuthentication.RegisterNameFragment;
+import com.example.toshiba.airbnb.UserAuthentication.UserRegistrationRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -4,7 +4,7 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost;
  * Created by TOSHIBA on 27/08/2017.
  */
 
-public class PublishListingDataRequest {
+public class PublishListingDataRequestDTO {
     int user_id;
     String property_ownership;
     String property_type;
@@ -54,23 +54,23 @@ public class PublishListingDataRequest {
 
     String date_listed;
 
-    public PublishListingDataRequest(int user_id, String property_ownership, String property_type,
-                                     String total_guest, String total_bedrooms, String total_beds, String total_bathrooms,
-                                     String bathroom_type, String country, String street, String extra_place_details,
-                                     String city, String state, String lng, String lat,
+    public PublishListingDataRequestDTO(int user_id, String property_ownership, String property_type,
+                                        String total_guest, String total_bedrooms, String total_beds, String total_bathrooms,
+                                        String bathroom_type, String country, String street, String extra_place_details,
+                                        String city, String state, String lng, String lat,
 
 
-                                     boolean essentials, boolean internet, boolean shampoo, boolean hangers, boolean tv, boolean heating, boolean air_conditioning,
-                                     boolean breakfast, boolean kitchen, boolean laundry, boolean parking, boolean elevator,
-                                     boolean pool, boolean gym,
+                                        boolean essentials, boolean internet, boolean shampoo, boolean hangers, boolean tv, boolean heating, boolean air_conditioning,
+                                        boolean breakfast, boolean kitchen, boolean laundry, boolean parking, boolean elevator,
+                                        boolean pool, boolean gym,
 
-                                     String place_description, String place_title,
+                                        String place_description, String place_title,
 
-                                     boolean suitable_for_children, boolean suitable_for_infants, boolean suitable_for_pets, boolean smoking_allowed,
-                                     boolean parties_allowed, String additional_rules, String listing_length, String arrive_after, String leave_before,
-                                     String min_stay, String max_stay, String price,
+                                        boolean suitable_for_children, boolean suitable_for_infants, boolean suitable_for_pets, boolean smoking_allowed,
+                                        boolean parties_allowed, String additional_rules, String listing_length, String arrive_after, String leave_before,
+                                        String min_stay, String max_stay, String price,
 
-                                     String date_listed)
+                                        String date_listed)
 
     {
         this.user_id = user_id;

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.toshiba.airbnb.PhoneNumFragment;
 import com.example.toshiba.airbnb.R;
 
 /**

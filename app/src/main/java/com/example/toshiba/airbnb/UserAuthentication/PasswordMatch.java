@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 /**
  * Created by Owner on 2017-06-28.

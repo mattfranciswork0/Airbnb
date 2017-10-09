@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

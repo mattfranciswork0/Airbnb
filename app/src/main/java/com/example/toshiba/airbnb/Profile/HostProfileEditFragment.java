@@ -24,9 +24,9 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Keyboard;
-import com.example.toshiba.airbnb.PhoneNumFragment;
+import com.example.toshiba.airbnb.UserAuthentication.PhoneNumFragment;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.SessionManager;
+import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import java.io.File;
 import java.io.IOException;

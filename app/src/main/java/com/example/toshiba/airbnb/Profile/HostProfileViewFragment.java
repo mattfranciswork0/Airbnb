@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.SessionManager;
+import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;

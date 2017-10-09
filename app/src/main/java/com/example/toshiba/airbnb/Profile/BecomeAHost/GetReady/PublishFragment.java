@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,13 +30,13 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFra
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequestDTO;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.SessionManager;
+import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -353,7 +352,7 @@ public class PublishFragment extends Fragment {
                         if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 2) {
                             progressDialog.setMessage("Listing your place...");
                             progressDialog.show();
-                            PublishListingDataRequest publishListingDataRequest = new PublishListingDataRequest(
+                            PublishListingDataRequestDTO publishListingDataRequestDTO = new PublishListingDataRequestDTO(
                                     sessionSP.getInt(SessionManager.USER_ID, 0),
                                     checkPropertyOwnership(),
                                     propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, "ERROR"),
@@ -407,7 +406,7 @@ public class PublishFragment extends Fragment {
                                     getCurrentDate()
                             );
 
-                            retrofit.insertListingData(publishListingDataRequest).enqueue(new Callback<IdListing>() {
+                            retrofit.insertListingData(publishListingDataRequestDTO).enqueue(new Callback<IdListing>() {
                                 @Override
                                 public void onResponse(Call<IdListing> call, Response<IdListing> response) {
                                     progressDialog.dismiss();

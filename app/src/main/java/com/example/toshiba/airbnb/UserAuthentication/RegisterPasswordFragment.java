@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 
 import android.app.Fragment;
@@ -23,23 +23,7 @@ import java.util.regex.Pattern;
  * Created by Owner on 2017-06-10.
  */
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.example.toshiba.airbnb.R;
 
 /**
  * Created by Owner on 2017-06-10.

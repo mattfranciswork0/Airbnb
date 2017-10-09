@@ -1,4 +1,4 @@
-package com.example.toshiba.airbnb;
+package com.example.toshiba.airbnb.UserAuthentication;
 
 /**
  * Created by TOSHIBA on 29/07/2017.
@@ -20,7 +20,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.MenuActivity;
+import com.example.toshiba.airbnb.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;

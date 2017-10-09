@@ -17,17 +17,14 @@ import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Keyboard;
-import com.example.toshiba.airbnb.PhoneNumFragment;
-import com.example.toshiba.airbnb.PhoneNumVerifyFragment;
 import com.example.toshiba.airbnb.Profile.DTO.AboutMeDTO;
 import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
-import com.example.toshiba.airbnb.Profile.DTO.PhoneNumDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.RegisterEmailFragment;
-import com.example.toshiba.airbnb.SessionManager;
+import com.example.toshiba.airbnb.UserAuthentication.RegisterEmailFragment;
+import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
