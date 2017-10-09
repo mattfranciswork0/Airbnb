@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Keyboard;
+import com.example.toshiba.airbnb.PhoneNumFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.SessionManager;
 
@@ -51,6 +53,8 @@ public class HostProfileEditFragment extends Fragment {
     ImageView ivProfilePic;
     Cloudinary cloudinary;
     Call<POJOUserData> getUserDataCall;
+    public static final String EMAIL_EDIT = "EMAIL_EDIT";
+    public static final String PHONE_NUM_EDIT = "PHONE_NUM_EDIT";
     public static final String LOCATION_EDIT = "LOCATION_EDIT";
     public static final String WORK_EDIT = "WORK_EDIT";
     public static final String LANGUAGES_EDIT = "LANGUAGES_EDIT";
@@ -111,6 +115,31 @@ public class HostProfileEditFragment extends Fragment {
             tvEmail.setText(sessionSP.getString(sessionManager.EMAIL, ""));
             TextView tvPhoneNum = (TextView) view.findViewById(R.id.tvPhoneNum);
             tvPhoneNum.setText(sessionSP.getString(sessionManager.PHONE_NUM, ""));
+
+            RelativeLayout layoutEmail = (RelativeLayout) view.findViewById(R.id.layoutEmail);
+            layoutEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HostProfileEditDetailFragment hostProfileEditDetailFragment = new HostProfileEditDetailFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(EMAIL_EDIT, true);
+                    hostProfileEditDetailFragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.hostProfileLayout, hostProfileEditDetailFragment).addToBackStack(null).commit();
+                }
+            });
+
+            RelativeLayout layoutPhoneNum = (RelativeLayout) view.findViewById(R.id.layoutPhoneNum);
+            layoutPhoneNum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PhoneNumFragment phoneNumFragment = new PhoneNumFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(PHONE_NUM_EDIT, true);
+                    phoneNumFragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().
+                            replace(R.id.hostProfileLayout, phoneNumFragment).addToBackStack(getActivity().getResources().getString(R.string.hostProfileEditFragment)).commit();
+                }
+            });
         }
         ImageView ivGallery = (ImageView) view.findViewById(R.id.ivGallery);
         Glide.with(getActivity()).load(getResources().getString(R.string.GalleryIcon)).into(ivGallery);

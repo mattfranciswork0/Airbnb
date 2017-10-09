@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.toshiba.airbnb.PhoneNumFragment;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -43,33 +44,68 @@ public class HostProfileActivity extends AppCompatActivity {
         if(fragment instanceof HostProfileEditDetailFragment){
             TextView tvEdit = (TextView) fragment.getView().findViewById(R.id.tvEdit);
             EditText etEdit = (EditText) fragment.getView().findViewById(R.id.etEdit);
-            Log.d("testMe", "whoa");
 
-            if(tvEdit.getText().toString().equals(getResources().getString(R.string.location))){
-                if (!etEdit.getText().toString().equals("") &&
-                        !etEdit.getText().toString().equals(HostProfileEditDetailFragment.locationText))
+
+            if(tvEdit.getText().toString().equals(getResources().getString(R.string.email))){
+                String etText;
+                if(etEdit.getText().toString().equals("")){
+                    etText = null;
+                } else{
+                    etText = etEdit.getText().toString();
+                }
+
+                if (!(HostProfileEditDetailFragment.emailText + "").equals(etText + ""))
+                    dialog.show();
+                else
+                    super.onBackPressed();
+            }
+
+            else if(tvEdit.getText().toString().equals(getResources().getString(R.string.location))){
+                String etText;
+                if(etEdit.getText().toString().equals("")){
+                    etText = null;
+                } else{
+                    etText = etEdit.getText().toString();
+                }
+                Log.d("checkMe", HostProfileEditDetailFragment.locationText + "" + "and" + etText + "" );
+                // +"" added for null check, without + "", equals() wouldn't work
+                if (!(HostProfileEditDetailFragment.locationText + "").equals(etText + ""))
                     dialog.show();
                 else
                     super.onBackPressed();
             }
             else if(tvEdit.getText().toString().equals(getResources().getString(R.string.work))) {
-                if (!etEdit.getText().toString().equals("") &&
-                        !etEdit.getText().toString().equals(HostProfileEditDetailFragment.workText))
+                String etText;
+                if(etEdit.getText().toString().equals("")){
+                    etText = null;
+                } else{
+                    etText = etEdit.getText().toString();
+                }
+
+                if (!(HostProfileEditDetailFragment.workText + "").equals(etText + ""))
                     dialog.show();
                 else
                     super.onBackPressed();
             }
             else if(tvEdit.getText().toString().equals(getResources().getString(R.string.languages))) {
-                if (!etEdit.getText().toString().equals("") &&
-                        !etEdit.getText().toString().equals(HostProfileEditDetailFragment.languagesText))
+                String etText;
+                if(etEdit.getText().toString().equals("")){
+                    etText = null;
+                } else{
+                    etText = etEdit.getText().toString();
+                }
+                if (!(HostProfileEditDetailFragment.languagesText + "").equals(etText + ""))
                     dialog.show();
                 else
                     super.onBackPressed();
             }
 
-        } else{
+        }
+
+        else{
             super.onBackPressed();
         }
+
 
     }
 

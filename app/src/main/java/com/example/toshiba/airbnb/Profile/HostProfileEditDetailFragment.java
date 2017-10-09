@@ -2,9 +2,12 @@ package com.example.toshiba.airbnb.Profile;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.PhoneNumFragment;
+import com.example.toshiba.airbnb.PhoneNumVerifyFragment;
+import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
-import com.example.toshiba.airbnb.Profile.DTO.LocationDetailDTO;
+import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
+import com.example.toshiba.airbnb.Profile.DTO.PhoneNumDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.RegisterEmailFragment;
 import com.example.toshiba.airbnb.SessionManager;
 
 import retrofit2.Call;
@@ -34,6 +42,9 @@ public class HostProfileEditDetailFragment extends Fragment {
     public static String locationText;
     public static String workText;
     public static String languagesText;
+    public static String emailText;
+    public static String phoneNumText;
+    public static String PHONE_NUM_EDIT;
 
 
 
@@ -84,10 +95,60 @@ public class HostProfileEditDetailFragment extends Fragment {
                     locationText = response.body().getLocation();
                     workText = response.body().getWork();
                     languagesText = response.body().getLanguages();
+                    emailText = response.body().getEmail();
+                    phoneNumText = response.body().getPhoneNum();
 
-                    if (getArguments().getBoolean(HostProfileEditFragment.LOCATION_EDIT)) {
-                        tvEdit.setText("Location");
-                        etEdit.setHint("Location");
+                    if (getArguments().getBoolean(HostProfileEditFragment.EMAIL_EDIT)) {
+                        tvEdit.setText(getResources().getString(R.string.email));
+                        etEdit.setHint(getResources().getString(R.string.email));
+                        if (emailText != null)
+                            etEdit.setText(emailText);
+
+                        tvSave.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String email = etEdit.getText().toString();
+                                if(RegisterEmailFragment.isValidEmail(email)) {
+                                    uploadDialog();
+                                    retrofit.insertEmailDetailEdit(USER_ID, new EmailDetailEditDTO(email)).enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            SessionManager sessionManager = new SessionManager(getActivity());
+                                            if (sessionManager.isLoggedIn()) {
+                                                SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sessionSP.edit();
+                                                editor.putString(sessionManager.EMAIL, etEdit.getText().toString());
+                                                editor.apply();
+                                            }
+                                            dialog.dismiss();
+                                            getFragmentManager().popBackStack();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+                                            dialog.dismiss();
+                                            Toast.makeText(getActivity(), "Failed to upload user data, try again", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else{
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                                    dialog.setCancelable(true);
+                                    dialog.setTitle("Unable to save");
+                                    dialog.setMessage("Please enter a valid email");
+                                    dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
+                                }
+                            }
+                        });
+                    }
+                    else if (getArguments().getBoolean(HostProfileEditFragment.LOCATION_EDIT)) {
+                        tvEdit.setText(getResources().getString(R.string.location));
+                        etEdit.setHint(getResources().getString(R.string.location));
                         if(locationText != null)
                             etEdit.setText(locationText);
 
@@ -96,7 +157,7 @@ public class HostProfileEditDetailFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 uploadDialog();
-                                retrofit.insertLocationDetailEdit(USER_ID, new LocationDetailDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
+                                retrofit.insertLocationDetailEdit(USER_ID, new LocationDetailEditDTO(etEdit.getText().toString())).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         dialog.dismiss();
@@ -114,7 +175,7 @@ public class HostProfileEditDetailFragment extends Fragment {
 
                     }
 
-                    if (getArguments().getBoolean(HostProfileEditFragment.WORK_EDIT)) {
+                    else if (getArguments().getBoolean(HostProfileEditFragment.WORK_EDIT)) {
                         tvEdit.setText("Work");
                         etEdit.setHint("Work");
                         if(workText != null)
@@ -132,8 +193,8 @@ public class HostProfileEditDetailFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(Call<Void> call, Throwable t) {
-                                        Toast.makeText(getActivity(), "Failed to retrieve user data, try again", Toast.LENGTH_LONG).show();
                                         dialog.dismiss();
+                                        Toast.makeText(getActivity(), "Failed to retrieve user data, try again", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
@@ -141,9 +202,9 @@ public class HostProfileEditDetailFragment extends Fragment {
                     }
 
 
-                    if (getArguments().getBoolean(HostProfileEditFragment.LANGUAGES_EDIT)) {
-                        tvEdit.setText("Languages");
-                        etEdit.setHint("Languages");
+                    else if (getArguments().getBoolean(HostProfileEditFragment.LANGUAGES_EDIT)) {
+                        tvEdit.setText(getResources().getString(R.string.languages));
+                        etEdit.setHint(getResources().getString(R.string.languages));
                         if(languagesText != null)
                             etEdit.setText(languagesText );
 
@@ -160,6 +221,7 @@ public class HostProfileEditDetailFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(Call<Void> call, Throwable t) {
+                                        dialog.dismiss();
                                         Toast.makeText(getActivity(), "Failed to upload user data, try again", Toast.LENGTH_LONG).show();
                                     }
                                 });

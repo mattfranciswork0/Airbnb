@@ -133,6 +133,7 @@
                             android:background="@color/lightRed" />
 
                         <RelativeLayout
+                            android:id="@+id/layoutEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp">
@@ -161,6 +162,7 @@
                             android:background="@color/lightRed" />
 
                         <RelativeLayout
+                            android:id="@+id/layoutPhoneNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp">
