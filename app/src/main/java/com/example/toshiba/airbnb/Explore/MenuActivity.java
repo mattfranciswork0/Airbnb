@@ -14,11 +14,10 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-        final ExploreFragment exploreFragment = new ExploreFragment();
+        final HomeFragment homeFragment = new HomeFragment();
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.sectionFragmentReplace, exploreFragment);
+        fragmentTransaction.replace(R.id.sectionFragmentReplace, homeFragment);
         fragmentTransaction.commit();
 
         TabLayout sectionTab = (TabLayout) findViewById(R.id.sectionTab);
@@ -30,7 +29,7 @@ public class MenuActivity extends AppCompatActivity {
                 switch(tab.getPosition()){
                     case 0: //Explore
                         final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.sectionFragmentReplace, new ExploreFragment());
+                        fragmentTransaction.replace(R.id.sectionFragmentReplace, homeFragment);
                         fragmentTransaction.commit();
                         break;
                     case 1:
