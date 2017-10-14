@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
+import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
@@ -31,6 +33,7 @@ import retrofit2.Response;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
     Context context;
+    ArrayList<Integer> listingIdArrayList = new ArrayList<>();
     ArrayList<String> imagePathArrayList = new ArrayList<>();
     ArrayList<String> propertyOwnershipArrayList = new ArrayList<>();
     ArrayList<String> propertyTypeArrayList = new ArrayList<>();
@@ -42,6 +45,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     public void addSize() {
         size++;
+    }
+
+    public void addListingId(int id) {
+        listingIdArrayList.add(id);
     }
 
     public void addImagePath(String imagePath) {
@@ -110,7 +117,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         }
 
-        public void bindView(int position) {
+        public void bindView(final int position) {
 
 //            Glide.with(mContext)
 //                    .load("")
@@ -126,6 +133,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, HomeDescActivity.class);
+                    intent.putExtra(ViewListingAdapter.LISTING_ID, listingIdArrayList.get(position) );
                     context.startActivity(intent);
                 }
             });

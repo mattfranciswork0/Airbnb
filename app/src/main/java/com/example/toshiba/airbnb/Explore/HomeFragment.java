@@ -34,6 +34,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     int size;
 
     public void addData(HomeAdapter homeAdapter, Response<POJOListingData> response) {
+        homeAdapter.addListingId(response.body().getId());
         homeAdapter.addImagePath(response.body().getImageData().get(0).getImagePath());
         homeAdapter.addPropertyOwnership(response.body().getPropertyOwnership());
         homeAdapter.addPropertyType(response.body().getPropertyType());
@@ -107,12 +108,12 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                 dialog.setCancelable(false);
                 dialog.show();
             }
-            int getListingId = i + 1;
+            final int getListingId = i + 1;
 
             retrofit.getListingData(getListingId).enqueue(new Callback<POJOListingData>() {
                 @Override
                 public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                    Log.d("HomeAdapter", "onResponse");
+                    Log.d("HomeAdapter", "onResponse" + getListingId);
 
                     addData(homeAdapter, response);
 

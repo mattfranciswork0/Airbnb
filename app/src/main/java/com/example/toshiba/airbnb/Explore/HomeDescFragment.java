@@ -217,6 +217,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                 dialog.setMessage("Getting data...");
                 dialog.show();
                 Log.d("HomeDescFragment", "getArgument scope");
+                Log.d("checkMe", getArguments().getInt(ViewListingAdapter.LISTING_ID) + "");
                 retrofit.getListingData(getArguments().getInt(ViewListingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
                     @Override
                     public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
@@ -233,7 +234,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
                             for (int i = 0; i < body.getImageData().size(); i++) {
                                 imageArrayList.add(body.getImageData().get(i).getImagePath());
-                                captionArrayList.add(response.body().getImageData().get(i).getCaption().toString());
+                                captionArrayList.add(response.body().getImageData().get(i).getCaption() +"");
                                 Log.d("HeyBestie", "Love ya" + imageArrayList.get(i));
                             }
                             imageSliderPager = new ImageSliderPager(getActivity(), HomeDescFragment.this,
