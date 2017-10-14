@@ -7,6 +7,7 @@ package com.example.toshiba.airbnb;
 
 
 import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJOTotalListings;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequestDTO;
@@ -61,6 +62,9 @@ public interface DatabaseInterface {
 
     @GET("/listingData/{id}")
     Call<POJOListingData> getListingData(@Path("id") int user_id);
+
+    @GET("/totalListingsData")
+    Call<POJOTotalListings> getTotalListings();
 
     @GET("/getUserData/{id}")
     Call<POJOUserData> getUserData(@Path("id") int user_id);

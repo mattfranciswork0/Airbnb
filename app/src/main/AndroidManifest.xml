@@ -24,6 +24,9 @@
         <activity android:name=".Explore.MenuActivity">
 
         </activity>
+        <activity android:name=".LoadingMenuActivity">
+
+        </activity>
         <activity android:name=".Explore.SingleContentDescActivity">
 
         </activity>

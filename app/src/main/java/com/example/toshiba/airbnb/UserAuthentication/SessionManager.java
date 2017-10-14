@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.example.toshiba.airbnb.Explore.MenuActivity;
+import com.example.toshiba.airbnb.LoadingMenuActivity;
 
 /**
  * Created by TOSHIBA on 22/08/2017.
@@ -68,7 +68,7 @@ public class SessionManager {
     public void checkLogin() {
         // Check login status
         if (isLoggedIn()) {
-            Intent intent = new Intent(context, MenuActivity.class);
+            Intent intent = new Intent(context, LoadingMenuActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
