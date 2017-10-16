@@ -103,7 +103,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onFailure(Call<POJOUserData> call, Throwable t) {
                 Log.d("ProfileFragment", t.toString());
-                Toast.makeText(getActivity(), "Failed to get profile picture, try again", Toast.LENGTH_LONG).show();
             }
         });
         Glide.with(getActivity()).load(getResources().getString(R.string.defaultProfilePicture)).into(ivProfilePic);

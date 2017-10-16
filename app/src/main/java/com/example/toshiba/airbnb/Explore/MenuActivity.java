@@ -4,6 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.toshiba.airbnb.LoadingMenuActivity;
 import com.example.toshiba.airbnb.Profile.ProfileFragment;
 import com.example.toshiba.airbnb.R;
 
@@ -15,10 +16,15 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        final ExploreFragment exploreFragment = new ExploreFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(LoadingMenuActivity.TOTAL_LISTINGS, getIntent().getExtras().getInt(LoadingMenuActivity.TOTAL_LISTINGS) );
+        final HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setArguments(bundle);
+
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.sectionFragmentReplace, exploreFragment);
+        fragmentTransaction.replace(R.id.sectionFragmentReplace, homeFragment);
         fragmentTransaction.commit();
 
         TabLayout sectionTab = (TabLayout) findViewById(R.id.sectionTab);
@@ -30,7 +36,7 @@ public class MenuActivity extends AppCompatActivity {
                 switch(tab.getPosition()){
                     case 0: //Explore
                         final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.sectionFragmentReplace, new ExploreFragment());
+                        fragmentTransaction.replace(R.id.sectionFragmentReplace, homeFragment);
                         fragmentTransaction.commit();
                         break;
                     case 1:
