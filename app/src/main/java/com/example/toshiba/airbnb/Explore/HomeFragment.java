@@ -11,13 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.LoadingMenuActivity;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,15 +33,19 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     DatabaseInterface retrofit;
     int size;
 
-    public void addData(HomeAdapter homeAdapter, Response<POJOListingData> response) {
-        homeAdapter.addListingId(response.body().getId());
-        homeAdapter.addImagePath(response.body().getImageData().get(0).getImagePath());
-        homeAdapter.addPropertyOwnership(response.body().getPropertyOwnership());
-        homeAdapter.addPropertyType(response.body().getPropertyType());
-        homeAdapter.addTotalBed(response.body().getTotalBeds());
-        homeAdapter.addPlaceTitle(response.body().getPlaceTitle());
-        homeAdapter.addPrice(response.body().getPrice());
-
+    public void addData(HomeAdapter homeAdapter, int index, Response<POJOMultipleListingsDataGetResult> response) {
+        List<POJOMultipleListingsData> result = response.body().getResult();
+        for (int i = 0; i < result.size(); i++) {
+            homeAdapter.addListingId(result.get(i).getId());
+            homeAdapter.addImagePath(result.get(i).getImagePath());
+            homeAdapter.addPropertyOwnership(result.get(i).getPropertyOwnership());
+            homeAdapter.addPropertyType(result.get(i).getPropertyType());
+            homeAdapter.addTotalBed(result.get(i).getTotalBeds());
+            homeAdapter.addPlaceTitle(result.get(i).getPlaceTitle());
+            homeAdapter.addPrice(result.get(i).getPrice());
+            Log.d("homeFragment", "for loop");
+        }
+        Log.d("homeFragment", "out of for loop");
     }
 
     @Override
@@ -72,33 +76,25 @@ public class HomeFragment extends android.support.v4.app.Fragment {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        if(size == 0){
+        if (size == 0) {
             view.findViewById(R.id.tvEmptyListing).setVisibility(View.VISIBLE);
         }
-        final CountDownLatch latch;
         final HomeAdapter homeAdapter = new HomeAdapter();
         index = 0;
         //get first four items
         final int visibleThreshold = 4;
 
-        if (size < visibleThreshold) {
-            latch = new CountDownLatch(size);
-        } else {
-            latch = new CountDownLatch(visibleThreshold);
-        }
-
         final ProgressDialog dialog = new ProgressDialog(getActivity());
 
         final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
-        Cloudinary cloudinary = new Cloudinary(getActivity().
 
-                getResources().getString(R.string.cloudinaryEnviornmentVariable)); //configured using an environment variable
         int showInitialItems;
-        if(size < visibleThreshold){
+        if (size < visibleThreshold) {
             showInitialItems = size;
-        } else{
+        } else {
             showInitialItems = index + visibleThreshold;
         }
+
         for (int i = index; i < showInitialItems; i++) {
 
             homeAdapter.addSize();
@@ -108,35 +104,25 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                 dialog.setCancelable(false);
                 dialog.show();
             }
-            final int getListingId = i + 1;
-
-            retrofit.getListingData(getListingId).enqueue(new Callback<POJOListingData>() {
-                @Override
-                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                    Log.d("HomeAdapter", "onResponse" + getListingId);
-
-                    addData(homeAdapter, response);
-
-
-                    latch.countDown();
-                    Log.d("latchCount", latch.getCount() + "");
-                    if (latch.getCount() == 0) {
-                        Log.d("latchCount", "hide");
-                        dialog.dismiss();
-                        recyclerView.setAdapter(homeAdapter);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<POJOListingData> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
-                            .show();
-                }
-            });
         }
 
-        index += visibleThreshold; //get fifth item in next for loop
+        retrofit.getMultipleListingsData(index, index + visibleThreshold).enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
+            @Override
+            public void onResponse(Call<POJOMultipleListingsDataGetResult> call, Response<POJOMultipleListingsDataGetResult> response) {
+                addData(homeAdapter, index, response);
+                dialog.dismiss();
+                recyclerView.setAdapter(homeAdapter);
+                index += visibleThreshold; //get fifth item in next for loop
+
+            }
+
+            @Override
+            public void onFailure(Call<POJOMultipleListingsDataGetResult> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -147,9 +133,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
                 int showItems = (index + visibleThreshold); //because index starts at 0, - 1
 
-                //TODO: if recyclerview is scrolled, disable/enable scrollView for LinearLayout in explore_tab_fragment_explore
                 super.onScrolled(recyclerView, dx, dy);
-                Log.d("scroll", String.valueOf(itemCount));
                 Log.d("numbers", "NOT Loading: " + "firstVisible is " + String.valueOf(firstVisibleItem) + " itemCount is " + String.valueOf(itemCount));
 
                 if (index < size) {
@@ -158,52 +142,46 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
                         if (showItems > size) {
-                            showItems = size; //show remaininning listing by forcing for loopp below to the database size
+                            showItems = size;
+                            //show remaining listing by forcing for loopp below to the database size
                         }
-                        Log.d("latchCount", showItems + "showItems" + " and" + firstVisibleItem);
-                        int remainingListings = showItems - firstVisibleItem;
-                        final CountDownLatch latch = new CountDownLatch(remainingListings);
+
                         final ProgressDialog dialog = new ProgressDialog(getActivity());
 
-                        for (int i = index; i < showItems; i++) {
+                        dialog.setMessage("Loading...");
+                        dialog.setCancelable(false);
+                        dialog.show();
 
-                            if (i == index) {
-                                Log.d("latchCount", "showDialog");
-                                dialog.setMessage("Loading...");
-                                dialog.setCancelable(false);
-                                dialog.show();
+                        final int finalShowItems = showItems;
+                        retrofit.getMultipleListingsData(index, showItems).enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
+                            @Override
+                            public void onResponse(Call<POJOMultipleListingsDataGetResult> call, Response<POJOMultipleListingsDataGetResult> response) {
+
+                                addData(homeAdapter, index, response);
+                                dialog.dismiss();
+                                for (int i = index; i < finalShowItems; i++) {
+                                    Log.d("MattCool", "I am for loop");
+                                    homeAdapter.addSize();
+                                    homeAdapter.notifyItemInserted(i);
+                                }
+
+                                index += visibleThreshold;
+
                             }
-                            int getListingId = i + 1;
 
-                            retrofit.getListingData(getListingId).enqueue(new Callback<POJOListingData>() {
-                                @Override
-                                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                                    addData(homeAdapter, response);
-                                    latch.countDown();
-                                    Log.d("latchCount", latch.getCount() + "");
-                                    if (latch.getCount() == 0) {
-                                        Log.d("latchCount", "hide");
-                                        dialog.dismiss();
-                                    }
-                                }
+                            @Override
+                            public void onFailure(Call<POJOMultipleListingsDataGetResult> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
 
-                                @Override
-                                public void onFailure(Call<POJOListingData> call, Throwable t) {
-                                    dialog.dismiss();
-                                    Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                            });
-
-                            homeAdapter.notifyItemInserted(i);
-
-                            //sort by id (earliest listing)
-                            homeAdapter.addSize();
-                        }
-                        index += visibleThreshold;
-                        Toast.makeText(getActivity(), "Loading", Toast.LENGTH_LONG).show();
 
                     }
+                    Toast.makeText(getActivity(), "Loading", Toast.LENGTH_LONG).show();
+
+
                 }
             }
 

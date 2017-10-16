@@ -179,7 +179,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         Glide.with(getContext()).load("http://www.freeiconspng.com/uploads/person-icon-person-icon-clipart-image-from-our-icon-clipart-category--9.png").into(ivGuest);
         Glide.with(getContext()).load("http://www.freeiconspng.com/uploads/door-icon-19.png").into(ivRoom);
         Glide.with(getContext()).load("https://www.materialui.co/materialIcons/maps/hotel_grey_192x192.png").into(ivBed);
-        Glide.with(getContext()).load("http://classicbathtubrefinishing.com/communities/7/000/001/766/187//images/9604963_229x158.png").into(ivBathroom);
+        Glide.with(getContext()).load("http://classicbaHothtubrefinishing.com/communities/7/000/001/766/187//images/9604963_229x158.png").into(ivBathroom);
 
         final TextView tvDesc = (TextView) view.findViewById(R.id.tvDesc);
         final TextView tvPlaceTitle = (TextView) view.findViewById(R.id.tvPlaceTitle);
@@ -401,10 +401,11 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
             if (imageArrayList.isEmpty()) {
                 viewPager.setVisibility(View.GONE);
             } else {
+                Log.d("HomeDescFragment", imageArrayList.get(0));
 
                 final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
                 imageSliderPager = new ImageSliderPager(getActivity(), HomeDescFragment.this, imageArrayList,
-                        captionArrayList.size(), false);
+                        imageArrayList.size(), false);
                 viewPager.setAdapter(imageSliderPager);
 
                 tvSize.setText(1 + " of " + imageArrayList.size() + " - " + imageSliderPager.getFirstCaption());

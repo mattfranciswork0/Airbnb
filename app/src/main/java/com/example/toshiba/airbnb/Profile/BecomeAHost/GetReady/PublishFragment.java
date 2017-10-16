@@ -22,6 +22,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.MenuActivity;
+import com.example.toshiba.airbnb.LoadingMenuActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BathroomFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
@@ -50,6 +51,8 @@ import java.util.concurrent.CountDownLatch;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 /**
  * Created by TOSHIBA on 11/08/2017.
@@ -228,6 +231,7 @@ public class PublishFragment extends Fragment {
         File file = new File(sdCardDirectory.getAbsolutePath() + GalleryAdapter.airBnbDirectory);
         final File[] listFile = file.listFiles();
 
+
         new AsyncTask<Void, Void, Void>() {
             SharedPreferences finishedUploadingSP;
             SharedPreferences.Editor finishedUploadingEdit;
@@ -295,9 +299,9 @@ public class PublishFragment extends Fragment {
                 if (finishedUploadingSP.getBoolean(FINISHED_UPLOADING, false)) {
                     finishedUploadingEdit.clear();
                     latchEdit.clear().apply();
-                    Intent intent = new Intent(getActivity(), MenuActivity.class);
+                    Intent intent = new Intent(getActivity(), LoadingMenuActivity.class);
                     intent.putExtra("BASIC_QUESTIONS_COMPLETED", true);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
 
