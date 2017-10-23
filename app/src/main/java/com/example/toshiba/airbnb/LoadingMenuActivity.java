@@ -39,7 +39,7 @@ public class LoadingMenuActivity extends Activity {
 
             @Override
             public void onFailure(Call<POJOTotalListings> call, Throwable t) {
-                Log.d("loadingFail", "loadingFail");
+                Log.d("loadingFail", "loadingFail" + t.toString());
                 onBackPressed();
             }
         });

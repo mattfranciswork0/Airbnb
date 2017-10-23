@@ -19,28 +19,32 @@ public class HomeDescActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.homeDescLayout);
-        if(currentFragment instanceof HomeDescFragment){
+        if (currentFragment instanceof HomeDescFragment) {
             Log.d("fullscreen", String.valueOf(ImageSliderPager.FULL_SCREEN_MODE));
-            if(ImageSliderPager.FULL_SCREEN_MODE){
+            if (ImageSliderPager.FULL_SCREEN_MODE) {
                 ImageSliderPager imageSliderPager = ((HomeDescFragment) currentFragment).getImageSliderPager();
                 imageSliderPager.getOutOfFullScreen();
             }
+            if (getFragmentManager().getBackStackEntryCount() > 0)
+                getFragmentManager().popBackStackImmediate();
+
+
             else{
                 super.onBackPressed();
             }
-        }
-        else{
+        } else {
             super.onBackPressed();
         }
 
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_desc);
         HomeDescFragment homeDescFragment = new HomeDescFragment();
-        if(getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().containsKey(ViewListingAdapter.LISTING_ID)) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(ViewListingAdapter.LISTING_ID,

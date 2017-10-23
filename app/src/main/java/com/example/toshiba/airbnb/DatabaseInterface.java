@@ -6,6 +6,9 @@ package com.example.toshiba.airbnb;
 
 
 
+import com.example.toshiba.airbnb.Explore.DTOBookSchedule;
+import com.example.toshiba.airbnb.Explore.POJOBookingData;
+import com.example.toshiba.airbnb.Explore.POJOBookingDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Explore.POJOMultipleListingsData;
 import com.example.toshiba.airbnb.Explore.POJOMultipleListingsDataGetResult;
@@ -64,6 +67,14 @@ public interface DatabaseInterface {
 
     @GET("/listingData/{id}")
     Call<POJOListingData> getListingData(@Path("id") int user_id);
+
+    @Headers("Content-Type: application/json")
+    @POST("/bookSchedule/{id}/{listing_id}")
+    Call<Void> insertBookingSchedule(@Path("id") int user_id, @Path("listing_id") int listing_id,
+                                     @Body DTOBookSchedule body);
+
+    @GET("/getBookingSchedules/{id}/{listing_id}")
+    Call<POJOBookingDataGetResult> getBookingSchedules(@Path("id") int user_id, @Path("listing_id") int listing_id);
 
     @GET("/multipleListingsData/{showRowsAfter}/{showAmountOfRows}")
     Call<POJOMultipleListingsDataGetResult> getMultipleListingsData(@Path("showRowsAfter") int showRowsAfter, @Path("showAmountOfRows") int showAmountOfRows );

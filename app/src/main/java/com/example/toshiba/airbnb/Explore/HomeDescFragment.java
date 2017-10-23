@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BathroomFra
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.BookingFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
@@ -39,6 +41,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.Profile.HostProfileViewFragment;
 import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -66,7 +69,13 @@ import retrofit2.Response;
 public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     Double LAT;
     Double LNG;
+    public static final String HOUSE_RULE_FRAGMENT_TAG = "HOUSE_RULE_FRAGMENT_TAG";
+    public static final String AMENITIES_FRAGMENT_TAG = "AMENITIES_FRAGMENT_TAG";
+    public static final String AVAILABILITY_FRAGMENT_TAG = "AVAILABILITY_FRAGMENT_TAG";
     public static String AMENITIES_FROM_DATABASE = "AMENITIES_FROM_DATABASE";
+    public static String AVAILABILITY_FROM_DATABASE = "AVAILABILITY_FROM_DATABASE";
+    public static String CHECK_IN = "CHECK_IN";
+    public static String CHECK_OUT = "CHECK_OUT";
     private ArrayList<String> imageArrayList = new ArrayList<>();
     private ArrayList<String> captionArrayList = new ArrayList<>();
     private ImageSliderPager imageSliderPager;
@@ -82,6 +91,18 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     DatabaseInterface retrofit;
     int showOthersIconInt;
     boolean retrieveAmenitiesFromData;
+
+    public void addNewFragment(Bundle bundle, String fragmentTag, Fragment fragment) {
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+        }
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(fragmentTag);
+        fragmentTransaction.add(R.id.homeDescLayout, fragment).commit();
+        fragmentTransaction.hide(HomeDescFragment.this);
+        fragmentTransaction.show(fragment);
+
+    }
 
     public ImageSliderPager getImageSliderPager() {
         return imageSliderPager;
@@ -139,7 +160,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-;
+        ;
         retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         Log.d("HomeDescFragment", "onCreate");
     }
@@ -190,7 +211,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         final TextView tvBathroom = (TextView) view.findViewById(R.id.tvBaths);
         layoutIconAmenities = (LinearLayout) view.findViewById(R.id.layoutIconAmenities);
         final RelativeLayout layoutHouseRule = (RelativeLayout) view.findViewById(R.id.layoutHouseRule);
-        final LinearLayout layoutAmentities = (LinearLayout) view.findViewById(R.id.layoutAmentities);
+        final LinearLayout layoutAmenities = (LinearLayout) view.findViewById(R.id.layoutAmenities);
+        final RelativeLayout layoutAvailability = (RelativeLayout) view.findViewById(R.id.layoutAvailability);
 
         showOthersIconInt = 6 - 1;
         //Layout params for amenities icons
@@ -204,8 +226,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         layoutHouseRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HouseRuleMoreFragment()).
-                        addToBackStack(null).commit();
+                addNewFragment(null, HOUSE_RULE_FRAGMENT_TAG, new HouseRuleMoreFragment());
             }
         });
 
@@ -214,13 +235,17 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             if (getArguments().containsKey(ViewListingAdapter.LISTING_ID)) {
                 final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setCancelable(true);
                 dialog.setMessage("Getting data...");
                 dialog.show();
                 Log.d("HomeDescFragment", "getArgument scope");
                 Log.d("checkMe", getArguments().getInt(ViewListingAdapter.LISTING_ID) + "");
-                retrofit.getListingData(getArguments().getInt(ViewListingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
+                final int userId = sessionSP.getInt(SessionManager.USER_ID, 0);
+                final int listingId = getArguments().getInt(ViewListingAdapter.LISTING_ID);
+                retrofit.getListingData(listingId).enqueue(new Callback<POJOListingData>() {
                     @Override
-                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                    public void onResponse(Call<POJOListingData> call, final Response<POJOListingData> response) {
                         final POJOListingData body = response.body();
                         //TODO: PRICE, add property_ownership and property_type in view listing
 
@@ -234,7 +259,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
                             for (int i = 0; i < body.getImageData().size(); i++) {
                                 imageArrayList.add(body.getImageData().get(i).getImagePath());
-                                captionArrayList.add(response.body().getImageData().get(i).getCaption() +"");
+                                captionArrayList.add(response.body().getImageData().get(i).getCaption() + "");
                                 Log.d("HeyBestie", "Love ya" + imageArrayList.get(i));
                             }
                             imageSliderPager = new ImageSliderPager(getActivity(), HomeDescFragment.this,
@@ -345,25 +370,75 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                         layoutHouseRule.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                HouseRuleMoreFragment houseRuleMoreFragment = new HouseRuleMoreFragment();
-                                Bundle houseRuleBundle = new Bundle();
-                                houseRuleBundle.putInt(ViewListingAdapter.LISTING_ID,
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(ViewListingAdapter.LISTING_ID,
                                         getArguments().getInt(ViewListingAdapter.LISTING_ID));
-                                houseRuleMoreFragment.setArguments(houseRuleBundle);
-                                getFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.homeDescLayout, houseRuleMoreFragment).commit();
+                                addNewFragment(bundle, HOUSE_RULE_FRAGMENT_TAG, new HouseRuleMoreFragment());
                             }
                         });
 
-                        layoutAmentities.setOnClickListener(new View.OnClickListener() {
+                        layoutAmenities.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                AmenitiesIconMoreFragment amenitiesIconMoreFragment = new AmenitiesIconMoreFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putStringArrayList(AMENITIES_FROM_DATABASE,
                                         amenitiesFromDatabase);
-                                amenitiesIconMoreFragment.setArguments(bundle);
-                                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, amenitiesIconMoreFragment).addToBackStack(null)
-                                        .commit();
+                                addNewFragment(null, AMENITIES_FRAGMENT_TAG, new AmenitiesIconMoreFragment());
+                            }
+                        });
+                        Log.d("LoveYa", "saved");
+                        layoutAvailability.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                                dialog.setCancelable(false);
+                                dialog.setMessage("Getting data...");
+                                dialog.show();
+                                final AvailabilityFragment availabilityFragment = new AvailabilityFragment();
+                                final Bundle bundle = new Bundle();
+                                bundle.putBoolean(AVAILABILITY_FROM_DATABASE, true);
+                                bundle.putInt(SessionManager.USER_ID, body.getId());
+                                bundle.putInt(ViewListingAdapter.LISTING_ID, getArguments().getInt(ViewListingAdapter.LISTING_ID));
+                                bundle.putString(BookingFragment.MAX_MONTH, body.getListingLength());
+                                if (body.getMinStay() != "") {
+                                    bundle.putString(BookingFragment.MIN_STAY, "3");
+                                }
+                                if (body.getMaxStay() != "") {
+                                    bundle.putString(BookingFragment.MAX_STAY, body.getMaxStay());
+                                }
+
+                                retrofit.getBookingSchedules(userId, listingId).enqueue(new Callback<POJOBookingDataGetResult>() {
+                                    @Override
+                                    public void onResponse(Call<POJOBookingDataGetResult> call, Response<POJOBookingDataGetResult> response) {
+                                        dialog.dismiss();
+                                        ArrayList<String> checkInArrayList = new ArrayList<String>();
+                                        ArrayList<String> checkOutArrayList = new ArrayList<String>();
+                                        if (response.body() != null) {
+                                            for (int i = 0; i < response.body().getResult().size(); i++) {
+
+                                                Log.d("hiMatt", response.body().getResult().get(i).getCheckIn());
+                                                checkInArrayList.add(String.valueOf(response.body().getResult().get(i).getCheckIn()));
+                                                checkOutArrayList.add(String.valueOf(response.body().getResult().get(i).getCheckOut()));
+                                            }
+
+                                            bundle.putStringArrayList(CHECK_IN, checkInArrayList);
+                                            bundle.putStringArrayList(CHECK_OUT, checkOutArrayList);
+                                        }
+
+                                        addNewFragment(bundle, AVAILABILITY_FRAGMENT_TAG, availabilityFragment);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<POJOBookingDataGetResult> call, Throwable t) {
+                                        dialog.dismiss();
+                                        Log.d("CoolMatt", t.toString());
+                                    }
+                                });
+
+                                availabilityFragment.setArguments(bundle);
+//                                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, availabilityFragment).addToBackStack(null)
+//                                        .commit();
+
                             }
                         });
 
@@ -507,7 +582,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
             layoutIconAmenities.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().add(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null).commit();
                 }
             });
 
@@ -532,17 +607,25 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
             if (savedAmenities.containsKey(getResources().getString(R.string.rbGym))) {
                 showOthersIconInt = loadAmenitiesIcon(getResources().getString(R.string.GymIcon), showOthersIconInt);
             }
-            layoutAmentities.setOnClickListener(new View.OnClickListener() {
+            layoutAmenities.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new AmenitiesIconMoreFragment()).addToBackStack(null)
-                            .commit();
+                    addNewFragment(null, AMENITIES_FRAGMENT_TAG, new AmenitiesIconMoreFragment());
+                }
+            });
+
+            Log.d("LoveYa", "unsaved");
+            layoutAvailability.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addNewFragment(null, AVAILABILITY_FRAGMENT_TAG, new AvailabilityFragment());
                 }
             });
 
         }
     }
 
+    //this overrides the onMapReady in MapFragment
     @Override
     public void onMapReady(GoogleMap googleMap) {
         LatLng latLng = new LatLng(LAT, LNG);
