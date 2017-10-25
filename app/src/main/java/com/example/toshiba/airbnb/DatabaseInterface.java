@@ -7,12 +7,11 @@ package com.example.toshiba.airbnb;
 
 
 import com.example.toshiba.airbnb.Explore.DTOBookSchedule;
-import com.example.toshiba.airbnb.Explore.POJOBookingData;
 import com.example.toshiba.airbnb.Explore.POJOBookingDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
-import com.example.toshiba.airbnb.Explore.POJOMultipleListingsData;
 import com.example.toshiba.airbnb.Explore.POJOMultipleListingsDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOTotalListings;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOYourBookingGetResult;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequestDTO;
@@ -23,7 +22,7 @@ import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.PhoneNumDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
 import com.example.toshiba.airbnb.Profile.POJOUserData;
-import com.example.toshiba.airbnb.Profile.ViewListing.POJOListingImageAndTitleGetResult;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOListingImageAndTitleGetResult;
 import com.example.toshiba.airbnb.UserAuthentication.EmailResult;
 import com.example.toshiba.airbnb.UserAuthentication.LogInRequest;
 import com.example.toshiba.airbnb.UserAuthentication.PasswordMatch;
@@ -114,6 +113,9 @@ public interface DatabaseInterface {
     @POST("/insertLanguagesDetailEdit/{id}")
     Call<Void> insertLanguagesDetailEdit(@Path("id") int user_id, @Body LanguagesDetailEditDTO body);
 
+    @Headers("Content-Type: application/json")
+    @GET("/bookingListingImageAndTitle/{user_id}")
+    Call<POJOYourBookingGetResult> getBookingListingImageAndTitle(@Path("user_id") int user_id);
 
     @Headers("Content-Type: application/json")
     @GET("/hi")

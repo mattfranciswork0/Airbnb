@@ -3,13 +3,22 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
+
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="40sp"
+        android:layout_marginBottom="30dp"
         android:text="Listings"
-        android:textStyle="bold"
-        android:layout_marginBottom="30dp"/>
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvEmptyListing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="There seems to be nothing here..."
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvListing"

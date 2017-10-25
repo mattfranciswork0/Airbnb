@@ -2,9 +2,7 @@ package com.example.toshiba.airbnb.Explore;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
-import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
-import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -133,7 +124,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, HomeDescActivity.class);
-                    intent.putExtra(ViewListingAdapter.LISTING_ID, listingIdArrayList.get(position) );
+                    intent.putExtra(ViewListingAndYourBookingAdapter.LISTING_ID, listingIdArrayList.get(position) );
                     context.startActivity(intent);
                 }
             });

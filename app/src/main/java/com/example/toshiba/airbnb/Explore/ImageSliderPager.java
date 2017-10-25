@@ -1,13 +1,10 @@
 package com.example.toshiba.airbnb.Explore;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,19 +19,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
-import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
 import com.example.toshiba.airbnb.R;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**

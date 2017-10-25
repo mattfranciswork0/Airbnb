@@ -1,12 +1,7 @@
 package com.example.toshiba.airbnb.Explore;
 
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,13 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.POJOUserData;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
@@ -82,7 +76,7 @@ public class BookingSendSMSFragment extends Fragment {
                         dialog.show();
 
                         final String userPhoneNum = response.body().getPhoneNum();
-                        retrofit.insertBookingSchedule(userId, getArguments().getInt(ViewListingAdapter.LISTING_ID),
+                        retrofit.insertBookingSchedule(userId, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
                                 new DTOBookSchedule(
                                         getArguments().getString(HomeDescFragment.CHECK_IN),
                                         getArguments().getString(HomeDescFragment.CHECK_OUT)

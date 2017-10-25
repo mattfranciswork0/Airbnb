@@ -2,26 +2,22 @@ package com.example.toshiba.airbnb.Explore;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.BookingFragment;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
@@ -33,10 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by TOSHIBA on 09/08/2017.
@@ -215,7 +207,7 @@ public class AvailabilityFragment extends Fragment {
                     }
                 }
 
-                final int listingId = getArguments().getInt(ViewListingAdapter.LISTING_ID, 1);
+                final int listingId = getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID, 1);
                 SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
                 int listingUserId = getArguments().getInt(SessionManager.USER_ID, 1);
                 final int userId = sessionSP.getInt(SessionManager.USER_ID, 0);
@@ -237,7 +229,7 @@ public class AvailabilityFragment extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString(HomeDescFragment.CHECK_IN, tvCheckIn.getText().toString());
                                 bundle.putString(HomeDescFragment.CHECK_OUT, tvCheckOut.getText().toString());
-                                bundle.putInt(ViewListingAdapter.LISTING_ID, listingId);
+                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, listingId);
                                 BookingSendSMSFragment bookingSendSMSFragment = new BookingSendSMSFragment();
                                 bookingSendSMSFragment.setArguments(bundle);
                                 fragmentTransaction.add(R.id.homeDescLayout, bookingSendSMSFragment).commit();
@@ -250,7 +242,7 @@ public class AvailabilityFragment extends Fragment {
                         disableSaveButton();
                     }
                 } else{
-                    bSave.setVisibility(View.GONE);
+//                    bSave.setVisibility(View.GONE);
 
 
                 }

@@ -79,6 +79,19 @@
             android:layout_marginBottom="25dp"/>
 
         <TextView
+            android:id="@+id/tvYourBooking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:text="View your bookings"
+            android:textSize="22dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightRed"
+            android:layout_marginBottom="25dp"/>
+
+        <TextView
             android:text="Log out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

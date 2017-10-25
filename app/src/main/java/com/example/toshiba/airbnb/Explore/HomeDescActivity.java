@@ -8,9 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 
 
@@ -45,12 +44,12 @@ public class HomeDescActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_desc);
         HomeDescFragment homeDescFragment = new HomeDescFragment();
         if (getIntent().getExtras() != null) {
-            if (getIntent().getExtras().containsKey(ViewListingAdapter.LISTING_ID)) {
+            if (getIntent().getExtras().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(ViewListingAdapter.LISTING_ID,
-                        getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID));
+                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID,
+                        getIntent().getExtras().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                 homeDescFragment.setArguments(bundle);
-//                Toast.makeText(HomeDescActivity.this, getIntent().getExtras().getInt(ViewListingAdapter.LISTING_ID) +"",
+//                Toast.makeText(HomeDescActivity.this, getIntent().getExtras().getInt(ViewListingAndYourBookingAdapter.LISTING_ID) +"",
 //                        Toast.LENGTH_LONG).show();
             }
         }

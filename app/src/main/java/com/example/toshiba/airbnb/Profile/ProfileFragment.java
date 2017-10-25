@@ -13,13 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingActivity;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
@@ -38,6 +37,7 @@ public class ProfileFragment extends Fragment {
     DatabaseInterface retrofit;
     int userId;
     Call<POJOUserData> getUserDataCall;
+    public static String YOUR_BOOKING = "YOUR_BOOKING";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,8 +118,20 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.tvListings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ViewListingActivity.class);
+                Intent intent = new Intent(getActivity(), ViewListingAndYourBookingActivity.class);
+                Log.d("inLove", "tvListings");
                 startActivity(intent);
+            }
+        });
+
+        view.findViewById(R.id.tvYourBooking ).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ViewListingAndYourBookingActivity.class);
+                Log.d("inLove", "tvYourBooking");
+                intent.putExtra(YOUR_BOOKING, true);
+                startActivity(intent);
+
             }
         });
         view.findViewById(R.id.tvLogOut).setOnClickListener(new View.OnClickListener() {

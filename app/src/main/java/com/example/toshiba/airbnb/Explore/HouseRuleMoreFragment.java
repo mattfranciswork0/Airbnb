@@ -9,13 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.HouseRuleFragment;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 
 import retrofit2.Call;
@@ -58,9 +57,9 @@ public class HouseRuleMoreFragment extends Fragment {
         final TextView tvSmoking = (TextView) view.findViewById(R.id.tvSmoking);
         TextView tvParties = (TextView) view.findViewById(R.id.tvParties);
 
-        final EditText etAdditionalRules = (EditText) view.findViewById(R.id.etAdditionalRules);
+        final TextView tvAdditionalRules = (TextView) view.findViewById(R.id.tvAdditionalRules);
         if (getArguments() != null) {
-            if (getArguments().containsKey(ViewListingAdapter.LISTING_ID)) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
                 final ProgressDialog dialog = new ProgressDialog(getActivity());
                 dialog.setMessage("Getting data...");
                 dialog.show();
@@ -69,7 +68,7 @@ public class HouseRuleMoreFragment extends Fragment {
                         .baseUrl("http://192.168.0.34:3000/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build().create(DatabaseInterface.class);
-                retrofit.getListingData(getArguments().getInt(ViewListingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
                     @Override
                     public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
                         POJOListingData body = response.body();
@@ -91,7 +90,7 @@ public class HouseRuleMoreFragment extends Fragment {
                             tvSmoking.setVisibility(View.VISIBLE);
                         }
 
-                        etAdditionalRules.setText(body.getAdditionalRules());
+                        tvAdditionalRules.setText(body.getAdditionalRules());
 
                         dialog.dismiss();
 
@@ -122,7 +121,7 @@ public class HouseRuleMoreFragment extends Fragment {
                     tvParties.setVisibility(View.VISIBLE);
                 }
                 if (sharedPreferences.contains(getResources().getString(R.string.additionalRules))) {
-                    etAdditionalRules.setText(sharedPreferences.getString(HouseRuleFragment.ADDITIONAL_RULES, ""));
+                    tvAdditionalRules.setText(sharedPreferences.getString(HouseRuleFragment.ADDITIONAL_RULES, ""));
                 }
             }
 

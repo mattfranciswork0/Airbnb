@@ -39,7 +39,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.Profile.HostProfileViewFragment;
-import com.example.toshiba.airbnb.Profile.ViewListing.ViewListingAdapter;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
@@ -233,16 +233,16 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
         //Retrieve data from database since listing is ALREADY PUBLISHED
         if (getArguments() != null) {
-            if (getArguments().containsKey(ViewListingAdapter.LISTING_ID)) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
                 final ProgressDialog dialog = new ProgressDialog(getActivity());
                 dialog.setCancelable(true);
                 dialog.setMessage("Getting data...");
                 dialog.show();
                 Log.d("HomeDescFragment", "getArgument scope");
-                Log.d("checkMe", getArguments().getInt(ViewListingAdapter.LISTING_ID) + "");
+                Log.d("checkMe", getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID) + "");
                 SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
                 final int userId = sessionSP.getInt(SessionManager.USER_ID, 0);
-                final int listingId = getArguments().getInt(ViewListingAdapter.LISTING_ID);
+                final int listingId = getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID);
                 retrofit.getListingData(listingId).enqueue(new Callback<POJOListingData>() {
                     @Override
                     public void onResponse(Call<POJOListingData> call, final Response<POJOListingData> response) {
@@ -255,7 +255,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             viewPager.setVisibility(View.GONE);
                         } else {
 
-                            Log.d("ILoveYou", String.valueOf(new Integer(getArguments().getInt(ViewListingAdapter.LISTING_ID) + "")));
+                            Log.d("ILoveYou", String.valueOf(new Integer(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID) + "")));
                             final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
                             for (int i = 0; i < body.getImageData().size(); i++) {
                                 imageArrayList.add(body.getImageData().get(i).getImagePath());
@@ -371,8 +371,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             @Override
                             public void onClick(View v) {
                                 Bundle bundle = new Bundle();
-                                bundle.putInt(ViewListingAdapter.LISTING_ID,
-                                        getArguments().getInt(ViewListingAdapter.LISTING_ID));
+                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID,
+                                        getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 addNewFragment(bundle, HOUSE_RULE_FRAGMENT_TAG, new HouseRuleMoreFragment());
                             }
                         });
@@ -398,7 +398,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                 final Bundle bundle = new Bundle();
                                 bundle.putBoolean(AVAILABILITY_FROM_DATABASE, true);
                                 bundle.putInt(SessionManager.USER_ID, body.getId());
-                                bundle.putInt(ViewListingAdapter.LISTING_ID, getArguments().getInt(ViewListingAdapter.LISTING_ID));
+                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 bundle.putString(BookingFragment.MAX_MONTH, body.getListingLength());
                                 if (body.getMinStay() != "") {
                                     bundle.putString(BookingFragment.MIN_STAY, "3");
