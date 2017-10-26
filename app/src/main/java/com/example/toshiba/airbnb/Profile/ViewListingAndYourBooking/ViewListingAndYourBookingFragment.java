@@ -6,15 +6,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.ProfileFragment;
 import com.example.toshiba.airbnb.R;
@@ -96,7 +100,56 @@ public class ViewListingAndYourBookingFragment extends Fragment {
 
             }
         } else {
+            final ImageView ivEditOrView = (ImageView) view.findViewById(R.id.ivEditOrView);
+            final boolean[] viewMode = {true};
+            Glide.with(getActivity()).load("").placeholder(R.drawable.pencil).into(ivEditOrView);
+            ivEditOrView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setCancelable(false);
+                    if(viewMode[0]) {
+                        dialog.setTitle("Edit Mode");
+                        dialog.setMessage("You are entering edit mode. You can now edit your listings. ");
+                        dialog.setPositiveButton("PROCEED", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                viewMode[0] = false;
+                                Glide.with(getActivity()).load("").placeholder(R.drawable.close).
+                                        into(ivEditOrView);
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
 
+                    } else{
+                        dialog.setTitle("View Mode");
+                        dialog.setMessage("You are entering view mode. You can now view your listings. ");
+                        dialog.setPositiveButton("PROCEED", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                viewMode[0] = true;
+                                Glide.with(getActivity()).load("").placeholder(R.drawable.pencil).into(ivEditOrView);
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+
+                }
+            });
             final Call<POJOListingImageAndTitleGetResult> call = retrofit.getListingImageAndTitle(getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
                     .getInt(SessionManager.USER_ID, 0));
 

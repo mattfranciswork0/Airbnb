@@ -58,7 +58,7 @@ public class HostProfileViewFragment extends Fragment {
             tvName.setText(sessionSP.getString(sessionManager.FIRST_NAME, "") + " " + sessionSP.getString(sessionManager.LAST_NAME, ""));
         }
         ImageView ivEdit = (ImageView) view.findViewById(R.id.ivEdit);
-        Glide.with(getActivity()).load(getResources().getString(R.string.PencilIcon)).into(ivEdit);
+        Glide.with(getActivity()).load("").placeholder(R.drawable.pencil).into(ivEdit);
         ivEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
