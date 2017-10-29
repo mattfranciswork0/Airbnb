@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
 
@@ -40,8 +41,10 @@ public class DescribePlaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_describe_place, container, false);
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(75);
+        if (getArguments() == null) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setProgress(75);
+        }
         return view;
     }
 
@@ -61,32 +64,6 @@ public class DescribePlaceFragment extends Fragment {
         registrationProceed();
 
 
-        bPreview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyboardUtil.hideKeyboard(getActivity());
-                Intent intent = new Intent(getContext(), HomeDescActivity.class);
-                intent.putExtra(DESCRIBE_PREVIEW, etDescribePlace.getText().toString());
-                Bundle bundle = new Bundle();
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-
-        bNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyboardUtil.hideKeyboard(getActivity());
-                getFragmentManager().beginTransaction().replace(R.id.progressFragment, new TitleFragment()).addToBackStack(null).commit();
-                //Save description
-                SharedPreferences.Editor editor = describePlaceSP.edit();
-                editor.remove(DESCRIBE_PLACE_KEY);
-                editor.putString(DESCRIBE_PLACE_KEY, etDescribePlace.getText().toString());
-                editor.apply();
-            }
-        });
-
-
         TextWatcher textWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 tvWordCount.setText(String.valueOf(500 - etDescribePlace.getText().length()));
@@ -101,6 +78,42 @@ public class DescribePlaceFragment extends Fragment {
         };
         etDescribePlace.addTextChangedListener(textWatcher);
 
+        if(getArguments().containsKey(EditListingFragment.DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE)){
+            etDescribePlace.setText(getArguments().getString(EditListingFragment.DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE));
+            bPreview.setVisibility(View.GONE);
+            bNext.setText(getString(R.string.save));
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        } else{
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    getFragmentManager().beginTransaction().replace(R.id.progressFragment, new TitleFragment()).addToBackStack(null).commit();
+                    //Save description
+                    SharedPreferences.Editor editor = describePlaceSP.edit();
+                    editor.remove(DESCRIBE_PLACE_KEY);
+                    editor.putString(DESCRIBE_PLACE_KEY, etDescribePlace.getText().toString());
+                    editor.apply();
+                }
+            });
+
+            bPreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    Intent intent = new Intent(getContext(), HomeDescActivity.class);
+                    intent.putExtra(DESCRIBE_PREVIEW, etDescribePlace.getText().toString());
+                    Bundle bundle = new Bundle();
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
 

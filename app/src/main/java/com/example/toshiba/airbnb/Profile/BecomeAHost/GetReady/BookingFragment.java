@@ -1,5 +1,6 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -18,8 +19,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by TOSHIBA on 09/08/2017.
@@ -38,8 +47,10 @@ public class BookingFragment extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(75);
+        if(getArguments() == null) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setProgress(75);
+        }
     }
 
     @Nullable
@@ -56,19 +67,51 @@ public class BookingFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button bNext = (Button) view.findViewById(R.id.bNext);
+        final Button bNext = (Button) view.findViewById(R.id.bNext);
         final EditText etMaxMonth = (EditText) view.findViewById(R.id.etMaxMonth);
         final EditText etArriveAfter = (EditText) view.findViewById(R.id.etArriveAfter);
         final EditText etLeaveBefore = (EditText) view.findViewById(R.id.etLeaveBefore);
         final EditText etMinStay = (EditText) view.findViewById(R.id.etMinStay);
         final EditText etMaxStay = (EditText) view.findViewById(R.id.etMaxStay);
+        //load from database
+        if(getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)){
+            final ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Loading...");
+            dialog.show();
+            bNext.setText(getString(R.string.save));
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        etMaxMonth.setText(sharedPreferences.getString(MAX_MONTH, ""));
-        etArriveAfter.setText(sharedPreferences.getString(ARRIVE_AFTER, ""));
-        etLeaveBefore.setText(sharedPreferences.getString(LEAVE_BEFORE, ""));
-        etMinStay.setText(sharedPreferences.getString(MIN_STAY, ""));
-        etMaxStay.setText(sharedPreferences.getString(MAX_STAY, ""));
+                }
+            });
+            DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+            retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                @Override
+                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                    POJOListingData body = response.body();
+                    etMaxMonth.setText(body.getListingLength());
+                    etArriveAfter.setText(body.getArriveAfter());
+                    etLeaveBefore.setText(body.getLeaveBefore());
+                    etMinStay.setText(body.getMinStay());
+                    etMaxStay.setText(body.getMaxStay());
+                    dialog.dismiss();
+                }
 
+                @Override
+                public void onFailure(Call<POJOListingData> call, Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                    getActivity().onBackPressed();
+                }
+            });
+        }else {
+            etMaxMonth.setText(sharedPreferences.getString(MAX_MONTH, ""));
+            etArriveAfter.setText(sharedPreferences.getString(ARRIVE_AFTER, ""));
+            etLeaveBefore.setText(sharedPreferences.getString(LEAVE_BEFORE, ""));
+            etMinStay.setText(sharedPreferences.getString(MIN_STAY, ""));
+            etMaxStay.setText(sharedPreferences.getString(MAX_STAY, ""));
+        }
         TextWatcher monthTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if (etMaxMonth.getText().length() > 0) {

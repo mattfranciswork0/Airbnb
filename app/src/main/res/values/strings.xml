@@ -59,4 +59,6 @@
     <!--fragment backstack names-->
     <string name="hostProfileEditFragment">hostProfileEditFragment </string>
 
+    <string name="save">Save</string>
+
 </resources>

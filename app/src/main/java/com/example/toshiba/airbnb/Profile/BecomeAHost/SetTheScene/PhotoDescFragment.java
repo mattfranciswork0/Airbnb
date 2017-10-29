@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -52,15 +53,18 @@ public class PhotoDescFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_desc, container, false);
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(50);
-        stringImageUri = getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URI);
-        getStringImageUri();
-        imageUri = Uri.parse(stringImageUri);
+        if(getArguments().containsKey(GalleryAdapter.CLICKED_IMAGE_URI)) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setProgress(50);
 
-        captionSP = getActivity().getSharedPreferences(CAPTION_SP, Context.MODE_PRIVATE);
-        editor = captionSP.edit();
-        savedCaption = captionSP.getString(stringImageUri, "");
+            stringImageUri = getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URI);
+            getStringImageUri();
+            imageUri = Uri.parse(stringImageUri);
+
+            captionSP = getActivity().getSharedPreferences(CAPTION_SP, Context.MODE_PRIVATE);
+            editor = captionSP.edit();
+            savedCaption = captionSP.getString(stringImageUri, "");
+        }
         return view;
     }
 
@@ -68,56 +72,81 @@ public class PhotoDescFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         etCaption = (EditText) view.findViewById(R.id.etCaption);
-        etCaption.setText(captionSP.getString(stringImageUri, ""));
+        Button bSave = (Button) view.findViewById(R.id.bSave);
+        Button bDelete = (Button) view.findViewById(R.id.bDelete);
+
         ImageView ivClickedPhoto = (ImageView) view.findViewById(R.id.ivClickedPhoto);
-        Glide.with(getActivity()).load(imageUri).into(ivClickedPhoto);
 
-        view.findViewById(R.id.bSave).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //write captions to sharedpreferences
-                if (captionSP.contains(stringImageUri)) {
-                    editor.remove(stringImageUri);
-                    editor.putString(stringImageUri, etCaption.getText().toString());
+        if(getArguments().containsKey(GalleryAdapter.CLICKED_IMAGE_URL)
+                && getArguments().containsKey(GalleryAdapter.CLICKED_IMAGE_CAPTION)){
+            Glide.with(getActivity()).load(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URL)).into(ivClickedPhoto);
+            etCaption.setText(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_CAPTION));
 
-                    Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
-                } else {
-                    editor.putString(stringImageUri, etCaption.getText().toString());
-                    Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
+            bSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
-                editor.apply();
-                getFragmentManager().popBackStack();
-            }
-        });
+            });
 
-        view.findViewById(R.id.bDelete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProgressDialog dialog = ProgressDialog.show(getActivity(), "",
-                        "Image is being processed, please wait....", true);
+            bDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                File file = new File(imageUri.getPath());
-                if (file.exists()) {
+                }
+            });
+        }
 
-                    //Delete picture
-                    file.delete();
+        if(getArguments().containsKey(GalleryAdapter.CLICKED_IMAGE_URI)) {
+            etCaption.setText(captionSP.getString(stringImageUri, ""));
+            Glide.with(getActivity()).load(imageUri).into(ivClickedPhoto);
+
+            bSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //write captions to sharedpreferences
                     if (captionSP.contains(stringImageUri)) {
                         editor.remove(stringImageUri);
-                        editor.apply();
+                        editor.putString(stringImageUri, etCaption.getText().toString());
+
+                        Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                    } else {
+                        editor.putString(stringImageUri, etCaption.getText().toString());
+                        Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
+                    }
+                    editor.apply();
+                    getFragmentManager().popBackStack();
+                }
+            });
+
+            bDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProgressDialog dialog = ProgressDialog.show(getActivity(), "",
+                            "Image is being processed, please wait....", true);
+
+                    File file = new File(imageUri.getPath());
+                    if (file.exists()) {
+
+                        //Delete picture
+                        file.delete();
+                        if (captionSP.contains(stringImageUri)) {
+                            editor.remove(stringImageUri);
+                            editor.apply();
+                        }
+
+                        dialog.dismiss();
+
+                        getFragmentManager().popBackStack();
+                        Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_LONG).show();
+                        //Delete caption
+
+
                     }
 
-                    dialog.dismiss();
-
-                    getFragmentManager().popBackStack();
-                    Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_LONG).show();
-                    //Delete caption
-
-
                 }
-
-            }
-        });
-
+            });
+        }
 
     }
 

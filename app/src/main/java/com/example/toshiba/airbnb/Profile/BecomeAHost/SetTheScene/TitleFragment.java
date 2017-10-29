@@ -16,8 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
@@ -42,9 +44,11 @@ public class TitleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_title, container, false);
         //OnCreate does not get called if user backs out from PhoneNumFragment
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_holo_light));
-        basicProgressBar.setProgress(100);
+        if (getArguments() == null) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_holo_light));
+            basicProgressBar.setProgress(100);
+        }
         return view;
     }
 
@@ -65,38 +69,6 @@ public class TitleFragment extends Fragment {
         registrationProceed();
 
 
-        bPreview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyboardUtil.hideKeyboard(getActivity());
-                Intent intent = new Intent(getContext(), HomeDescActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(TITLE_PREVIEW, etTitle.getText().toString());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-
-        bNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyboardUtil.hideKeyboard(getActivity());
-                SharedPreferences.Editor titleEdit = titleSP.edit();
-                titleEdit.remove(TITLE_KEY);
-                titleEdit.putString(TITLE_KEY, etTitle.getText().toString());
-                titleEdit.apply();
-
-                SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
-                SharedPreferences.Editor progressEdit = progressSP.edit();
-                progressEdit.putBoolean(TITLE_FRAGMENT_FINISHED, true);
-                progressEdit.apply();
-
-                Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
         TextWatcher textWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 tvWordCount.setText(String.valueOf(50 - etTitle.getText().length()));
@@ -110,6 +82,52 @@ public class TitleFragment extends Fragment {
             }
         };
         etTitle.addTextChangedListener(textWatcher);
+        //if launched from EditListingFragment f
+        if (getArguments().containsKey(EditListingFragment.TITLE_FRAGMENT_INFO_FROM_DATABASE)) {
+            etTitle.setText(getArguments().getString(EditListingFragment.TITLE_FRAGMENT_INFO_FROM_DATABASE));
+            bNext.setText(getString(R.string.save));
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    Toast.makeText(getActivity(), "im in love", Toast.LENGTH_LONG).show();
+                }
+            });
+            bPreview.setVisibility(View.GONE);
+        } else {
+            bPreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    Intent intent = new Intent(getContext(), HomeDescActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(TITLE_PREVIEW, etTitle.getText().toString());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    SharedPreferences.Editor titleEdit = titleSP.edit();
+                    titleEdit.remove(TITLE_KEY);
+                    titleEdit.putString(TITLE_KEY, etTitle.getText().toString());
+                    titleEdit.apply();
+
+                    SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor progressEdit = progressSP.edit();
+                    progressEdit.putBoolean(TITLE_FRAGMENT_FINISHED, true);
+                    progressEdit.apply();
+
+                    Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+
+        }
 
     }
 
