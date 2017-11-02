@@ -16,9 +16,10 @@ import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesItemDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import retrofit2.Call;
@@ -62,6 +63,7 @@ public class AmenitiesItemFragment extends Fragment {
         return radioCanUnCheck;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class AmenitiesItemFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button bNext = (Button) view.findViewById(R.id.bNext);
+        final Button bNext = (Button) view.findViewById(R.id.bNext);
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,69 +95,100 @@ public class AmenitiesItemFragment extends Fragment {
         final RadioButton rbBreakfast = (RadioButton) view.findViewById(R.id.rbBreakfast);
 
 
-
         DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
-        if(getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)){
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading...");
-            dialog.show();
-            bNext.setText(getString(R.string.save));
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(false);
+                dialog.show();
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        retrofit.updateAmenitiesItem(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                new AmenitiesItemDTO(
+                                        rbEssentials.isChecked(), rbInternet.isChecked(),
+                                        rbShampoo.isChecked(), rbHangers.isChecked(),
+                                        rbTV.isChecked(), rbHeating.isChecked(),
+                                        rbAirConditioning.isChecked(), rbBreakfast.isChecked()
+                                )).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
 
-                }
-            });
-            retrofit.getListingData(
-                    getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)
-            ).enqueue(new Callback<POJOListingData>() {
-                @Override
-                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                    //Load saved amenities in database
-                    POJOListingData body = response.body();
-                    if (body.getEssentials() == 1) {
-                        rbEssentials.setChecked(true);
-                        rbEssentialsCanUncheck = true;
-                    }
-                    if (body.getInternet() == 1) {
-                        rbInternet.setChecked(true);
-                        rbInternetCanUncheck = true;
-                    }
-                    if (body.getShampoo() == 1) {
-                        rbShampoo.setChecked(true);
-                        rbShampooCanUncheck = true;
-                    }
-                    if (body.getHangers() == 1) {
-                        rbHangers.setChecked(true);
-                        rbHangersCanUncheck = true;
-                    }
-                    if (body.getTv() == 1) {
-                        rbTV.setChecked(true);
-                        rbTVCanUncheck = true;
-                    }
-                    if (body.getHeating() == 1) {
-                        rbHeating.setChecked(true);
-                        rbHeatingCanUncheck = true;
-                    }
-                    if (body.getAirConditioning() == 1) {
-                        rbAirConditioning.setChecked(true);
-                        rbAirConditoningCanUncheck = true;
-                    }
-                    if (body.getBreakfast() == 1) {
-                        rbBreakfast.setChecked(true);
-                        rbBreakfastCanUncheck = true;
-                    }
-                    dialog.dismiss();
-                }
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
 
-                @Override
-                public void onFailure(Call<POJOListingData> call, Throwable t) {
-                    Toast.makeText(getActivity(), t.toString(),  Toast.LENGTH_LONG).show();
-                    getActivity().onBackPressed();
-                    dialog.dismiss();
-                }
-            });
-        } else{
+                            }
+                        });
+                    }
+                });
+                retrofit.getListingData(
+                        getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)
+                ).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, final Response<POJOListingData> response) {
+                        //Load saved amenities in database
+                        final POJOListingData body = response.body();
+                        if (body.getEssentials() == 1) {
+                            rbEssentials.setChecked(true);
+                            rbEssentialsCanUncheck = true;
+                        }
+                        if (body.getInternet() == 1) {
+                            rbInternet.setChecked(true);
+                            rbInternetCanUncheck = true;
+                        }
+                        if (body.getShampoo() == 1) {
+                            rbShampoo.setChecked(true);
+                            rbShampooCanUncheck = true;
+                        }
+                        if (body.getHangers() == 1) {
+                            rbHangers.setChecked(true);
+                            rbHangersCanUncheck = true;
+                        }
+                        if (body.getTv() == 1) {
+                            rbTV.setChecked(true);
+                            rbTVCanUncheck = true;
+                        }
+                        if (body.getHeating() == 1) {
+                            rbHeating.setChecked(true);
+                            rbHeatingCanUncheck = true;
+                        }
+                        if (body.getAirConditioning() == 1) {
+                            rbAirConditioning.setChecked(true);
+                            rbAirConditoningCanUncheck = true;
+                        }
+                        if (body.getBreakfast() == 1) {
+                            rbBreakfast.setChecked(true);
+                            rbBreakfastCanUncheck = true;
+                        }
+
+
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        getActivity().onBackPressed();
+                        dialog.dismiss();
+                    }
+
+                });
+            }
+        } else {
             //Load saved amenities in shared preferences
             if (sharedPreferences.contains(rbEssentials.getTag().toString())) {
                 rbEssentials.setChecked(true);

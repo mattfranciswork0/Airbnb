@@ -1,5 +1,6 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,10 +19,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.DescriptionDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Owner on 2017-07-19.
@@ -77,18 +87,42 @@ public class DescribePlaceFragment extends Fragment {
             }
         };
         etDescribePlace.addTextChangedListener(textWatcher);
+        if(getArguments() != null) {
+            if (getArguments().containsKey(EditListingFragment.DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE)
+                    && getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                final String descriptionFromDatabase = getArguments().getString(EditListingFragment.DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE);
+                etDescribePlace.setText(descriptionFromDatabase);
+                bPreview.setVisibility(View.GONE);
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        retrofit.updateDescription(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                new DescriptionDTO(etDescribePlace.getText().toString())).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
 
-        if(getArguments().containsKey(EditListingFragment.DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE)){
-            etDescribePlace.setText(getArguments().getString(EditListingFragment.DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE));
-            bPreview.setVisibility(View.GONE);
-            bNext.setText(getString(R.string.save));
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
 
-                }
-            });
-        } else{
+                            }
+                        });
+                    }
+                });
+            }
+        }else{
             bNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

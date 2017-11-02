@@ -1,5 +1,6 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by TOSHIBA on 07/08/2017.
@@ -38,6 +48,7 @@ public class TitleFragment extends Fragment {
     Button bPreview;
     Button bNext;
     EditText etTitle;
+
 
     @Nullable
     @Override
@@ -82,19 +93,47 @@ public class TitleFragment extends Fragment {
             }
         };
         etTitle.addTextChangedListener(textWatcher);
-        //if launched from EditListingFragment f
-        if (getArguments().containsKey(EditListingFragment.TITLE_FRAGMENT_INFO_FROM_DATABASE)) {
-            etTitle.setText(getArguments().getString(EditListingFragment.TITLE_FRAGMENT_INFO_FROM_DATABASE));
-            bNext.setText(getString(R.string.save));
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    KeyboardUtil.hideKeyboard(getActivity());
-                    Toast.makeText(getActivity(), "im in love", Toast.LENGTH_LONG).show();
-                }
-            });
-            bPreview.setVisibility(View.GONE);
-        } else {
+        //if launched from EditListingFragment
+        if(getArguments() != null) {
+            if (getArguments().containsKey(EditListingFragment.TITLE_FRAGMENT_INFO_FROM_DATABASE)
+                    && getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+
+                final String titleFromDatabase = getArguments().getString(EditListingFragment.TITLE_FRAGMENT_INFO_FROM_DATABASE);
+                etTitle.setText(titleFromDatabase);
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.setCancelable(false);
+
+                        dialog.show();
+                        retrofit.updateTitle(1,
+                                new TitleDTO(etTitle.getText().toString())).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Log.d("mordor", getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)
+                                        + etTitle.getText().toString());
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
+
+                            }
+                        });
+                    }
+                });
+                bPreview.setVisibility(View.GONE);
+            }
+        }else {
             bPreview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

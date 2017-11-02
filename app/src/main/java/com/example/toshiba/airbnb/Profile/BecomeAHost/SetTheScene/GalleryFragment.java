@@ -25,17 +25,25 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.HomeDescActivity;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Profile.POJOUserData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.ListingImagesDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RealPathUtil;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 import retrofit2.Call;
@@ -88,7 +96,7 @@ public class GalleryFragment extends Fragment {
             }
 
             //load from database
-            if(getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)){
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
                 final ProgressDialog dialog = new ProgressDialog(getActivity());
                 bNext.setVisibility(View.GONE);
                 bPreview.setVisibility(View.GONE);
@@ -100,10 +108,12 @@ public class GalleryFragment extends Fragment {
                     public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
                         POJOListingData body = response.body();
                         galleryAdapter = new GalleryAdapter(GalleryFragment.this, true);
-                        for(int i = 0; i < body.getImageData().size(); i++){
+                        for (int i = 0; i < body.getImageData().size(); i++) {
 //                            Log.d("imcool", body.getImageData().get(i).getCaption().toString());
                             galleryAdapter.addImageFromDatabase(body.getImageData().get(i).getImagePath());
                             galleryAdapter.addCaptionFromDatabase(body.getImageData().get(i).getCaption());
+
+
                         }
 
                         recyclerView.setAdapter(galleryAdapter);
@@ -118,7 +128,7 @@ public class GalleryFragment extends Fragment {
                     }
                 });
             }
-        } else{
+        } else {
             galleryAdapter = new GalleryAdapter(GalleryFragment.this, false);
             recyclerView.setAdapter(galleryAdapter);
         }
@@ -159,12 +169,71 @@ public class GalleryFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri imageUri = data.getData();
+                //Cloudinary needs real path to upload
+                //Using imageUri.getPath() would not get the real path
+                //so get Real path from selected gallery by:
+                if (getArguments() != null) {
+                    if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                        final String realPath;
+                        final Cloudinary cloudinary = new Cloudinary(getActivity().getResources().getString(R.string.cloudinaryEnviornmentVariable));
+                        if (Build.VERSION.SDK_INT < 19)
+                            realPath = RealPathUtil.getRealPathFromURI_API11to18(getActivity(), imageUri);
 
-                galleryAdapter.addImageFromPhone(imageUri);
+                            // SDK > 19 (Android 4.4)
+                        else
+                            realPath = RealPathUtil.getRealPathFromURI_API19(getActivity(), imageUri);
+
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Uploading your picture...");
+                        dialog.setCancelable(false);
+                        final String realPathAsName = realPath.substring(0, realPath.indexOf(".")).replaceFirst("/", "");
+                        dialog.show();
+                        final int listingId = getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID);
+                        final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        retrofit.updateListingImages(listingId,
+                                new ListingImagesDTO(realPathAsName, null)).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                new AsyncTask<Void, Void, Void>() {
+
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        try {
+                                            Map cloudParam = ObjectUtils.asMap("public_id", realPathAsName);
+                                            Log.d("loveu", realPathAsName);
+                                            cloudinary.uploader().upload(new File(realPath), cloudParam);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void aVoid) {
+                                        super.onPostExecute(aVoid);
+                                        dialog.dismiss();
+                                        galleryAdapter.addImageFromDatabase(realPathAsName);
+                                        galleryAdapter.notifyItemInserted(galleryAdapter.getItemCount() + 1);
+                                    }
 
 
+                                }.execute();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Log.d("mattError", t.toString());
+                            }
+                        });
+                    }
+
+                }else {
+                    galleryAdapter.addImageFromPhone(imageUri);
+                    galleryAdapter.notifyItemInserted(galleryAdapter.getItemCount() + 1);
+                }
             }
         }
-    }
 
+    }
 }

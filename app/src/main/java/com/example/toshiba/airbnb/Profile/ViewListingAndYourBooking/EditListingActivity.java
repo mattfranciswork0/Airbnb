@@ -1,10 +1,17 @@
 package com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
 
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
 
 /**
@@ -16,6 +23,7 @@ public class EditListingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_edit_listing);
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
@@ -24,7 +32,8 @@ public class EditListingActivity extends AppCompatActivity {
                 EditListingFragment editListingFragment = new EditListingFragment();
                 editListingFragment.setArguments(bundle);
                 Log.d("imSorry", "" + getIntent().getExtras().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
-                getSupportFragmentManager().beginTransaction().replace(R.id.rootLayout, editListingFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.rootLayout, editListingFragment)
+                        .commit();
             }
         }
 
@@ -32,11 +41,43 @@ public class EditListingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Log.d("loveutodeath", "hi" + getSupportFragmentManager().getBackStackEntryCount());
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            Log.d("loveutodeath", "ho");
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(true);
+            dialog.setTitle("Want to save your changes?");
+            dialog.setMessage("Any changes will be lost if you continue");
+            dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
 
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStackImmediate();
+            dialog.setNegativeButton("PROCEED", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    getSupportFragmentManager().popBackStack();
+                }
+            });
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.rootLayout);
+
+            if (currentFragment instanceof GalleryFragment ||
+                    currentFragment instanceof PhotoDescFragment) {
+                super.onBackPressed();
+            } else {
+                dialog.show();
+            }
+
+
         } else {
+            Log.d("loveutodeath", "super.onbaack");
             super.onBackPressed();
         }
+
+//
     }
 }
+

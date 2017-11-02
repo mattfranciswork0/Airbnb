@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.BookingDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
@@ -47,7 +50,7 @@ public class BookingFragment extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if(getArguments() == null) {
+        if (getArguments() == null) {
             ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
             basicProgressBar.setProgress(75);
         }
@@ -67,6 +70,7 @@ public class BookingFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         final Button bNext = (Button) view.findViewById(R.id.bNext);
         final EditText etMaxMonth = (EditText) view.findViewById(R.id.etMaxMonth);
         final EditText etArriveAfter = (EditText) view.findViewById(R.id.etArriveAfter);
@@ -74,43 +78,126 @@ public class BookingFragment extends Fragment {
         final EditText etMinStay = (EditText) view.findViewById(R.id.etMinStay);
         final EditText etMaxStay = (EditText) view.findViewById(R.id.etMaxStay);
         //load from database
-        if(getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)){
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading...");
-            dialog.show();
-            bNext.setText(getString(R.string.save));
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                Log.d("loveusomuch", "listing_id");
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(false);
+                dialog.show();
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("loveusomuch", "clicked");
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.setCancelable(false);
 
-                }
-            });
-            DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
-            retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
-                @Override
-                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                    POJOListingData body = response.body();
-                    etMaxMonth.setText(body.getListingLength());
-                    etArriveAfter.setText(body.getArriveAfter());
-                    etLeaveBefore.setText(body.getLeaveBefore());
-                    etMinStay.setText(body.getMinStay());
-                    etMaxStay.setText(body.getMaxStay());
-                    dialog.dismiss();
-                }
+                        dialog.show();
+                        retrofit.updateBooking(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                new BookingDTO(etMaxMonth.getText().toString(), etArriveAfter.getText().toString(),
+                                        etLeaveBefore.getText().toString(), etMaxStay.getText().toString(),
+                                        etMinStay.getText().toString())).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
 
-                @Override
-                public void onFailure(Call<POJOListingData> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
-                    getActivity().onBackPressed();
-                }
-            });
-        }else {
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
+
+                            }
+                        });
+                    }
+                });
+                DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                        POJOListingData body = response.body();
+                        etMaxMonth.setText(body.getListingLength());
+                        etArriveAfter.setText(body.getArriveAfter());
+                        etLeaveBefore.setText(body.getLeaveBefore());
+                        etMinStay.setText(body.getMinStay());
+                        etMaxStay.setText(body.getMaxStay());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        getActivity().onBackPressed();
+                    }
+                });
+            }
+        } else {
             etMaxMonth.setText(sharedPreferences.getString(MAX_MONTH, ""));
             etArriveAfter.setText(sharedPreferences.getString(ARRIVE_AFTER, ""));
             etLeaveBefore.setText(sharedPreferences.getString(LEAVE_BEFORE, ""));
             etMinStay.setText(sharedPreferences.getString(MIN_STAY, ""));
             etMaxStay.setText(sharedPreferences.getString(MAX_STAY, ""));
+
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    if (etMaxMonth.getText().length() > 0 &&
+                            etArriveAfter.getText().length() > 0 &&
+                            etLeaveBefore.getText().length() > 0 &&
+                            etMinStay.getText().length() > 0) {
+
+
+                        edit.putString(MAX_MONTH, etMaxMonth.getText().toString());
+                        edit.putString(ARRIVE_AFTER, etArriveAfter.getText().toString());
+                        edit.putString(LEAVE_BEFORE, etLeaveBefore.getText().toString());
+                        edit.putString(MIN_STAY, etMinStay.getText().toString());
+
+                        //etMaxStay is optional
+                        if (etMaxStay.getText().length() > 0) {
+                            if (Integer.parseInt(etMaxStay.getText().toString()) >
+                                    Integer.parseInt(etMinStay.getText().toString())) {
+                                edit.putString(MAX_STAY, etMaxStay.getText().toString());
+                            } else {
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                                dialog.setMessage("Maximum stay must be greater than minimum stay");
+                                dialog.setCancelable(false);
+                                dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                dialog.show();
+                                return;
+                            }
+
+                        }
+
+                        edit.apply();
+
+                    } else {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setMessage("Please fill in the required fields");
+                        dialog.setCancelable(false);
+                        dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }
+            });
+
         }
         TextWatcher monthTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -154,63 +241,6 @@ public class BookingFragment extends Fragment {
         };
 //        etMaxMonth.addTextChangedListener(stayTextWatcher);
         etMinStay.addTextChangedListener(stayTextWatcher);
-
-
-        bNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyboardUtil.hideKeyboard(getActivity());
-                if (etMaxMonth.getText().length() > 0 &&
-                        etArriveAfter.getText().length() > 0 &&
-                        etLeaveBefore.getText().length() > 0 &&
-                        etMinStay.getText().length() > 0) {
-
-
-                    edit.putString(MAX_MONTH, etMaxMonth.getText().toString());
-                    edit.putString(ARRIVE_AFTER, etArriveAfter.getText().toString());
-                    edit.putString(LEAVE_BEFORE, etLeaveBefore.getText().toString());
-                    edit.putString(MIN_STAY, etMinStay.getText().toString());
-
-                    //etMaxStay is optional
-                    if (etMaxStay.getText().length() > 0) {
-                        if (Integer.parseInt(etMaxStay.getText().toString()) >
-                                Integer.parseInt(etMinStay.getText().toString())) {
-                            edit.putString(MAX_STAY, etMaxStay.getText().toString());
-                        }else{
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                            dialog.setMessage("Maximum stay must be greater than minimum stay");
-                            dialog.setCancelable(false);
-                            dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            dialog.show();
-                            return;
-                        }
-
-                    }
-
-                    edit.apply();
-
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.progressFragment, new PriceFragment()).addToBackStack(null).commit();
-                    ;
-                } else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setMessage("Please fill in the required fields");
-                    dialog.setCancelable(false);
-                    dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
-                }
-            }
-        });
 
     }
 }

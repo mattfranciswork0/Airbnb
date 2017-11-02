@@ -102,10 +102,11 @@ public class EditListingFragment extends Fragment {
                                 TitleFragment titleFragment = new TitleFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putString(TITLE_FRAGMENT_INFO_FROM_DATABASE, response.body().getPlaceTitle());
+                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 titleFragment.setArguments(bundle);
-                                fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, titleFragment).addToBackStack(EDIT_LISTING).commit();
-                                fragmentTransaction.show(titleFragment);
+//                                fragmentTransaction.hide(EditListingFragment.this);
+                                fragmentTransaction.replace(R.id.rootLayout, titleFragment).addToBackStack(null).commit();
+//                                fragmentTransaction.show(titleFragment);
                             }
                         });
 
@@ -119,9 +120,10 @@ public class EditListingFragment extends Fragment {
                                 DescribePlaceFragment describePlaceFragment = new DescribePlaceFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putString(DESCRIPTION_PLACE_FRAGMENT_INFO_FROM_DATABASE, response.body().getPlaceDescription());
+                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 describePlaceFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, describePlaceFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, describePlaceFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(describePlaceFragment);
 
                             }
@@ -136,7 +138,7 @@ public class EditListingFragment extends Fragment {
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 guestFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, guestFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, guestFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(guestFragment);
                             }
                         });
@@ -150,7 +152,7 @@ public class EditListingFragment extends Fragment {
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 amenitiesItemFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, amenitiesItemFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, amenitiesItemFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(amenitiesItemFragment);
                             }
                         });
@@ -165,7 +167,7 @@ public class EditListingFragment extends Fragment {
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 amenitiesSpaceFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, amenitiesSpaceFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, amenitiesSpaceFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(amenitiesSpaceFragment);
                             }
                         });
@@ -179,7 +181,7 @@ public class EditListingFragment extends Fragment {
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 locationFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, locationFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, locationFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(locationFragment);
                             }
                         });
@@ -193,7 +195,7 @@ public class EditListingFragment extends Fragment {
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 houseRuleFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, houseRuleFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, houseRuleFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(houseRuleFragment);
                             }
                         });
@@ -207,7 +209,7 @@ public class EditListingFragment extends Fragment {
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID,  getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 bookingFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, bookingFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, bookingFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(bookingFragment);
                             }
                         });
@@ -219,9 +221,10 @@ public class EditListingFragment extends Fragment {
                                 PriceFragment priceFragment = new PriceFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putString(PRICE_FRAGMENT_INFO_FROM_DATABASE,  response.body().getPrice());
+                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 priceFragment.setArguments(bundle);
                                 fragmentTransaction.hide(EditListingFragment.this);
-                                fragmentTransaction.add(R.id.rootLayout, priceFragment).addToBackStack(EDIT_LISTING).commit();
+                                fragmentTransaction.add(R.id.rootLayout, priceFragment).addToBackStack(null).commit();
                                 fragmentTransaction.show(priceFragment);
                             }
                         });

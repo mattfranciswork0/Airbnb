@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.HouseRulesDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
@@ -65,7 +66,7 @@ public class HouseRuleFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() == null) {
+        if (getArguments() == null) {
             ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
             basicProgressBar.setProgress(25);
         }
@@ -90,58 +91,84 @@ public class HouseRuleFragment extends Fragment {
         final RadioButton rbPets = (RadioButton) view.findViewById(R.id.rbPets);
         final RadioButton rbSmoking = (RadioButton) view.findViewById(R.id.rbSmoking);
         final RadioButton rbParties = (RadioButton) view.findViewById(R.id.rbParties);
-        etAdditionalRules= (EditText) view.findViewById(R.id.etAdditionalRules);
+        etAdditionalRules = (EditText) view.findViewById(R.id.etAdditionalRules);
         etAdditionalRules.setText(sharedPreferences.getString(ADDITIONAL_RULES, ""));
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(false);
+                dialog.show();
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        retrofit.updateHouseRules(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                new HouseRulesDTO(
+                                        rbChildren.isChecked(), rbInfants.isChecked(),
+                                        rbPets.isChecked(), rbSmoking.isChecked(),
+                                        rbParties.isChecked(), etAdditionalRules.getText().toString())
+                        ).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
 
-        if(getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)){
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading...");
-            dialog.show();
-            bNext.setText(getString(R.string.save));
-            bNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
 
-                }
-            });
-            DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
-            retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
-                @Override
-                public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
-                    POJOListingData body = response.body();
-                    if (body.getSuitableForChildren() == 1) {
-                        rbChildren.setChecked(true);
-                        rbChildrenCanUncheck = true;
+                            }
+                        });
                     }
-                    if (body.getSuitableForInfants() == 1) {
-                        rbInfants.setChecked(true);
-                        rbInfantsCanUncheck = true;
+                });
+                DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                        POJOListingData body = response.body();
+                        if (body.getSuitableForChildren() == 1) {
+                            rbChildren.setChecked(true);
+                            rbChildrenCanUncheck = true;
+                        }
+                        if (body.getSuitableForInfants() == 1) {
+                            rbInfants.setChecked(true);
+                            rbInfantsCanUncheck = true;
+                        }
+                        if (body.getSuitableForPets() == 1) {
+                            rbPets.setChecked(true);
+                            rbPetsCanUncheck = true;
+                        }
+                        if (body.getSmokingAllowed() == 1) {
+                            rbSmoking.setChecked(true);
+                            rbSmokingCanUncheck = true;
+                        }
+                        if (body.getPartiesAllowed() == 1) {
+                            rbParties.setChecked(true);
+                            rbPartiesCanUncheck = true;
+                        }
+                        dialog.dismiss();
                     }
-                    if (body.getSuitableForPets() == 1) {
-                        rbPets.setChecked(true);
-                        rbPetsCanUncheck = true;
-                    }
-                    if (body.getSmokingAllowed() == 1) {
-                        rbSmoking.setChecked(true);
-                        rbSmokingCanUncheck = true;
-                    }
-                    if (body.getPartiesAllowed() == 1) {
-                        rbParties.setChecked(true);
-                        rbPartiesCanUncheck = true;
-                    }
-                    dialog.dismiss();
-                }
 
-                @Override
-                public void onFailure(Call<POJOListingData> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
-                    getActivity().onBackPressed();
-                }
-            });{
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        getActivity().onBackPressed();
+                    }
+                });
 
             }
-        }else {
+        } else {
             bNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -88,16 +88,16 @@
                         android:layout_alignParentRight="true"
                         android:text="Edit"
                         android:textSize="15sp" />
-                    
+
                 </RelativeLayout>
+                <TextView
+                    android:id="@+id/tvTitleDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="15sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvTitleDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"

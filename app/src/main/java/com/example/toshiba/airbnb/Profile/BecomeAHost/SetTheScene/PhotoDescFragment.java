@@ -27,9 +27,17 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cloudinary.Cloudinary;
+import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.CaptionDTO;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import java.io.File;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -79,13 +87,31 @@ public class PhotoDescFragment extends Fragment {
 
         if(getArguments().containsKey(GalleryAdapter.CLICKED_IMAGE_URL)
                 && getArguments().containsKey(GalleryAdapter.CLICKED_IMAGE_CAPTION)){
-            Glide.with(getActivity()).load(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URL)).into(ivClickedPhoto);
+            Cloudinary cloudinary = new Cloudinary(getActivity().getString(R.string.cloudinaryEnviornmentVariable));
+
+            final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+            Glide.with(getActivity()).load(
+                    cloudinary.url().generate(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URL))).into(ivClickedPhoto);
             etCaption.setText(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_CAPTION));
 
             bSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    retrofit.updateCaption(
+                            new CaptionDTO(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URL),
+                                    etCaption.getText().toString())).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(getActivity(), getString(R.string.save), Toast.LENGTH_LONG).show();
+                            getActivity().onBackPressed();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             });
 

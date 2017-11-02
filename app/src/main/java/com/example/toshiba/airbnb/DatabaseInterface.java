@@ -11,6 +11,17 @@ import com.example.toshiba.airbnb.Explore.POJOBookingDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Explore.POJOMultipleListingsDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOTotalListings;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.BookingDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.CaptionDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.DescriptionDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.HouseRulesDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesItemDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.ListingImagesDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PlaceLocationDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PriceDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.RoomsAndGuestDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesSpaceDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOYourBookingGetResult;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
@@ -41,7 +52,6 @@ import retrofit2.http.Path;
 
 public interface DatabaseInterface {
 
-    @Headers("Content-Type: application/json")
     @GET("/findUser/{email}")
     Call<EmailResult> findUser(@Path("email") String email);
 
@@ -113,12 +123,60 @@ public interface DatabaseInterface {
     @POST("/insertLanguagesDetailEdit/{id}")
     Call<Void> insertLanguagesDetailEdit(@Path("id") int user_id, @Body LanguagesDetailEditDTO body);
 
-    @Headers("Content-Type: application/json")
     @GET("/bookingListingImageAndTitle/{user_id}")
     Call<POJOYourBookingGetResult> getBookingListingImageAndTitle(@Path("user_id") int user_id);
 
-    @Headers("Content-Type: application/json")
     @GET("/hi")
     Call<Void> hi();
+
+    //edit listing
+    @Headers("Content-Type: application/json")
+    @POST("/updateListingImages/{listing_id}")
+    Call<Void> updateListingImages(@Path("listing_id") int listing_id, @Body ListingImagesDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateCaption")
+    Call<Void> updateCaption(@Body CaptionDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateTitle/{listing_id}")
+    Call<Void> updateTitle(@Path("listing_id") int listing_id, @Body TitleDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateDescription/{listing_id}")
+    Call<Void> updateDescription(@Path("listing_id") int listing_id, @Body DescriptionDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateRoomsAndGuests/{listing_id}")
+    Call<Void> updateRoomsAndGuests(@Path("listing_id") int listing_id, @Body RoomsAndGuestDTO body);
+
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateAmenitiesItem/{listing_id}")
+    Call<Void> updateAmenitiesItem(@Path("listing_id") int listing_id, @Body AmenitiesItemDTO body);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateAmenitiesSpace/{listing_id}")
+    Call<Void> updateAmenitiesSpace(@Path("listing_id") int listing_id, @Body AmenitiesSpaceDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateLocation/{listing_id}")
+    Call<Void> updateLocation(@Path("listing_id") int listing_id, @Body PlaceLocationDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateHouseRules/{listing_id}")
+    Call<Void> updateHouseRules(@Path("listing_id") int listing_id, @Body HouseRulesDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updateBooking/{listing_id}")
+    Call<Void> updateBooking(@Path("listing_id") int listing_id, @Body BookingDTO body);
+
+    @Headers("Content-Type: application/json")
+    @POST("/updatePrice/{listing_id}")
+    Call<Void> updatePrice(@Path("listing_id") int listing_id, @Body PriceDTO body);
+
 
 }

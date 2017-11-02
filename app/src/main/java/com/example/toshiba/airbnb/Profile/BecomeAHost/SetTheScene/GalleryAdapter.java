@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.R;
 
 import java.io.File;
@@ -48,7 +49,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public static final String CLICKED_IMAGE_URI = "CLICKED_IMAGE_URI";
     public static final String CLICKED_IMAGE_URL = "CLICKED_IMAGE_URL";
     public static final String CLICKED_IMAGE_CAPTION = "CLICKED_IMAGE_CAPTION";
-    public static final String GALLERY_FRAGMENT = "GALLERY_FRAGMENT";
     ArrayList<Uri> imageUriArrayList = new ArrayList<>();
     //from database
     ArrayList<String> imageUrlArrayList = new ArrayList<>();
@@ -99,6 +99,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
 
     }
+
 
     public void addImageFromDatabase(String imageUrl) {
         imageUrlArrayList.add(imageUrl);
@@ -200,8 +201,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         public void bindView(final int position) {
             //load images called by addImage()
             if (fromDatabase) {
+                Cloudinary cloudinary = new Cloudinary(mFragment.getActivity().getString(R.string.cloudinaryEnviornmentVariable));
                 Glide.with(mFragment)
-                        .load(imageUrlArrayList.get(position)) // Uri of the picture
+                        .load(cloudinary.url().generate(imageUrlArrayList.get(position))) // Uri of the picture
                         .into(ivPhoto);
 
                 ivPhoto.setOnClickListener(new View.OnClickListener() {

@@ -60,5 +60,5 @@
     <string name="hostProfileEditFragment">hostProfileEditFragment </string>
 
     <string name="save">Save</string>
-
+    <string name="failedToUpdate">Failed to update, try again. Check your internet connection</string>
 </resources>
