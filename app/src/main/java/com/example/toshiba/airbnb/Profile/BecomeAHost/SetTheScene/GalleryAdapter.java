@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.R;
 
 import java.io.File;
@@ -46,22 +47,28 @@ import static android.R.attr.imeActionId;
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
 
     public static final String CLICKED_IMAGE_URI = "CLICKED_IMAGE_URI";
-    public static final String GALLERY_FRAGMENT = "GALLERY_FRAGMENT";
+    public static final String CLICKED_IMAGE_URL = "CLICKED_IMAGE_URL";
+    public static final String CLICKED_IMAGE_CAPTION = "CLICKED_IMAGE_CAPTION";
     ArrayList<Uri> imageUriArrayList = new ArrayList<>();
+    //from database
+    ArrayList<String> imageUrlArrayList = new ArrayList<>();
+    ArrayList<String> databaseCaptionArrayList = new ArrayList<>();
     File[] listFile;
     ProgressBar progressBar;
     private GalleryFragment mFragment;
     public static final String airBnbDirectory = "/Airbnb";
     ProgressDialog dialog;
     int position;
+    boolean fromDatabase;
 
-    public GalleryAdapter(GalleryFragment fragment) {
+    public GalleryAdapter(GalleryFragment fragment, boolean fromDatabase) {
         mFragment = fragment;
+        this.fromDatabase = fromDatabase;
         //When RecyclerView is first initalized, load the images in SD card
-        loadSDCard();
+        if (!fromDatabase) loadSDCard();
     }
 
-    public void addImage(final Uri imageUri) {
+    public void addImageFromPhone(final Uri imageUri) {
         imageUriArrayList.add(imageUri);
 
         notifyItemChanged(position);
@@ -91,6 +98,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
 
 
+    }
+
+
+    public void addImageFromDatabase(String imageUrl) {
+        imageUrlArrayList.add(imageUrl);
+    }
+
+    public void addCaptionFromDatabase(String caption){
+        databaseCaptionArrayList.add(caption);
     }
 
     public String saveInSDCard(Uri imageUri) {
@@ -162,8 +178,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     @Override
     public int getItemCount() {
-        return imageUriArrayList.size();
+        if(!fromDatabase) {
+            return imageUriArrayList.size();
+        }
+        else{
+            return imageUrlArrayList.size();
+        }
     }
+
 
     public class GalleryViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPhoto;
@@ -178,23 +200,44 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
         public void bindView(final int position) {
             //load images called by addImage()
-            Glide.with(mFragment)
-                    .load(imageUriArrayList.get(position)) // Uri of the picture
-                    .into(ivPhoto);
+            if (fromDatabase) {
+                Cloudinary cloudinary = new Cloudinary(mFragment.getActivity().getString(R.string.cloudinaryEnviornmentVariable));
+                Glide.with(mFragment)
+                        .load(cloudinary.url().generate(imageUrlArrayList.get(position))) // Uri of the picture
+                        .into(ivPhoto);
 
-            Log.d("adapter", "bindView");
+                ivPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PhotoDescFragment photoDescFragment = new PhotoDescFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(CLICKED_IMAGE_URL, imageUrlArrayList.get(position));
+                        bundle.putString(CLICKED_IMAGE_CAPTION, databaseCaptionArrayList.get(position));
+                        photoDescFragment.setArguments(bundle);
+                        mFragment.getFragmentManager().beginTransaction().replace(R.id.rootLayout, photoDescFragment)
+                                .addToBackStack(null).commit();
+                    }
+                });
 
-            ivPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            } else {
+                Glide.with(mFragment)
+                        .load(imageUriArrayList.get(position)) // Uri of the picture
+                        .into(ivPhoto);
+
+                Log.d("adapter", "bindView");
+
+                ivPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         PhotoDescFragment photoDescFragment = new PhotoDescFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString(CLICKED_IMAGE_URI, imageUriArrayList.get(position).toString());
                         photoDescFragment.setArguments(bundle);
                         mFragment.getFragmentManager().beginTransaction().replace(R.id.progressFragment, photoDescFragment)
                                 .addToBackStack(null).commit();
-                }
-            });
+                    }
+                });
+            }
         }
 
     }

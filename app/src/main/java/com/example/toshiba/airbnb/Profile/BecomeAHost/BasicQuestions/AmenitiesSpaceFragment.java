@@ -1,23 +1,33 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
+import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesSpaceDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
-import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -66,19 +76,7 @@ public class AmenitiesSpaceFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
-                SharedPreferences.Editor progressEdit = progressSP.edit();
-                progressEdit.putBoolean(AMENITIES_SPACE_FRAGMENT_FINISHED, true);
-                progressEdit.apply();
-                Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        final Button bNext = (Button) view.findViewById(R.id.bNext);
 
         final RadioButton rbKitchen = (RadioButton) view.findViewById(R.id.rbKitchen);
         final RadioButton rbLaundry = (RadioButton) view.findViewById(R.id.rbLaundry);
@@ -86,33 +84,130 @@ public class AmenitiesSpaceFragment extends Fragment {
         final RadioButton rbElevator = (RadioButton) view.findViewById(R.id.rbElevator);
         final RadioButton rbPool = (RadioButton) view.findViewById(R.id.rbPool);
         final RadioButton rbGym = (RadioButton) view.findViewById(R.id.rbGym);
-        //Load saved spaces in shared preferences
-        if (sharedPreferences.contains(rbKitchen.getTag().toString())) {
-            rbKitchen.setChecked(true);
-            rbKitchenCanUncheck = true;
-        }
-        if (sharedPreferences.contains(rbLaundry.getTag().toString())) {
-            rbLaundry.setChecked(true);
-            rbLaundryCanUncheck = true;
-        }
-        if (sharedPreferences.contains(rbParking.getTag().toString())) {
-            rbParking.setChecked(true);
-            rbParkingCanUncheck = true;
-        }
-        if (sharedPreferences.contains(rbElevator.getTag().toString())) {
-            rbElevator.setChecked(true);
-            rbElevatorCanUncheck = true;
-        }
-        if (sharedPreferences.contains(rbPool.getTag().toString())) {
-            rbPool.setChecked(true);
-            rbPoolUncheck = true;
-        }
-        if (sharedPreferences.contains(rbGym.getTag().toString())) {
-            rbGym.setChecked(true);
-            rbGymUncheck = true;
-        }
+
+        if(getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(false);
+                dialog.show();
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        retrofit.updateAmenitiesSpace(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                new AmenitiesSpaceDTO(
+                                        rbKitchen.isChecked(), rbLaundry.isChecked(),
+                                        rbParking.isChecked(), rbElevator.isChecked(),
+                                        rbPool.isChecked(), rbGym.isChecked()
+                                )).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
+
+                            }
+                        });
+                    }
+                });
+                DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                        //Load saved spaces from database
+                        final POJOListingData body = response.body();
+                        if (body.getKitchen() == 1) {
+                            rbKitchen.setChecked(true);
+                            rbKitchenCanUncheck = true;
+                        }
+                        if (body.getLaundry() == 1) {
+                            rbLaundry.setChecked(true);
+                            rbLaundryCanUncheck = true;
+                        }
+                        if (body.getParking() == 1) {
+                            rbParking.setChecked(true);
+                            rbParkingCanUncheck = true;
+                        }
+                        if (body.getElevator() == 1) {
+                            rbElevator.setChecked(true);
+                            rbElevatorCanUncheck = true;
+                        }
+                        if (body.getPool() == 1) {
+                            rbPool.setChecked(true);
+                            rbPoolUncheck = true;
+                        }
+                        if (body.getGym() == 1) {
+                            rbGym.setChecked(true);
+                            rbGymUncheck = true;
+                        }
 
 
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        getActivity().onBackPressed();
+                    }
+                });
+            }
+        }else {
+
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences progressSP = getActivity().getSharedPreferences(ProgressActivity.PROGRESS_SP, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor progressEdit = progressSP.edit();
+                    progressEdit.putBoolean(AMENITIES_SPACE_FRAGMENT_FINISHED, true);
+                    progressEdit.apply();
+                    Intent intent = new Intent(getActivity(), BecomeAHostActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+
+            //Load saved spaces in shared preferences
+            if (sharedPreferences.contains(rbKitchen.getTag().toString())) {
+                rbKitchen.setChecked(true);
+                rbKitchenCanUncheck = true;
+            }
+            if (sharedPreferences.contains(rbLaundry.getTag().toString())) {
+                rbLaundry.setChecked(true);
+                rbLaundryCanUncheck = true;
+            }
+            if (sharedPreferences.contains(rbParking.getTag().toString())) {
+                rbParking.setChecked(true);
+                rbParkingCanUncheck = true;
+            }
+            if (sharedPreferences.contains(rbElevator.getTag().toString())) {
+                rbElevator.setChecked(true);
+                rbElevatorCanUncheck = true;
+            }
+            if (sharedPreferences.contains(rbPool.getTag().toString())) {
+                rbPool.setChecked(true);
+                rbPoolUncheck = true;
+            }
+            if (sharedPreferences.contains(rbGym.getTag().toString())) {
+                rbGym.setChecked(true);
+                rbGymUncheck = true;
+            }
+
+        }
         //Handle click
         rbKitchen.setOnClickListener(new View.OnClickListener() {
             @Override

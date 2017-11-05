@@ -5,6 +5,7 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
  */
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,11 +18,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.textservice.TextInfo;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BottomSheetFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.DescriptionDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.RoomsAndGuestDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.KeyboardUtil;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -45,8 +60,10 @@ public class GuestFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(40);
+        if (getArguments() == null) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setProgress(40);
+        }
     }
 
     @Nullable
@@ -66,10 +83,15 @@ public class GuestFragment extends Fragment {
         final TextView tvTotalGuestInput = (TextView) view.findViewById(R.id.tvTotalGuestInput);
         final TextView tvTotalBedRoomInput = (TextView) view.findViewById(R.id.tvTotalBedRoomInput);
         final TextView tvTotalBedInput = (TextView) view.findViewById(R.id.tvTotalBedInput);
+        Button bNext = (Button) view.findViewById(R.id.bNext);
 
-        if(guestSP.contains(TOTAL_GUEST)) tvTotalGuestInput.setText(guestSP.getString(TOTAL_GUEST, "1 guest"));
-        if(guestSP.contains(TOTAL_BED_ROOM)) tvTotalBedRoomInput.setText(guestSP.getString(TOTAL_BED_ROOM, "1 bed"));
-        if(guestSP.contains(TOTAL_BED)) tvTotalBedInput.setText(guestSP.getString(TOTAL_BED, "1 bedroom"));
+
+        if (guestSP.contains(TOTAL_GUEST))
+            tvTotalGuestInput.setText(guestSP.getString(TOTAL_GUEST, "1 guest"));
+        if (guestSP.contains(TOTAL_BED_ROOM))
+            tvTotalBedRoomInput.setText(guestSP.getString(TOTAL_BED_ROOM, "1 bed"));
+        if (guestSP.contains(TOTAL_BED))
+            tvTotalBedInput.setText(guestSP.getString(TOTAL_BED, "1 bedroom"));
 
 
         this.mView = view;
@@ -165,15 +187,76 @@ public class GuestFragment extends Fragment {
                 edit.apply();
             }
         });
-        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!(guestSP.contains(TOTAL_GUEST))) edit.putString(TOTAL_GUEST,tvTotalGuestInput.getText().toString()).apply();
-                if(!(guestSP.contains(TOTAL_BED_ROOM))) edit.putString(TOTAL_BED_ROOM, tvTotalBedRoomInput.getText().toString()).apply();
-                if(!(guestSP.contains(TOTAL_BED)))  edit.putString(TOTAL_BED, tvTotalBedInput.getText().toString()).apply();
-                getFragmentManager().beginTransaction().replace(R.id.progressFragment, new BathroomFragment()).addToBackStack(null).commit();
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(true);
+                dialog.show();
+                bNext.setText(getString(R.string.save));
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        KeyboardUtil.hideKeyboard(getActivity());
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Updating data...");
+                        dialog.show();
+                        retrofit.updateRoomsAndGuests(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                new RoomsAndGuestDTO(tvTotalGuestInput.getText().toString(),
+                                        tvTotalBedRoomInput.getText().toString(),
+                                        tvTotalBedInput.getText().toString())).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                getFragmentManager().popBackStack();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
+
+                            }
+                        });
+                    }
+                });
+                DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                        POJOListingData body = response.body();
+                        tvTotalGuestInput.setText(body.getTotalGuest());
+                        tvTotalBedRoomInput.setText(body.getTotalBedrooms());
+                        tvTotalBedInput.setText(body.getTotalBeds());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        getActivity().onBackPressed();
+
+                    }
+                });
+
             }
-        });
+        } else {
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!(guestSP.contains(TOTAL_GUEST)))
+                        edit.putString(TOTAL_GUEST, tvTotalGuestInput.getText().toString()).apply();
+                    if (!(guestSP.contains(TOTAL_BED_ROOM)))
+                        edit.putString(TOTAL_BED_ROOM, tvTotalBedRoomInput.getText().toString()).apply();
+                    if (!(guestSP.contains(TOTAL_BED)))
+                        edit.putString(TOTAL_BED, tvTotalBedInput.getText().toString()).apply();
+                    getFragmentManager().beginTransaction().replace(R.id.progressFragment, new BathroomFragment()).addToBackStack(null).commit();
+                }
+            });
+        }
 
     }
 

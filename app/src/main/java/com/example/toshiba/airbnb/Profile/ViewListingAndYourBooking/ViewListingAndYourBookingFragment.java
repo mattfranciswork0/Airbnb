@@ -6,15 +6,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.ProfileFragment;
 import com.example.toshiba.airbnb.R;
@@ -96,7 +100,6 @@ public class ViewListingAndYourBookingFragment extends Fragment {
 
             }
         } else {
-
             final Call<POJOListingImageAndTitleGetResult> call = retrofit.getListingImageAndTitle(getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
                     .getInt(SessionManager.USER_ID, 0));
 

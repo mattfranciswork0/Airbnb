@@ -38,6 +38,7 @@
 
         </activity>
         <activity android:name=".Profile.ViewListingAndYourBooking.ViewListingAndYourBookingActivity"></activity>
+        <activity android:name=".Profile.ViewListingAndYourBooking.EditListingActivity"></activity>
         <activity android:name=".Profile.BecomeAHost.ProgressActivity"></activity>
 
         <activity android:name=".Explore.HomeDescActivity"></activity>

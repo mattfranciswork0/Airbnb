@@ -13,7 +13,7 @@ public class POJOListingImageData {
     private String imagePath;
     @SerializedName("caption")
     @Expose
-    private Object caption;
+    private String caption;
     @SerializedName("listing_id")
     @Expose
     private Integer listingId;
@@ -26,11 +26,11 @@ public class POJOListingImageData {
         this.imagePath = imagePath;
     }
 
-    public Object getCaption() {
+    public String getCaption() {
         return caption;
     }
 
-    public void setCaption(Object caption) {
+    public void setCaption(String caption) {
         this.caption = caption;
     }
 

@@ -164,6 +164,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                         @Override
                         public void onClick(View v) {
                             input.setText(String.valueOf(position + 1) + "+ guests");
+                            bottomSheetFragment.dismiss();
                         }
                     });
                 }

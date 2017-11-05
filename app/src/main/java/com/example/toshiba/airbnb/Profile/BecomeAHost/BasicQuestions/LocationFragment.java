@@ -1,6 +1,7 @@
 package com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -11,12 +12,23 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PlaceLocationDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.Util.RetrofitUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -35,30 +47,45 @@ public class LocationFragment extends Fragment {
     View view;
     SharedPreferences.Editor edit;
 
-
-    public void checkSavedData(){
-            etCountryInput = (EditText) view.findViewById(R.id.etCountryInput);
-            etCountryInput.setText(sharedPreferences.getString(LocationFilterAdapter.COUNTRY_NAME,""));
-
-            tvStreetInput = (TextView) view.findViewById(R.id.tvStreetInput);
-            tvStreetInput.setText(sharedPreferences.getString(LocationFilterAdapter.STREET_NAME,""));
-
-            if(sharedPreferences.contains(EXTRA_DETAILS)) {
-                etExtraDetailsInput = (EditText) view.findViewById(R.id.etExtraDetailsInput);
-                etExtraDetailsInput.setText(sharedPreferences.getString(EXTRA_DETAILS, ""));
+    public void fillInRequirementsAlertDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setMessage("Please fill in the required fields");
+        dialog.setCancelable(false);
+        dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
-            etCityInput = (EditText) view.findViewById(R.id.etCityInput);
-            etCityInput.setText(sharedPreferences.getString(LocationFilterAdapter.CITY_NAME,""));
+        });
+        dialog.show();
+    }
 
-            etStateInput = (EditText) view.findViewById(R.id.etStateInput);
-            etStateInput.setText(sharedPreferences.getString(LocationFilterAdapter.STATE_NAME,""));
+    public void checkSavedData() {
+
+        etCountryInput.setText(sharedPreferences.getString(LocationFilterAdapter.COUNTRY_NAME, ""));
+
+
+        tvStreetInput.setText(sharedPreferences.getString(LocationFilterAdapter.STREET_NAME, ""));
+
+        if (sharedPreferences.contains(EXTRA_DETAILS)) {
+
+            etExtraDetailsInput.setText(sharedPreferences.getString(EXTRA_DETAILS, ""));
+        }
+
+        etCityInput.setText(sharedPreferences.getString(LocationFilterAdapter.CITY_NAME, ""));
+
+
+        etStateInput.setText(sharedPreferences.getString(LocationFilterAdapter.STATE_NAME, ""));
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(80);
+        if (getArguments() == null) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setProgress(80);
+        }
         sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
         edit = sharedPreferences.edit();
     }
@@ -79,13 +106,122 @@ public class LocationFragment extends Fragment {
         this.view = view;
         //checkSavedData in OnViewCreated wont refresh the views when popBackStack is called in LocationFilterFragment
         //hence it's called on OnResume..
-        checkSavedData();
+        etCountryInput = (EditText) view.findViewById(R.id.etCountryInput);
+        tvStreetInput = (TextView) view.findViewById(R.id.tvStreetInput);
+        etExtraDetailsInput = (EditText) view.findViewById(R.id.etExtraDetailsInput);
+        etCityInput = (EditText) view.findViewById(R.id.etCityInput);
+        etStateInput = (EditText) view.findViewById(R.id.etStateInput);
+        final Button bNext = (Button) view.findViewById(R.id.bNext);
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ViewListingAndYourBookingAdapter.LISTING_ID)) {
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Loading...");
+                dialog.show();
+                dialog.setCancelable(false);
+                bNext.setText(getString(R.string.save));
+
+                DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                retrofit.getListingData(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID)).enqueue(new Callback<POJOListingData>() {
+                    @Override
+                    public void onResponse(Call<POJOListingData> call, Response<POJOListingData> response) {
+                        POJOListingData body = response.body();
+                        etCountryInput.setText(body.getCountry());
+                        tvStreetInput.setText(body.getStreet());
+                        etExtraDetailsInput.setText(body.getExtraPlaceDetails());
+                        etCityInput.setText(body.getCity());
+                        etStateInput.setText(body.getState());
+
+                        bNext.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0) {
+                                    if (etCityInput.getText().length() > 0 || etStateInput.getText().length() > 0) {
+                                        KeyboardUtil.hideKeyboard(getActivity());
+                                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                                        dialog.setMessage("Updating data...");
+                                        dialog.setCancelable(false);
+                                        dialog.show();
+                                        retrofit.updateLocation(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                                new PlaceLocationDTO(
+                                                        etCountryInput.getText().toString(),
+                                                        tvStreetInput.getText().toString(), etExtraDetailsInput.getText().toString(),
+                                                        etCityInput.getText().toString(), etStateInput.getText().toString()
+                                                )).enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                                dialog.dismiss();
+                                                Toast.makeText(getActivity(), "Updated", Toast.LENGTH_LONG).show();
+                                                getFragmentManager().popBackStack();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Void> call, Throwable t) {
+                                                dialog.dismiss();
+                                                Toast.makeText(getActivity(), getString(R.string.failedToUpdate), Toast.LENGTH_LONG);
+
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    fillInRequirementsAlertDialog();
+                                }
+                            }
+                        });
+
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOListingData> call, Throwable t) {
+                        Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        getActivity().onBackPressed();
+                    }
+                });
+
+            }
+        } else {
+            checkSavedData();
+
+            bNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    edit.putString(EXTRA_DETAILS, "");
+                    edit.apply();
+                    if (etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0) {
+                        if (etCityInput.getText().length() > 0 || etStateInput.getText().length() > 0) {
+                            MapFragment mapFragment = new MapFragment();
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.progressFragment, mapFragment).addToBackStack(null).commit();
+                        } else {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                            dialog.setMessage("Please fill in your state / city");
+                            dialog.setCancelable(false);
+                            dialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+
+                    } else {
+                        fillInRequirementsAlertDialog();
+                    }
+
+
+                }
+            });
+        }
 
         view.findViewById(R.id.layoutStreet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               KeyboardUtil.hideKeyboard(getActivity());
-                if(etCountryInput.getText().toString().length() > 0) {
+                KeyboardUtil.hideKeyboard(getActivity());
+                if (etCountryInput.getText().toString().length() > 0) {
                     edit = sharedPreferences.edit();
                     edit.putString(COUNTRY, etCountryInput.getText().toString());
                     edit.apply();
@@ -95,48 +231,6 @@ public class LocationFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.bNext).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyboardUtil.hideKeyboard(getActivity());
-                edit.putString(EXTRA_DETAILS, "");
-                edit.apply();
-                if(etCountryInput.getText().length() > 0 && tvStreetInput.getText().length() > 0 ){
-                    if(etCityInput.getText().length() > 0 || etStateInput.getText().length() > 0){
-                        MapFragment mapFragment = new MapFragment();
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.progressFragment, mapFragment).addToBackStack(null).commit();
-                    }
-                    else{
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                        dialog.setMessage("Please fill in your state / city");
-                        dialog.setCancelable(false);
-                        dialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-                    }
-
-                }else{
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setMessage("Please fill in the required fields");
-                    dialog.setCancelable(false);
-                    dialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
-                }
-
-
-
-            }
-        });
         view.findViewById(R.id.layoutTapInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

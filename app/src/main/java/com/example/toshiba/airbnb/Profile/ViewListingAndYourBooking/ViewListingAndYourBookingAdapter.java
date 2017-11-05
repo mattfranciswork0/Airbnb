@@ -87,9 +87,14 @@ public class ViewListingAndYourBookingAdapter extends RecyclerView.Adapter<ViewL
                         itemView.findViewById(R.id.listingLayout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(context, HomeDescActivity.class);
+//                                Intent intent = new Intent(context, HomeDescActivity.class);
+//                                intent.putExtra(LISTING_ID, response.body().getResult().get(position).getListingId());
+//                                context.startActivity(intent);
+
+                                Intent intent = new Intent(context, EditListingActivity.class);
                                 intent.putExtra(LISTING_ID, response.body().getResult().get(position).getListingId());
                                 context.startActivity(intent);
+
                             }
                         });
 
@@ -115,9 +120,14 @@ public class ViewListingAndYourBookingAdapter extends RecyclerView.Adapter<ViewL
                         itemView.findViewById(R.id.listingLayout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(context, HomeDescActivity.class);
+//                                Intent intent = new Intent(context, HomeDescActivity.class);
+//                                intent.putExtra(LISTING_ID, response.body().getResult().get(position).getId());
+//                                context.startActivity(intent);
+                                Intent intent = new Intent(context, EditListingActivity.class);
                                 intent.putExtra(LISTING_ID, response.body().getResult().get(position).getId());
                                 context.startActivity(intent);
+
+
                             }
                         });
 
