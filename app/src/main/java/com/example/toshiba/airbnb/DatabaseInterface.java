@@ -7,6 +7,7 @@ package com.example.toshiba.airbnb;
 
 
 import com.example.toshiba.airbnb.Explore.DTOBookSchedule;
+import com.example.toshiba.airbnb.Explore.POJOBookingData;
 import com.example.toshiba.airbnb.Explore.POJOBookingDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
 import com.example.toshiba.airbnb.Explore.POJOMultipleListingsDataGetResult;
@@ -22,6 +23,7 @@ import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.RoomsAndGuestDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesSpaceDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOBookingsToDelete;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOYourBookingGetResult;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
@@ -41,6 +43,7 @@ import com.example.toshiba.airbnb.UserAuthentication.UserRegistrationRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -177,6 +180,15 @@ public interface DatabaseInterface {
     @Headers("Content-Type: application/json")
     @POST("/updatePrice/{listing_id}")
     Call<Void> updatePrice(@Path("listing_id") int listing_id, @Body PriceDTO body);
+
+
+    @GET("/bookingsToDeleteData/{listing_id}")
+    Call<POJOBookingsToDelete> bookingsToDeleteData(@Path("listing_id") int id);
+
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/deleteBookings/{listing_id}")
+    Call<Void> deleteBookings(@Path("listing_id") int listing_id);
 
 
 }

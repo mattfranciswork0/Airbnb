@@ -227,8 +227,10 @@ public class AvailabilityFragment extends Fragment {
                             public void onClick(View v) {
                                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                                 Bundle bundle = new Bundle();
-                                bundle.putString(HomeDescFragment.CHECK_IN, tvCheckIn.getText().toString());
-                                bundle.putString(HomeDescFragment.CHECK_OUT, tvCheckOut.getText().toString());
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                                bundle.putString(HomeDescFragment.CHECK_IN, sdf.format(tvCheckIn.getText().toString()));
+                                bundle.putString(HomeDescFragment.CHECK_OUT, sdf.format(tvCheckOut.getText().toString()));
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, listingId);
                                 BookingSendSMSFragment bookingSendSMSFragment = new BookingSendSMSFragment();
                                 bookingSendSMSFragment.setArguments(bundle);

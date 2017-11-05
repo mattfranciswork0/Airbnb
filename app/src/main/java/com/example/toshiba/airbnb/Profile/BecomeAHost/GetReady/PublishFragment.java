@@ -311,9 +311,9 @@ public class PublishFragment extends Fragment {
     }
 
     public String getCurrentDate() {
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date todayDate = new Date();
-        return currentDate.format(todayDate);
+        return sdf.format(todayDate);
     }
 
     @Override
