@@ -179,7 +179,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
                     }
-                    Toast.makeText(getActivity(), "Loading", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Loading", Toast.LENGTH_SHORT).show();
 
 
                 }
