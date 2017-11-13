@@ -24,8 +24,8 @@ public class HomeDescActivity extends AppCompatActivity {
                 ImageSliderPager imageSliderPager = ((HomeDescFragment) currentFragment).getImageSliderPager();
                 imageSliderPager.getOutOfFullScreen();
             }
-            if (getFragmentManager().getBackStackEntryCount() > 0)
-                getFragmentManager().popBackStackImmediate();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                getSupportFragmentManager().popBackStackImmediate();
 
 
             else{

@@ -5,11 +5,11 @@ package com.example.toshiba.airbnb;
  */
 
 
-
 import com.example.toshiba.airbnb.Explore.DTOBookSchedule;
 import com.example.toshiba.airbnb.Explore.POJOBookingData;
 import com.example.toshiba.airbnb.Explore.POJOBookingDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJOMultipleListingsData;
 import com.example.toshiba.airbnb.Explore.POJOMultipleListingsDataGetResult;
 import com.example.toshiba.airbnb.Explore.POJOTotalListings;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.BookingDTO;
@@ -88,11 +88,27 @@ public interface DatabaseInterface {
     @GET("/getBookingSchedules/{id}/{listing_id}")
     Call<POJOBookingDataGetResult> getBookingSchedules(@Path("id") int user_id, @Path("listing_id") int listing_id);
 
-    @GET("/multipleListingsData/{showRowsAfter}/{showAmountOfRows}")
-    Call<POJOMultipleListingsDataGetResult> getMultipleListingsData(@Path("showRowsAfter") int showRowsAfter, @Path("showAmountOfRows") int showAmountOfRows );
+    @GET("/multipleListingsData/{showRowsAfter}/{showAmountOfRows}/{country}/{street}/{city}/{state}/{total_guest}/{suitable_for_infants}/{suitable_for_children}/{suitable_for_pets}")
+    Call<POJOMultipleListingsDataGetResult> getMultipleListingsData(@Path("showRowsAfter") int showRowsAfter,
+                                                                    @Path("showAmountOfRows") int showAmountOfRow,
+                                                                    @Path("country") String country,
+                                                                    @Path("street") String street,
+                                                                    @Path("city") String city,
+                                                                    @Path("state") String state,
+                                                                    @Path("total_guest") String total_guest,
+                                                                    @Path("suitable_for_infants") String suitable_for_infants,
+                                                                    @Path("suitable_for_children") String suitable_for_children,
+                                                                    @Path("suitable_for_pets") String suitable_for_pets);
 
-    @GET("/totalListingsData")
-    Call<POJOTotalListings> getTotalListings();
+    @GET("/totalListingsData/{country}/{street}/{city}/{state}/{total_guest}/{suitable_for_infants}/{suitable_for_children}/{suitable_for_pets}")
+    Call<POJOTotalListings> getTotalListings (@Path("country") String country,
+    @Path("street") String street,
+    @Path("city") String city,
+    @Path("state") String state,
+    @Path("total_guest") String total_guest,
+    @Path("suitable_for_infants") String suitable_for_infants,
+    @Path("suitable_for_children") String suitable_for_children,
+    @Path("suitable_for_pets") String suitable_for_pets);
 
     @GET("/getUserData/{id}")
     Call<POJOUserData> getUserData(@Path("id") int user_id);
@@ -154,8 +170,6 @@ public interface DatabaseInterface {
     Call<Void> updateRoomsAndGuests(@Path("listing_id") int listing_id, @Body RoomsAndGuestDTO body);
 
 
-
-
     @Headers("Content-Type: application/json")
     @POST("/updateAmenitiesItem/{listing_id}")
     Call<Void> updateAmenitiesItem(@Path("listing_id") int listing_id, @Body AmenitiesItemDTO body);
@@ -190,5 +204,16 @@ public interface DatabaseInterface {
     @DELETE("/deleteBookings/{listing_id}")
     Call<Void> deleteBookings(@Path("listing_id") int listing_id);
 
+    //search bar
+    @GET("/searchFilter/{country}/{street}/{city}/{state}/{total_guest}/{suitable_for_infants}/{suitable_for_children}/{suitable_for_pets}")
+    Call<POJOMultipleListingsDataGetResult> searchFilter(@Path("country") String country,
+                                                         @Path("street") String street,
+                                                         @Path("city") String city,
+                                                         @Path("state") String state,
+                                                         @Path("total_guest") String total_guest,
+                                                         @Path("suitable_for_infants") String suitable_for_infants,
+                                                         @Path("suitable_for_children") String suitable_for_children,
+                                                         @Path("suitable_for_pets") boolean suitable_for_pets
+    );
 
 }

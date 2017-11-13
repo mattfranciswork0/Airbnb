@@ -1,18 +1,24 @@
 package com.example.toshiba.airbnb.Explore;
 
+import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.LoadingMenuActivity;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
@@ -32,6 +38,34 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     int index;
     DatabaseInterface retrofit;
     int size;
+    public static final String SEARCH_BAR_LOCATION = "SEARCH_BAR_LOCATION";
+    public static String SEARCH_BAR_SIZE = "SEARCH_BAR_SIZE";
+
+
+    
+    public void addSearchBarRelatedFragment(Fragment fragment, String fragmentTag){
+            getFragmentManager().beginTransaction()
+                    .add(R.id.sectionFragmentReplace, fragment).addToBackStack(fragmentTag)
+                    .hide(HomeFragment.this)
+                    .commit();
+    }
+    public static void expand(final View v, int duration, int targetHeight) {
+
+        int prevHeight  = v.getHeight();
+
+        v.setVisibility(View.VISIBLE);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(prevHeight, targetHeight);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                v.requestLayout();
+            }
+        });
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
 
     public void addData(HomeAdapter homeAdapter, int index, Response<POJOMultipleListingsDataGetResult> response) {
         List<POJOMultipleListingsData> result = response.body().getResult();
@@ -45,13 +79,22 @@ public class HomeFragment extends android.support.v4.app.Fragment {
             homeAdapter.addPrice(result.get(i).getPrice());
             Log.d("homeFragment", "for loop");
         }
-        Log.d("homeFragment", "out of for loop");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        size = getArguments().getInt(LoadingMenuActivity.TOTAL_LISTINGS);
+        if(getArguments() != null){
+            if(getArguments().containsKey(LoadingMenuActivity.TOTAL_LISTINGS)){
+                size =getArguments().getInt(LoadingMenuActivity.TOTAL_LISTINGS);
+            }
+            else if(getArguments().containsKey(SEARCH_BAR_SIZE)){
+                size = getArguments().getInt(SEARCH_BAR_SIZE);
+            }
+        }else {
+            //from loadingMenuActivity
+
+        }
         retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
 
     }
@@ -60,11 +103,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        Log.d("fragmentCheck", "HomeFragment");
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
 
         return view;
     }
@@ -72,8 +111,70 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //section tab is invisible when one of the search-bar filters are clicked
+        getActivity().findViewById(R.id.sectionTab).setVisibility(View.VISIBLE);
+        TextView tvSearchAnywhere = (TextView) view.findViewById(R.id.tvSearchAnywhere);
+        TextView tvSearchGuest = (TextView) view.findViewById(R.id.tvSearchGuest);
+
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        final LinearLayout searchLayout = (LinearLayout) view.findViewById(R.id.searchLayout);
+        final LinearLayout whereLayout = (LinearLayout) view.findViewById(R.id.whereLayout);
+        final LinearLayout guestLayout = (LinearLayout) view.findViewById(R.id.guestLayout);
+
+         if(!LocationFragment.SEARCH_COUNTRY_PATH.equals(" ") &&
+                !LocationFragment.SEARCH_STREET_PATH.equals(" ") && !LocationFragment.SEARCH_STATE_PATH.equals(" ")){
+            tvSearchAnywhere.setText(LocationFragment.SEARCH_COUNTRY_PATH + ", " +
+                    LocationFragment.SEARCH_CITY_PATH + ", " + LocationFragment.SEARCH_STREET_PATH) ;
+        }
+        else if(!LocationFragment.SEARCH_COUNTRY_PATH.equals(" ") &&
+                !LocationFragment.SEARCH_CITY_PATH.equals(" ") ){
+            tvSearchAnywhere.setText(LocationFragment.SEARCH_COUNTRY_PATH + ", " +
+                    LocationFragment.SEARCH_CITY_PATH);
+        }
+         else if(!LocationFragment.SEARCH_COUNTRY_PATH.equals(" ")){
+             tvSearchAnywhere.setText(LocationFragment.SEARCH_COUNTRY_PATH);
+         }
+
+
+
+        if(!SearchGuestFragment.SEARCH_TOTAL_GUEST_PATH.equals("1")){
+            tvSearchGuest.setText("Guest(s) - " + SearchGuestFragment.SEARCH_TOTAL_GUEST_PATH );
+        }
+
+
+        whereLayout.setClickable(false);
+        searchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {;
+                guestLayout.setVisibility(View.VISIBLE);
+                expand(searchLayout, 250, 250 );
+                whereLayout.setClickable(true);
+                whereLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        LocationFragment locationFragment = new LocationFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(SEARCH_BAR_LOCATION, true);
+                        locationFragment.setArguments(bundle);
+                        addSearchBarRelatedFragment(locationFragment, "love");
+                    }
+                });
+
+                guestLayout.setClickable(true);
+                guestLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addSearchBarRelatedFragment(new SearchGuestFragment(),"love");
+                    }
+                });
+
+            }
+        });
+
+
         recyclerView.setLayoutManager(layoutManager);
 
         if (size == 0) {
@@ -106,28 +207,62 @@ public class HomeFragment extends android.support.v4.app.Fragment {
             }
         }
 
-        retrofit.getMultipleListingsData(index, index + visibleThreshold).enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
-            @Override
-            public void onResponse(Call<POJOMultipleListingsDataGetResult> call, Response<POJOMultipleListingsDataGetResult> response) {
-                addData(homeAdapter, index, response);
-                dialog.dismiss();
-                recyclerView.setAdapter(homeAdapter);
-                index += visibleThreshold; //get fifth item in next for loop
+        if(getArguments() != null){
+            if(getArguments().containsKey(LoadingMenuActivity.TOTAL_LISTINGS)){
+                retrofit.getMultipleListingsData(index, index + visibleThreshold, " " ," " ," " ," ", " ", " ", " ", " ").enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
+                    @Override
+                    public void onResponse(Call<POJOMultipleListingsDataGetResult> call, Response<POJOMultipleListingsDataGetResult> response) {
+                        addData(homeAdapter, index, response);
+                        dialog.dismiss();
+                        recyclerView.setAdapter(homeAdapter);
+                        index += visibleThreshold; //get fifth item in next for loop
 
-            }
+                    }
 
-            @Override
-            public void onFailure(Call<POJOMultipleListingsDataGetResult> call, Throwable t) {
-                dialog.dismiss();
-                Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
-                        .show();
+                    @Override
+                    public void onFailure(Call<POJOMultipleListingsDataGetResult> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
             }
-        });
+            else if(getArguments().containsKey(SEARCH_BAR_SIZE)){
+                retrofit.getMultipleListingsData(index, index + visibleThreshold, LocationFragment.SEARCH_COUNTRY_PATH,
+                        LocationFragment.SEARCH_STREET_PATH , LocationFragment.SEARCH_CITY_PATH ,
+                        LocationFragment.SEARCH_STATE_PATH, " ", " ", " ", " ").enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
+                    @Override
+                    public void onResponse(Call<POJOMultipleListingsDataGetResult> call, Response<POJOMultipleListingsDataGetResult> response) {
+                        addData(homeAdapter, index, response);
+                        dialog.dismiss();
+                        recyclerView.setAdapter(homeAdapter);
+                        index += visibleThreshold; //get fifth item in next for loop
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOMultipleListingsDataGetResult> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+            }
+        }
+        //this is based by oldest to newest listing
+
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                expand(searchLayout, 250, 175
+                );
+                whereLayout.setClickable(false);
+                guestLayout.setClickable(false);
+
+
                 int itemCount = homeAdapter.getItemCount();
                 int firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition() + 1; //+1 because starts at 0
 
@@ -153,7 +288,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                         dialog.show();
 
                         final int finalShowItems = showItems;
-                        retrofit.getMultipleListingsData(index, showItems).enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
+                        retrofit.getMultipleListingsData(index, showItems, " " ," " ," " ," ", " ", " ", " ", " ").enqueue(new Callback<POJOMultipleListingsDataGetResult>() {
                             @Override
                             public void onResponse(Call<POJOMultipleListingsDataGetResult> call, Response<POJOMultipleListingsDataGetResult> response) {
 
@@ -171,8 +306,9 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
                             @Override
                             public void onFailure(Call<POJOMultipleListingsDataGetResult> call, Throwable t) {
+//                                "Failed to retrieve data, check your internet conncection"
                                 dialog.dismiss();
-                                Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncection", Toast.LENGTH_LONG)
+                                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
                                         .show();
                             }
                         });
@@ -191,5 +327,6 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+
     }
 }

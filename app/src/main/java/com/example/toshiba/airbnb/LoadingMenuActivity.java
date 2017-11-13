@@ -26,7 +26,8 @@ public class LoadingMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_loading);
         final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
-        retrofit.getTotalListings().enqueue(new Callback<POJOTotalListings>() {
+        //search for results for total_guests that are greater than 1
+        retrofit.getTotalListings(" ", " ", " ", " ", "1", " ", " ", " ").enqueue(new Callback<POJOTotalListings>() {
             @Override
             public void onResponse(Call<POJOTotalListings> call, Response<POJOTotalListings> response) {
                 int size = Integer.parseInt(response.body().getTotalListings());

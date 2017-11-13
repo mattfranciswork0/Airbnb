@@ -8,18 +8,35 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.toshiba.airbnb.LoadingMenuActivity;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFragment;
 import com.example.toshiba.airbnb.Profile.ProfileFragment;
 import com.example.toshiba.airbnb.R;
 
 
 public class MenuActivity extends AppCompatActivity {
+     HomeFragment homeFragment;
 
 
     @Override
     public void onBackPressed() {
-        finish();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.sectionFragmentReplace);
+
+        if(currentFragment instanceof LocationFragment || currentFragment instanceof SearchGuestFragment){
+
+            super.onBackPressed();
+            //section tab is invisible when one of the search-bar filters are clicked
+            findViewById(R.id.sectionTab).setVisibility(View.VISIBLE);
+        }
+        else if(currentFragment instanceof HomeFragment || currentFragment instanceof ProfileFragment){
+            finish();
+        }
+        else{
+            super.onBackPressed();
+        }
+
     }
 
     @Override
@@ -30,14 +47,14 @@ public class MenuActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putInt(LoadingMenuActivity.TOTAL_LISTINGS, getIntent().getExtras().getInt(LoadingMenuActivity.TOTAL_LISTINGS));
-        final HomeFragment homeFragment = new HomeFragment();
+         homeFragment = new HomeFragment();
         homeFragment.setArguments(bundle);
 
         final ProfileFragment profileFragment = new ProfileFragment();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.sectionFragmentReplace, homeFragment, "homeFragment").addToBackStack("homeFragment");
+        fragmentTransaction.add(R.id.sectionFragmentReplace, homeFragment, "homeFragment");
         fragmentTransaction.add(R.id.sectionFragmentReplace, profileFragment);
         fragmentTransaction.hide(profileFragment);
         fragmentTransaction.show(homeFragment);
@@ -51,7 +68,6 @@ public class MenuActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0: //Explore
-                        Log.d("hicutie", "blue");
                        fragmentManager.beginTransaction().hide(profileFragment)
                                .show(homeFragment).commit();
 

@@ -80,6 +80,7 @@ public class GuestFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         final TextView tvTotalGuestInput = (TextView) view.findViewById(R.id.tvTotalGuestInput);
         final TextView tvTotalBedRoomInput = (TextView) view.findViewById(R.id.tvTotalBedRoomInput);
         final TextView tvTotalBedInput = (TextView) view.findViewById(R.id.tvTotalBedInput);
@@ -248,7 +249,9 @@ public class GuestFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (!(guestSP.contains(TOTAL_GUEST)))
-                        edit.putString(TOTAL_GUEST, tvTotalGuestInput.getText().toString()).apply();
+                        edit.putString(TOTAL_GUEST, tvTotalGuestInput.getText().toString()
+                                .substring(0 , tvTotalGuestInput.getText().toString().indexOf("+"))).apply();
+
                     if (!(guestSP.contains(TOTAL_BED_ROOM)))
                         edit.putString(TOTAL_BED_ROOM, tvTotalBedRoomInput.getText().toString()).apply();
                     if (!(guestSP.contains(TOTAL_BED)))

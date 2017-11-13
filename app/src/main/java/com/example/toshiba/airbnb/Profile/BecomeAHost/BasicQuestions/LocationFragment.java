@@ -9,17 +9,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.HomeFragment;
 import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJOTotalListings;
+import com.example.toshiba.airbnb.Explore.SearchGuestFragment;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PlaceLocationDTO;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
@@ -39,6 +45,11 @@ public class LocationFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     public static String COUNTRY = "COUNTRY";
     public static String EXTRA_DETAILS = "EXTRA_DETAILS";
+
+    public static String SEARCH_COUNTRY_PATH = " ";
+    public static String SEARCH_STREET_PATH = " ";
+    public static String SEARCH_CITY_PATH = " ";
+    public static String SEARCH_STATE_PATH = " ";
     private EditText etCountryInput;
     TextView tvStreetInput;
     EditText etCityInput;
@@ -47,6 +58,13 @@ public class LocationFragment extends Fragment {
     View view;
     SharedPreferences.Editor edit;
 
+    public String checkIfEditTextIsEmpty(String etInput){
+        if(etInput == null || etInput.equals("")){
+            //cannot use an empty string for retrofit parameters/paths, therefore a space is used
+            return  " ";
+        }
+        return etInput;
+    }
     public void fillInRequirementsAlertDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setMessage("Please fill in the required fields");
@@ -103,6 +121,7 @@ public class LocationFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         this.view = view;
         //checkSavedData in OnViewCreated wont refresh the views when popBackStack is called in LocationFilterFragment
         //hence it's called on OnResume..
@@ -180,6 +199,85 @@ public class LocationFragment extends Fragment {
                     }
                 });
 
+            } else if (getArguments().containsKey(HomeFragment.SEARCH_BAR_LOCATION)){
+                //get rid of section tab from activity
+                getActivity().findViewById(R.id.sectionTab).setVisibility(View.GONE);
+                LinearLayout layouTapInfo = (LinearLayout) view.findViewById(R.id.layoutTapInfo);
+                RelativeLayout layoutExtraDetails = (RelativeLayout) view.findViewById(R.id.layoutExtraDetails);
+                layoutExtraDetails.setVisibility(View.GONE);
+                view.findViewById(R.id.tvExtraDetailsLine).setVisibility(View.GONE);
+
+                layouTapInfo.setClickable(false);
+                layouTapInfo.setVisibility(View.INVISIBLE);
+
+                if(!SEARCH_COUNTRY_PATH.equals(" ")){
+                    etCountryInput.setText(SEARCH_COUNTRY_PATH);
+                }
+                if(!SEARCH_STREET_PATH.equals(" ")){
+                    tvStreetInput.setText(SEARCH_STREET_PATH);
+                }
+                if(!SEARCH_CITY_PATH.equals(" ")){
+                    etCityInput.setText(SEARCH_CITY_PATH);
+                }
+                if(!SEARCH_STATE_PATH.equals(" ")){
+                    etStateInput.setText(SEARCH_STATE_PATH);
+                }
+                bNext.setText("Search");
+                bNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final ProgressDialog dialog = new ProgressDialog(getActivity());
+                        dialog.setMessage("Fetching your results...");
+                        dialog.show();
+
+                        DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
+                        SEARCH_COUNTRY_PATH = checkIfEditTextIsEmpty(etCountryInput.getText().toString().trim());
+                        SEARCH_STREET_PATH =  checkIfEditTextIsEmpty(tvStreetInput.getText().toString().trim());
+                        SEARCH_CITY_PATH = checkIfEditTextIsEmpty(etCityInput.getText().toString().trim());
+                        SEARCH_STATE_PATH  = checkIfEditTextIsEmpty(etStateInput.getText().toString().trim());
+
+
+                        retrofit.getTotalListings(
+                                LocationFragment.SEARCH_COUNTRY_PATH,
+                                LocationFragment.SEARCH_STREET_PATH,
+                                LocationFragment.SEARCH_CITY_PATH,
+                                LocationFragment.SEARCH_STATE_PATH,
+                                SearchGuestFragment.SEARCH_TOTAL_GUEST_PATH,
+                                SearchGuestFragment.SEARCH_INFANTS_PATH,
+                                SearchGuestFragment.SEARCH_CHILDREN_PATH,
+                                String.valueOf(SearchGuestFragment.SEARCH_PETS_ALLOWED_PATH)).enqueue(new Callback<POJOTotalListings>() {
+                            @Override
+                            public void onResponse(Call<POJOTotalListings> call, Response<POJOTotalListings> response) {
+
+                                Log.d("searchCountry", LocationFragment.SEARCH_COUNTRY_PATH);
+                                Log.d("searchStreet", LocationFragment.SEARCH_STREET_PATH);
+                                Log.d("searchCity", LocationFragment.SEARCH_CITY_PATH);
+                                Log.d("searchState",  LocationFragment.SEARCH_STATE_PATH);
+                                Log.d("searchGuest", SearchGuestFragment.SEARCH_TOTAL_GUEST_PATH);
+                                Log.d("searchInfants", SearchGuestFragment.SEARCH_INFANTS_PATH);
+                                Log.d("searchChildren", SearchGuestFragment.SEARCH_CHILDREN_PATH);
+                                Log.d("searchPets", String.valueOf(SearchGuestFragment.SEARCH_PETS_ALLOWED_PATH));
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(HomeFragment.SEARCH_BAR_SIZE, Integer.parseInt(response.body().getTotalListings()));
+                                HomeFragment homeFragment = new HomeFragment();
+                                homeFragment.setArguments(bundle);
+                                dialog.dismiss();
+                                getFragmentManager().beginTransaction().replace(R.id.sectionFragmentReplace, homeFragment).commit();
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<POJOTotalListings> call, Throwable t) {
+                                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getActivity(), "Failed to fetch data, check your internet connection and try again", Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                            }
+                        });
+
+
+                    }
+                });
             }
         } else {
             checkSavedData();
@@ -226,8 +324,22 @@ public class LocationFragment extends Fragment {
                     edit.putString(COUNTRY, etCountryInput.getText().toString());
                     edit.apply();
                 }
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.progressFragment, new LocationFilterFragment()).addToBackStack("layoutStreet").commit();
+                Log.d("hiMatt", "click");
+                if(getArguments() != null){
+                    if (getArguments().containsKey(HomeFragment.SEARCH_BAR_LOCATION)) {
+                        Log.d("hiMatt", "true");
+                        LocationFilterFragment locationFilterFragment = new LocationFilterFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(HomeFragment.SEARCH_BAR_LOCATION, getArguments().containsKey(HomeFragment.SEARCH_BAR_LOCATION));
+                        locationFilterFragment.setArguments(bundle);
+                        getFragmentManager().beginTransaction()
+                                .add(R.id.sectionFragmentReplace, locationFilterFragment).hide(LocationFragment.this)
+                                .addToBackStack(null).commit();
+                    }
+                } else {
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.progressFragment, new LocationFilterFragment()).hide(LocationFragment.this).addToBackStack(null).commit();
+                }
             }
         });
 

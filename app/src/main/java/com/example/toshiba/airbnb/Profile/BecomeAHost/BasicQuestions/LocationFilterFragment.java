@@ -55,14 +55,20 @@ public class LocationFilterFragment extends Fragment {
             streetName = etStreet.getText().toString() + ", " + sharedPreferences.getString(LocationFragment.COUNTRY, "");
 
         Call<POJOPredictions> call = retrofit.getAutoCompleteInfo(streetName, "address", getResources().getString(R.string.google_maps_key));
-        ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
-        basicProgressBar.setProgress(80);
+        if(getArguments() == null) {
+            ProgressBar basicProgressBar = (ProgressBar) getActivity().findViewById(R.id.basicProgressBar);
+            basicProgressBar.setProgress(80);
+
+
+            progressBar.setVisibility(View.VISIBLE);
+        }
         recyclerView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<POJOPredictions>() {
             @Override
             public void onResponse(Call<POJOPredictions> call, Response<POJOPredictions> response) {
-                progressBar.setVisibility(View.INVISIBLE);
+                if(getArguments() == null){
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
                 recyclerView.setVisibility(View.VISIBLE);
                 List<POJOPrediction> predictions = response.body().getPredictions();
                 ArrayList<String> fullNameArrayList = new ArrayList<>();
@@ -90,7 +96,9 @@ public class LocationFilterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location_filter, container, false);
         mView = view;
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        if(getArguments() == null) {
+            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        }
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         sharedPreferences = getActivity().getSharedPreferences(LocationFilterAdapter.LOCATION_SP, Context.MODE_PRIVATE);
         return view;
