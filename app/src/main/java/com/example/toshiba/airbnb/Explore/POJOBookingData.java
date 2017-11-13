@@ -19,7 +19,7 @@ public class POJOBookingData {
     private String checkIn;
     @SerializedName("check_out")
     @Expose
-    private Object checkOut;
+    private String checkOut;
 
     public Object getUserId() {
         return userId;
@@ -45,11 +45,11 @@ public class POJOBookingData {
         this.checkIn = checkIn;
     }
 
-    public Object getCheckOut() {
+    public String getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOut(Object checkOut) {
+    public void setCheckOut(String checkOut) {
         this.checkOut = checkOut;
     }
 }

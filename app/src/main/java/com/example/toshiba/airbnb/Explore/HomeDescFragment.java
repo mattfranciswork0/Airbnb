@@ -54,7 +54,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -77,7 +80,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     public static String CHECK_IN = "CHECK_IN";
     public static String CHECK_OUT = "CHECK_OUT";
     private ArrayList<String> imageArrayList = new ArrayList<>();
-    private ArrayList<String> captionArrayList = new ArrayList<>();
+
     private ImageSliderPager imageSliderPager;
     //Amenities
     SharedPreferences amenitiesSP;
@@ -259,7 +262,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             final TextView tvSize = (TextView) view.findViewById(R.id.tvSize);
                             for (int i = 0; i < body.getImageData().size(); i++) {
                                 imageArrayList.add(body.getImageData().get(i).getImagePath());
-                                captionArrayList.add(response.body().getImageData().get(i).getCaption() + "");
+//                                captionArrayList.add(response.body().getImageData().get(i).getCaption() + "");
                                 Log.d("HeyBestie", "Love ya" + imageArrayList.get(i));
                             }
                             imageSliderPager = new ImageSliderPager(getActivity(), HomeDescFragment.this,
@@ -267,7 +270,11 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                     body.getImageData().size(), true);
                             viewPager.setAdapter(imageSliderPager);
                             Log.d("LoveYou", String.valueOf(body.getImageData().size()));
-                            tvSize.setText(1 + " of " + body.getImageData().size() + " - " + body.getImageData().get(0));
+                            if (body.getImageData().get(0).getCaption() == null) {
+                                tvSize.setText(1 + " of " + body.getImageData().size());
+                            }else {
+                                tvSize.setText(1 + " of " + body.getImageData().size() + " - " + body.getImageData().get(0).getCaption());
+                            }
                             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                                 @Override
@@ -276,7 +283,11 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
                                 @Override
                                 public void onPageSelected(int position) {
-                                    tvSize.setText((position + 1) + " of " + imageArrayList.size() + " - " + body.getImageData().get(position).getCaption());
+                                    if(body.getImageData().get(position).getCaption() == null){
+                                        tvSize.setText((position + 1) + " of " + imageArrayList.size());
+                                    } else {
+                                        tvSize.setText((position + 1) + " of " + imageArrayList.size() + " - " + body.getImageData().get(position).getCaption());
+                                    }
                                 }
 
                                 @Override
@@ -414,11 +425,26 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                         ArrayList<String> checkInArrayList = new ArrayList<String>();
                                         ArrayList<String> checkOutArrayList = new ArrayList<String>();
                                         if (response.body() != null) {
+                                            SimpleDateFormat mySqlFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                            SimpleDateFormat appFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+
                                             for (int i = 0; i < response.body().getResult().size(); i++) {
+                                                try {
+                                                    Date checkInDate = mySqlFormat.parse(response.body().getResult().get(i).getCheckIn());
+                                                    String checkInDateAsString = appFormat.format(checkInDate);
+
+                                                    Date checkOutDate = mySqlFormat.parse(response.body().getResult().get(i).getCheckOut());
+                                                    String checkOutDateAsString = appFormat.format(checkOutDate);
+
+                                                    checkInArrayList.add(checkInDateAsString);
+                                                    checkOutArrayList.add(checkOutDateAsString);
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
 
                                                 Log.d("hiMatt", response.body().getResult().get(i).getCheckIn());
-                                                checkInArrayList.add(String.valueOf(response.body().getResult().get(i).getCheckIn()));
-                                                checkOutArrayList.add(String.valueOf(response.body().getResult().get(i).getCheckOut()));
+
                                             }
 
                                             bundle.putStringArrayList(CHECK_IN, checkInArrayList);
@@ -468,11 +494,6 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         } else {
             loadSDCard();
             //Handle images
-            SharedPreferences captionSP = getActivity().getSharedPreferences(PhotoDescFragment.CAPTION_SP, Context.MODE_PRIVATE);
-
-            for (Map.Entry<String, ?> entry : captionSP.getAll().entrySet()) {
-                captionArrayList.add(String.valueOf(entry.getValue()));
-            }
             if (imageArrayList.isEmpty()) {
                 viewPager.setVisibility(View.GONE);
             } else {

@@ -227,16 +227,29 @@ public class AvailabilityFragment extends Fragment {
                             public void onClick(View v) {
                                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                                 Bundle bundle = new Bundle();
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                SimpleDateFormat mySqlFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                SimpleDateFormat appFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                try {
+                                    Date checkIn = appFormat.parse(tvCheckIn.getText().toString());
+                                    String checkInAsString = mySqlFormat.format(checkIn);
+                                    Date checkOut = appFormat.parse(tvCheckOut.getText().toString());
+                                    String checkOutAsString = mySqlFormat.format(checkOut);
 
-                                bundle.putString(HomeDescFragment.CHECK_IN, sdf.format(tvCheckIn.getText().toString()));
-                                bundle.putString(HomeDescFragment.CHECK_OUT, sdf.format(tvCheckOut.getText().toString()));
-                                bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, listingId);
-                                BookingSendSMSFragment bookingSendSMSFragment = new BookingSendSMSFragment();
-                                bookingSendSMSFragment.setArguments(bundle);
-                                fragmentTransaction.add(R.id.homeDescLayout, bookingSendSMSFragment).commit();
-                                fragmentTransaction.addToBackStack(SMS_FRAGMENT);
-                                fragmentTransaction.hide(AvailabilityFragment.this);
+                                    bundle.putString(HomeDescFragment.CHECK_IN, checkInAsString);
+                                    bundle.putString(HomeDescFragment.CHECK_OUT, checkOutAsString);
+                                    bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, listingId);
+                                    BookingSendSMSFragment bookingSendSMSFragment = new BookingSendSMSFragment();
+                                    bookingSendSMSFragment.setArguments(bundle);
+                                    fragmentTransaction.add(R.id.homeDescLayout, bookingSendSMSFragment).commit();
+                                    fragmentTransaction.addToBackStack(SMS_FRAGMENT);
+                                    fragmentTransaction.hide(AvailabilityFragment.this);
+                                } catch (ParseException e) {
+                                    Log.d("coolio", e.toString());
+                                    e.printStackTrace();
+                                }
+
+
+
 
                             }
                         });

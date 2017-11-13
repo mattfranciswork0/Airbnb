@@ -136,8 +136,6 @@ public class ImageSliderPager extends PagerAdapter {
                 layoutParams.gravity = Gravity.CENTER_VERTICAL;
                 scrollViewChild.setLayoutParams(layoutParams);
 
-                Toast.makeText(context, "you clicked image " + (position + 1), Toast.LENGTH_LONG).show();
-
             }
         });
 

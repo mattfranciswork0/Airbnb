@@ -130,7 +130,7 @@ public class BookingFragment extends Fragment {
                                                 final List<String> checkOutArrayList = new ArrayList<String>();
                                                 final int size = response.body().getUserId().size();
 
-                                                SimpleDateFormat mySqlFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+                                                SimpleDateFormat mySqlFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                                                 for (int i = 0; i < size; i++) {
 

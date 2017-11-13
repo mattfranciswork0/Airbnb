@@ -129,10 +129,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 }
             });
 //
-            tvPropertyTypeAndOwnership.setText(propertyOwnershipArrayList.get(position) + " " + propertyTypeArrayList.get(position));
+            tvPropertyTypeAndOwnership.setText("$" + propertyOwnershipArrayList.get(position) + " " + propertyTypeArrayList.get(position));
             tvBed.setText(bedArrayList.get(position));
             tvPlaceTitle.setText(placeTitleArrayList.get(position));
-            tvPrice.setText(priceArrayList.get(position) + " " + "per night");
+            tvPrice.setText("$" + priceArrayList.get(position) + " " + "per night");
 
 
         }

@@ -19,18 +19,19 @@ public class HomeDescActivity extends AppCompatActivity {
 
         final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.homeDescLayout);
         if (currentFragment instanceof HomeDescFragment) {
-            Log.d("fullscreen", String.valueOf(ImageSliderPager.FULL_SCREEN_MODE));
             if (ImageSliderPager.FULL_SCREEN_MODE) {
                 ImageSliderPager imageSliderPager = ((HomeDescFragment) currentFragment).getImageSliderPager();
                 imageSliderPager.getOutOfFullScreen();
             }
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStackImmediate();
 
-
+            }
             else{
                 super.onBackPressed();
             }
+
+
         } else {
             super.onBackPressed();
         }
