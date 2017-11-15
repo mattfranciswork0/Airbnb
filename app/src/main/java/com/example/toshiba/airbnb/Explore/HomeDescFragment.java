@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesIconMoreFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
@@ -39,6 +40,7 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.Profile.HostProfileViewFragment;
+import com.example.toshiba.airbnb.Profile.POJOUserData;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
@@ -75,8 +77,10 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     public static final String HOUSE_RULE_FRAGMENT_TAG = "HOUSE_RULE_FRAGMENT_TAG";
     public static final String AMENITIES_FRAGMENT_TAG = "AMENITIES_FRAGMENT_TAG";
     public static final String AVAILABILITY_FRAGMENT_TAG = "AVAILABILITY_FRAGMENT_TAG";
+    public static final String CONTACT_HOST = "CONTACT_HOST";
     public static String AMENITIES_FROM_DATABASE = "AMENITIES_FROM_DATABASE";
     public static String AVAILABILITY_FROM_DATABASE = "AVAILABILITY_FROM_DATABASE";
+    public static String HOST_ID = "HOST_ID";
     public static String CHECK_IN = "CHECK_IN";
     public static String CHECK_OUT = "CHECK_OUT";
     private ArrayList<String> imageArrayList = new ArrayList<>();
@@ -163,7 +167,6 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ;
         retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         Log.d("HomeDescFragment", "onCreate");
     }
@@ -184,16 +187,10 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         showOthersIconAddded = false;
 
-        ImageView ivHost = (ImageView) view.findViewById(R.id.ivHost);
-        ivHost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HostProfileViewFragment()).
-                        addToBackStack(null).commit();
-            }
-        });
+        final ImageView ivHost = (ImageView) view.findViewById(R.id.ivHost);
 
-        Glide.with(this).load("https://cdn.pixabay.com/photo/2014/03/04/12/55/people-279457_960_720.jpg").into(ivHost);
+
+        Glide.with(this).load(getString(R.string.defaultProfilePicture)).into(ivHost);
 
         ImageView ivGuest = (ImageView) view.findViewById(R.id.ivGuest);
         ImageView ivRoom = (ImageView) view.findViewById(R.id.ivRoom);
@@ -203,10 +200,11 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         Glide.with(getContext()).load("http://www.freeiconspng.com/uploads/person-icon-person-icon-clipart-image-from-our-icon-clipart-category--9.png").into(ivGuest);
         Glide.with(getContext()).load("http://www.freeiconspng.com/uploads/door-icon-19.png").into(ivRoom);
         Glide.with(getContext()).load("https://www.materialui.co/materialIcons/maps/hotel_grey_192x192.png").into(ivBed);
-        Glide.with(getContext()).load("http://classicbaHothtubrefinishing.com/communities/7/000/001/766/187//images/9604963_229x158.png").into(ivBathroom);
+        Glide.with(getContext()).load("https://www.shareicon.net/download/2017/03/06/880383_bath_512x512.png").into(ivBathroom);
 
         final TextView tvDesc = (TextView) view.findViewById(R.id.tvDesc);
         final TextView tvPlaceTitle = (TextView) view.findViewById(R.id.tvPlaceTitle);
+
         TextView tvPropertyType = (TextView) view.findViewById(R.id.tvPropertyType);
         final TextView tvGuest = (TextView) view.findViewById(R.id.tvGuest);
         final TextView tvRoom = (TextView) view.findViewById(R.id.tvRoom);
@@ -216,6 +214,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
         final RelativeLayout layoutHouseRule = (RelativeLayout) view.findViewById(R.id.layoutHouseRule);
         final LinearLayout layoutAmenities = (LinearLayout) view.findViewById(R.id.layoutAmenities);
         final RelativeLayout layoutAvailability = (RelativeLayout) view.findViewById(R.id.layoutAvailability);
+        final RelativeLayout layoutContact = (RelativeLayout) view.findViewById(R.id.layoutContact);
 
         showOthersIconInt = 6 - 1;
         //Layout params for amenities icons
@@ -241,8 +240,6 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                 dialog.setCancelable(true);
                 dialog.setMessage("Getting data...");
                 dialog.show();
-                Log.d("HomeDescFragment", "getArgument scope");
-                Log.d("checkMe", getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID) + "");
                 SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
                 final int userId = sessionSP.getInt(SessionManager.USER_ID, 0);
                 final int listingId = getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID);
@@ -250,9 +247,6 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onResponse(Call<POJOListingData> call, final Response<POJOListingData> response) {
                         final POJOListingData body = response.body();
-                        //TODO: PRICE, add property_ownership and property_type in view listing
-
-
                         //Handle slide images
                         if (body.getImageData().size() == 0) {
                             viewPager.setVisibility(View.GONE);
@@ -296,7 +290,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                             });
 
                         }
-                        tvGuest.setText(body.getTotalGuest());
+                        tvGuest.setText(body.getTotalGuest() + " Guest(s)");
                         tvRoom.setText(body.getTotalBedrooms());
                         tvBed.setText(body.getTotalBeds());
                         tvBathroom.setText(body.getTotalBathrooms());
@@ -378,6 +372,38 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                         tvDesc.setText(body.getPlaceDescription());
                         tvPlaceTitle.setText(body.getPlaceTitle());
 
+                        //get profile picture and host's name
+                        retrofit.getUserData(body.getUserId()).enqueue(new Callback<POJOUserData>() {
+                            @Override
+                            public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
+                                final Cloudinary cloudinary = new Cloudinary(getActivity().getResources().getString(R.string.cloudinaryEnviornmentVariable));
+                                Glide.with(getContext()).load(
+                                        cloudinary.url().generate(response.body().getProfileImagePath())).into(ivHost);
+                                TextView tvHostBy = (TextView) view.findViewById(R.id.tvHostBy);
+                                tvHostBy.setText(response.body().getFirstName() + " " + response.body().getLastName());
+                                //handle profile image click
+                                ivHost.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt(HOST_ID, body.getUserId());
+                                        HostProfileViewFragment hostProfileViewFragment = new HostProfileViewFragment();
+                                        hostProfileViewFragment.setArguments(bundle);
+                                        getFragmentManager().beginTransaction().add(R.id.homeDescLayout, hostProfileViewFragment).hide(HomeDescFragment.this)
+                                               .addToBackStack(null).commit();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Call<POJOUserData> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(getActivity(),
+                                        "Data retrieval failed, make sure your internet connection is stable, try again", Toast.LENGTH_LONG).show();
+                                getActivity().onBackPressed();
+                            }
+                        });
+
                         layoutHouseRule.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -397,7 +423,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                 addNewFragment(null, AMENITIES_FRAGMENT_TAG, new AmenitiesIconMoreFragment());
                             }
                         });
-                        Log.d("LoveYa", "saved");
+
                         layoutAvailability.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -408,7 +434,7 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                 final AvailabilityFragment availabilityFragment = new AvailabilityFragment();
                                 final Bundle bundle = new Bundle();
                                 bundle.putBoolean(AVAILABILITY_FROM_DATABASE, true);
-                                bundle.putInt(SessionManager.USER_ID, body.getId());
+                                bundle.putInt(HOST_ID, body.getUserId());
                                 bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID));
                                 bundle.putString(BookingFragment.MAX_MONTH, body.getListingLength());
                                 if (body.getMinStay() != "") {
@@ -443,7 +469,6 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                                     e.printStackTrace();
                                                 }
 
-                                                Log.d("hiMatt", response.body().getResult().get(i).getCheckIn());
 
                                             }
 
@@ -462,12 +487,22 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
                                 });
 
                                 availabilityFragment.setArguments(bundle);
-//                                getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, availabilityFragment).addToBackStack(null)
-//                                        .commit();
 
                             }
                         });
 
+                        layoutContact.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean(CONTACT_HOST, true);
+                                bundle.putInt(HOST_ID, body.getUserId());
+                                BookingSendSMSFragment bookingSendSMSFragment = new BookingSendSMSFragment();
+                                bookingSendSMSFragment.setArguments(bundle);
+                                addNewFragment(bundle, CONTACT_HOST, bookingSendSMSFragment);
+
+                            }
+                        });
 
                         dialog.dismiss();
 
@@ -492,6 +527,14 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
 
             }
         } else {
+            //handle profile image click
+            ivHost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().beginTransaction().replace(R.id.homeDescLayout, new HostProfileViewFragment()).
+                            addToBackStack(null).commit();
+                }
+            });
             loadSDCard();
             //Handle images
             if (imageArrayList.isEmpty()) {
@@ -529,10 +572,8 @@ public class HomeDescFragment extends Fragment implements OnMapReadyCallback {
             LNG = Double.parseDouble(locationSP.getString(LocationFilterAdapter.LNG, "0.000000"));
             mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(HomeDescFragment.this);
+
             //get data from sharedpreferences since listing HAS NOT BEEN PUBLISHED
-
-            Log.d("HomeDescFragment", "out of get arguments scope");
-
             //Load description from shared preferences if user did not make any changes
             SharedPreferences describeSP = getActivity().getSharedPreferences(DescribePlaceFragment.DESCRIBE_SP, Context.MODE_PRIVATE);
             String savedEtDescribePlace = describeSP.getString(DescribePlaceFragment.DESCRIBE_PLACE_KEY, "");

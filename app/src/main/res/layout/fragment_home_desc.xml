@@ -415,6 +415,7 @@
                     android:background="@color/lightRed" />
 
                 <RelativeLayout
+                    android:id="@+id/layoutContact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="20dp"

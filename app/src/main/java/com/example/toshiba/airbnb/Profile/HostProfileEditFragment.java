@@ -103,7 +103,8 @@ public class HostProfileEditFragment extends Fragment {
 
             @Override
             public void onFailure(Call<POJOUserData> call, Throwable t) {
-
+                Toast.makeText(getActivity(), "Failed to retrieve data, check your internet conncction and try again", Toast.LENGTH_LONG).show();
+                getActivity().onBackPressed();
             }
         });
 
@@ -259,7 +260,7 @@ public class HostProfileEditFragment extends Fragment {
                             @Override
                             protected void onPostExecute(Void aVoid) {
                                 super.onPostExecute(aVoid);
-                                getUserDataCall.enqueue(new Callback<POJOUserData>() {
+                                getUserDataCall.clone().enqueue(new Callback<POJOUserData>() {
                                     @Override
                                     public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
                                         Log.d("HostProfileEdit", response.body().getProfileImagePath().toString());

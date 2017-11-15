@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.HomeDescFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
@@ -69,7 +70,14 @@ public class HostProfileViewFragment extends Fragment {
         final ImageView ivProfilePic = (ImageView) view.findViewById(R.id.ivProfilePic);
         final Cloudinary cloudinary = new Cloudinary(getActivity().getResources().getString(R.string.cloudinaryEnviornmentVariable)); //configured using an environment variable
 
-        getUserDataCall = retrofit.getUserData(userId);
+        if(getArguments() != null){
+            if(getArguments().containsKey(HomeDescFragment.HOST_ID)){
+                getUserDataCall = retrofit.getUserData(getArguments().getInt(HomeDescFragment.HOST_ID));
+                ivEdit.setVisibility(View.GONE);
+            }
+        }else {
+            getUserDataCall = retrofit.getUserData(userId);
+        }
 
         getUserDataCall.enqueue(new Callback<POJOUserData>() {
             @Override

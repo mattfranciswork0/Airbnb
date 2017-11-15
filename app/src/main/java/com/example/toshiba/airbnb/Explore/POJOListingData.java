@@ -13,6 +13,9 @@ public class POJOListingData {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("user_id")
+    @Expose
+    private Integer user_id;
     @SerializedName("property_ownership")
     @Expose
     private String propertyOwnership;
@@ -152,6 +155,14 @@ public class POJOListingData {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getUserId() {
+        return user_id;
+    }
+
+    public void setUserId(Integer user_id) {
+        this.user_id = user_id;
     }
 
     public String getPropertyOwnership() {

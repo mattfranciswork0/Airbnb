@@ -11,6 +11,7 @@ import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,72 +45,116 @@ public class BookingSendSMSFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.booking_send_sms_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_booking_send_sms, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         final ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Loading...");
-        dialog.show();
+
+        final TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        final TextView tvDesc = (TextView) view.findViewById(R.id.tvDesc);
+        final Button bProceed = (Button) view.findViewById(R.id.bProceed);
 
 
         SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
         final int userId = sessionSP.getInt(SessionManager.USER_ID, 0);
+        final String firstName = sessionSP.getString(SessionManager.FIRST_NAME, "First Name");
+        final String lastName = sessionSP.getString(SessionManager.LAST_NAME, "Last Name");
 
         final TextView tvUser = (TextView) view.findViewById(R.id.tvUser);
         final EditText etMessage = (EditText) view.findViewById(R.id.etMessage);
+        tvUser.setText("Hey," + "I'm " + firstName + " " + lastName);
 
-        retrofit.getUserData(userId).enqueue(new Callback<POJOUserData>() {
-            @Override
-            public void onResponse(Call<POJOUserData> call, final Response<POJOUserData> response) {
-                dialog.dismiss();
-                tvUser.setText(response.body().getFirstName() + " " + response.body().getLastName());
+        if(getArguments() != null) {
+            if(getArguments().containsKey(HomeDescFragment.AVAILABILITY_FROM_DATABASE)) {
 
-                view.findViewById(R.id.bProceed).setOnClickListener(new View.OnClickListener() {
+                dialog.setMessage("Loading...");
+                dialog.show();
+                retrofit.getUserData(getArguments().getInt(HomeDescFragment.HOST_ID)).enqueue(new Callback<POJOUserData>() {
+                    @Override
+                    public void onResponse(Call<POJOUserData> call, final Response<POJOUserData> response) {
+                        dialog.dismiss();
+
+
+                        bProceed.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.setMessage("Booking your place...");
+                                dialog.show();
+
+                                final String hostPhoneNum = response.body().getPhoneNum();
+                                retrofit.insertBookingSchedule(userId, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
+                                        new DTOBookSchedule(
+                                                getArguments().getString(HomeDescFragment.CHECK_IN),
+                                                getArguments().getString(HomeDescFragment.CHECK_OUT)
+                                        )).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+
+                                        dialog.dismiss();
+                                        SmsManager sms = SmsManager.getDefault();
+                                        sms.sendTextMessage(hostPhoneNum, null,
+                                                "Hey, I'm" + firstName + ", " + lastName + "; " +
+                                                        etMessage.getText().toString(), null, null);
+                                        Toast.makeText(getActivity(), "Booked your place", Toast.LENGTH_LONG).show();
+                                        getFragmentManager().popBackStack(HomeDescFragment.AVAILABILITY_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        dialog.dismiss();
+                                        Toast.makeText(getActivity(), "Failed to book your place, try again", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<POJOUserData> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Failed to load, check your internet connection and try again", Toast.LENGTH_LONG).show();
+                        getFragmentManager().popBackStack(AvailabilityFragment.SMS_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                });
+            }
+            else if(getArguments().containsKey(HomeDescFragment.CONTACT_HOST)){
+
+                tvTitle.setText("What do you want to say?");
+                tvDesc.setVisibility(View.GONE);
+                bProceed.setText("Send");
+                bProceed.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.setMessage("Booking your place...");
+                        dialog.setMessage("Sending your text...");
                         dialog.show();
-
-                        final String userPhoneNum = response.body().getPhoneNum();
-                        retrofit.insertBookingSchedule(userId, getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
-                                new DTOBookSchedule(
-                                        getArguments().getString(HomeDescFragment.CHECK_IN),
-                                        getArguments().getString(HomeDescFragment.CHECK_OUT)
-                                )).enqueue(new Callback<Void>() {
+                        retrofit.getUserData(getArguments().getInt(HomeDescFragment.HOST_ID)).enqueue(new Callback<POJOUserData>() {
                             @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
+                            public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
                                 dialog.dismiss();
                                 SmsManager sms = SmsManager.getDefault();
-                                sms.sendTextMessage(userPhoneNum, null,
-                                        "Hey, I'm" + tvUser.getText().toString() + ", " +
-                                        etMessage.getText().toString(), null, null);
-                                Toast.makeText(getActivity(), "Booked your place", Toast.LENGTH_LONG).show();
-                                getFragmentManager().popBackStack(HomeDescFragment.AVAILABILITY_FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                String hostPhoneNum = response.body().getPhoneNum();
+                                sms.sendTextMessage(hostPhoneNum , null,
+                                        "Hey, I'm  " + firstName + ", " + lastName + "; " +
+                                                etMessage.getText().toString(), null, null);
+                                getFragmentManager().popBackStack(HomeDescFragment.CONTACT_HOST, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             }
 
                             @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                            public void onFailure(Call<POJOUserData> call, Throwable t) {
                                 dialog.dismiss();
                                 Toast.makeText(getActivity(), "Failed to book your place, try again", Toast.LENGTH_LONG).show();
                             }
                         });
 
-
                     }
                 });
+
             }
-
-            @Override
-            public void onFailure(Call<POJOUserData> call, Throwable t) {
-                getFragmentManager().popBackStack(AvailabilityFragment.SMS_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-        });
-
-
+        }
     }
 }

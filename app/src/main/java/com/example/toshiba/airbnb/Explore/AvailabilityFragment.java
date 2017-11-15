@@ -207,14 +207,14 @@ public class AvailabilityFragment extends Fragment {
                     }
                 }
 
-                final int listingId = getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID, 1);
+                final int hostId = getArguments().getInt(HomeDescFragment.HOST_ID, 1);
                 SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
                 int listingUserId = getArguments().getInt(SessionManager.USER_ID, 1);
                 final int userId = sessionSP.getInt(SessionManager.USER_ID, 0);
 
                 //if user clicked his own listing
                 //TODO: CHANGE THIS TO !=, but for testing purposes, leave it.
-                if (listingUserId
+                if (hostId
                         == userId) {
                     if (!tvCheckIn.getText().toString().equals("Check In") && !tvCheckOut.getText()
                             .toString().equals("Check Out")) {
@@ -237,14 +237,13 @@ public class AvailabilityFragment extends Fragment {
 
                                     bundle.putString(HomeDescFragment.CHECK_IN, checkInAsString);
                                     bundle.putString(HomeDescFragment.CHECK_OUT, checkOutAsString);
-                                    bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, listingId);
+                                    bundle.putInt(ViewListingAndYourBookingAdapter.LISTING_ID, hostId);
                                     BookingSendSMSFragment bookingSendSMSFragment = new BookingSendSMSFragment();
                                     bookingSendSMSFragment.setArguments(bundle);
                                     fragmentTransaction.add(R.id.homeDescLayout, bookingSendSMSFragment).commit();
                                     fragmentTransaction.addToBackStack(SMS_FRAGMENT);
                                     fragmentTransaction.hide(AvailabilityFragment.this);
                                 } catch (ParseException e) {
-                                    Log.d("coolio", e.toString());
                                     e.printStackTrace();
                                 }
 

@@ -40,6 +40,7 @@ public class ProfileFragment extends Fragment {
     public static String YOUR_BOOKING = "YOUR_BOOKING";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("rujoking", "onCreate");
         super.onCreate(savedInstanceState);
         retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
         userId = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE)
@@ -59,6 +60,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("rujoking", "onviewcreated");
         if(sessionManager.isLoggedIn()){
             SharedPreferences sessionSP = getActivity().getSharedPreferences(SessionManager.SESSION_SP, Context.MODE_PRIVATE);
             TextView tvName = (TextView) view.findViewById(R.id.tvName);
@@ -91,7 +93,7 @@ public class ProfileFragment extends Fragment {
         getUserDataCall.enqueue(new Callback<POJOUserData>() {
             @Override
             public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {
-                Log.d("ProfileFragment", "ProfileFragment pic");
+                Log.d("rujoking", "ProfileFragment pic");
                 if(response.body().getProfileImagePath() != null){
                     Glide.with(getActivity()).
                             load(cloudinary.url().generate(response.body().getProfileImagePath().
@@ -102,7 +104,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<POJOUserData> call, Throwable t) {
-                Log.d("ProfileFragment", t.toString());
+                Log.d("rujoking", t.toString());
             }
         });
         Glide.with(getActivity()).load(getResources().getString(R.string.defaultProfilePicture)).into(ivProfilePic);
@@ -145,6 +147,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("rujoking", "onPause");
         getUserDataCall.cancel();
     }
 

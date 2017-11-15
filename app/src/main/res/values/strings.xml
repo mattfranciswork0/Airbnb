@@ -46,7 +46,7 @@
     <string name="rbParties">rbParties</string>
 
     <!--default pic for profile picture-->
-    <string name="defaultProfilePicture">http://626.nz/sites/default/files/pictures/picture-95-1501497724.png</string>
+    <string name="defaultProfilePicture">https://www.cmog.org/sites/default/files/styles/5_column/public/default_images/default-bio-photo.png?itok=U0XEkap3</string>
 
     <!--edit profile detail-->
     <string name="aboutMe">About Me</string>

@@ -55,7 +55,7 @@ public class MenuActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.sectionFragmentReplace, homeFragment, "homeFragment");
-        fragmentTransaction.add(R.id.sectionFragmentReplace, profileFragment);
+
         fragmentTransaction.hide(profileFragment);
         fragmentTransaction.show(homeFragment);
         fragmentTransaction.commit();
@@ -73,6 +73,9 @@ public class MenuActivity extends AppCompatActivity {
 
                         break;
                     case 1:
+                        if(!profileFragment.isAdded()) {
+                            fragmentManager.beginTransaction().add(R.id.sectionFragmentReplace, profileFragment).commit();
+                        }
                         fragmentManager.beginTransaction().
                                 hide(homeFragment)
                                 .show(profileFragment)
