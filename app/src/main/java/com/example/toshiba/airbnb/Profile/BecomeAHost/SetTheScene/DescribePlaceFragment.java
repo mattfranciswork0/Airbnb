@@ -157,7 +157,6 @@ public class DescribePlaceFragment extends Fragment {
             bNext.setEnabled(false);
             bPreview.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button_fail);
-            Toast.makeText(getActivity(), "PROCEED FAIL", Toast.LENGTH_LONG).show();
 
 
         } else {
@@ -166,7 +165,6 @@ public class DescribePlaceFragment extends Fragment {
             bNext.setEnabled(true);
             bNext.setBackgroundResource(R.drawable.reg_host_proceed_button);
 
-            Toast.makeText(getActivity(), "PROCEED", Toast.LENGTH_LONG).show();
         }
     }
 }

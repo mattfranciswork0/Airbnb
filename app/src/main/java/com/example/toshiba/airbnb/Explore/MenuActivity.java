@@ -1,6 +1,7 @@
 package com.example.toshiba.airbnb.Explore;
 
 
+import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +9,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.toshiba.airbnb.LoadingMenuActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFragment;
@@ -19,6 +23,21 @@ import com.example.toshiba.airbnb.R;
 public class MenuActivity extends AppCompatActivity {
      HomeFragment homeFragment;
 
+    private void changeTabsFont(TabLayout tabLayout) {
+
+        ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+            int tabChildsCount = vgTab.getChildCount();
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    ((TextView) tabViewChild).setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                }
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -63,6 +82,7 @@ public class MenuActivity extends AppCompatActivity {
         TabLayout sectionTab = (TabLayout) findViewById(R.id.sectionTab);
         sectionTab.addTab(sectionTab.newTab().setText("Explore"));
         sectionTab.addTab(sectionTab.newTab().setText("Profile"));
+        changeTabsFont(sectionTab);
         sectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
