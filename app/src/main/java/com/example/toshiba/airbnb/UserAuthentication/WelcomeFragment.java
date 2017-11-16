@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.R;
+import com.example.toshiba.airbnb.UserAuthentication.LogIn.LogInFragment;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.RegisterNameFragment;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import org.json.JSONException;
@@ -74,15 +76,15 @@ public class WelcomeFragment extends Fragment {
         bPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
+//                DTOUserRegistrationRequest DTOUserRegistrationRequest = new DTOUserRegistrationRequest(
 //                        RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
 //                        RegisterPasswordFragment.sPassword, PhoneNumVerifyFragment.phoneNum);
 
-                UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
+                DTOUserRegistrationRequest DTOUserRegistrationRequest = new DTOUserRegistrationRequest(
                         "Matt", "Francis", "q@gmail.com",
                         "heyBestie123", "2897727436");
 
-                Call<Void> call = retrofit.insertUserRegistration(userRegistrationRequest);
+                Call<Void> call = retrofit.insertUserRegistration(DTOUserRegistrationRequest);
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {

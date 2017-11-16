@@ -13,22 +13,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.textservice.TextInfo;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BottomSheetFragment;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.DescriptionDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.RoomsAndGuestDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTORoomsAndGuest;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
@@ -204,7 +200,7 @@ public class GuestFragment extends Fragment {
                         dialog.setMessage("Updating data...");
                         dialog.show();
                         retrofit.updateRoomsAndGuests(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
-                                new RoomsAndGuestDTO(tvTotalGuestInput.getText().toString(),
+                                new DTORoomsAndGuest(tvTotalGuestInput.getText().toString(),
                                         tvTotalBedRoomInput.getText().toString(),
                                         tvTotalBedInput.getText().toString())).enqueue(new Callback<Void>() {
                             @Override

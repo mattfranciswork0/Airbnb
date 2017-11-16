@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.toshiba.airbnb.Explore.MenuActivity;
-import com.example.toshiba.airbnb.Explore.POJOTotalListings;
+import com.example.toshiba.airbnb.Explore.POJO.POJOTotalListings;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import retrofit2.Call;

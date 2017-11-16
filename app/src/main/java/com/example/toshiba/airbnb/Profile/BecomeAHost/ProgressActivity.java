@@ -5,35 +5,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.toshiba.airbnb.Explore.AvailabilityFragment;
-import com.example.toshiba.airbnb.Explore.HomeDescFragment;
-import com.example.toshiba.airbnb.Explore.ImageSliderPager;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesSpaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.BookingFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.HouseRuleFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.PriceFragment;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.GetReady.PublishFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.TitleFragment;
 import com.example.toshiba.airbnb.R;
-
-import java.util.Map;
 
 
 public class ProgressActivity extends AppCompatActivity {

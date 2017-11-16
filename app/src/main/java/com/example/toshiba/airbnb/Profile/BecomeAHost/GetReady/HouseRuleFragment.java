@@ -16,8 +16,8 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.HouseRulesDTO;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOHouseRules;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
@@ -110,7 +110,7 @@ public class HouseRuleFragment extends Fragment {
                         dialog.setCancelable(false);
                         dialog.show();
                         retrofit.updateHouseRules(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
-                                new HouseRulesDTO(
+                                new DTOHouseRules(
                                         rbChildren.isChecked(), rbInfants.isChecked(),
                                         rbPets.isChecked(), rbSmoking.isChecked(),
                                         rbParties.isChecked(), etAdditionalRules.getText().toString())

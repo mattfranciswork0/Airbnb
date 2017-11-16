@@ -17,9 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.HouseRulesDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PriceDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOPrice;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingFragment;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
@@ -110,7 +109,7 @@ public class PriceFragment extends Fragment {
                         dialog.setCancelable(false);
                         dialog.show();
                         retrofit.updatePrice(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
-                                new PriceDTO(
+                                new DTOPrice(
                                         etPricePerNight.getText().toString())
                         ).enqueue(new Callback<Void>() {
                             @Override

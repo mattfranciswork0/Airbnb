@@ -21,9 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.HomeDescActivity;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListingFragment;
+import com.example.toshiba.airbnb.Explore.Homes.HomeDescActivity;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOTitle;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingFragment;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
@@ -112,7 +112,7 @@ public class TitleFragment extends Fragment {
 
                         dialog.show();
                         retrofit.updateTitle(1,
-                                new TitleDTO(etTitle.getText().toString())).enqueue(new Callback<Void>() {
+                                new DTOTitle(etTitle.getText().toString())).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 dialog.dismiss();

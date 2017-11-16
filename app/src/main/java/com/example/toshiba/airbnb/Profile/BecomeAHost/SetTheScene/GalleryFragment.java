@@ -2,16 +2,11 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,29 +15,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.HomeDescActivity;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
-import com.example.toshiba.airbnb.Profile.POJOUserData;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.ListingImagesDTO;
+import com.example.toshiba.airbnb.Explore.Homes.HomeDescActivity;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOListingImages;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RealPathUtil;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -191,7 +180,7 @@ public class GalleryFragment extends Fragment {
                         final int listingId = getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID);
                         final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
                         retrofit.updateListingImages(listingId,
-                                new ListingImagesDTO(realPathAsName, null)).enqueue(new Callback<Void>() {
+                                new DTOListingImages(realPathAsName, null)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 new AsyncTask<Void, Void, Void>() {

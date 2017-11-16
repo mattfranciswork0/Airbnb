@@ -27,10 +27,7 @@
         <activity android:name=".LoadingMenuActivity">
 
         </activity>
-        <activity android:name=".Explore.SingleContentDescActivity">
-
-        </activity>
-        <activity android:name=".Profile.HostProfileActivity">
+        <activity android:name=".Profile.UserProfile.UserProfileActivity">
 
         </activity>
         <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"></activity>
@@ -38,10 +35,10 @@
 
         </activity>
         <activity android:name=".Profile.ViewListingAndYourBooking.ViewListingAndYourBookingActivity"></activity>
-        <activity android:name=".Profile.ViewListingAndYourBooking.EditListingActivity"></activity>
+        <activity android:name=".Profile.ViewListingAndYourBooking.EditListing.EditListingActivity"></activity>
         <activity android:name=".Profile.BecomeAHost.ProgressActivity"></activity>
 
-        <activity android:name=".Explore.HomeDescActivity"></activity>
+        <activity android:name=".Explore.Homes.HomeDescActivity"></activity>
 
     </application>
 

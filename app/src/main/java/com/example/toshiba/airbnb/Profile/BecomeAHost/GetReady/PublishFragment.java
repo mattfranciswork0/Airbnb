@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.MenuActivity;
 import com.example.toshiba.airbnb.LoadingMenuActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.AmenitiesItemFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.BathroomFragment;
@@ -29,9 +28,9 @@ import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.GuestFragme
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFilterAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.PropertyTypeFragment;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequestDTO;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.POJOIdListing;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.DTOImageListing;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.DTOPublishListingDataRequest;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.DescribePlaceFragment;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.GalleryAdapter;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene.PhotoDescFragment;
@@ -51,8 +50,6 @@ import java.util.concurrent.CountDownLatch;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 /**
  * Created by TOSHIBA on 11/08/2017.
@@ -190,12 +187,12 @@ public class PublishFragment extends Fragment {
         imagePathArrayList.toArray(imagePathArray);
 
 
-        ImageListingRequest imageListingRequest = new ImageListingRequest(
+        DTOImageListing DTOImageListing = new DTOImageListing(
                 imagePathArray,
                 captionArray, //retrieve key of captionSP, which is the image uri
                 listingIdSP.getInt(LISTING_ID, 0));
 
-        retrofit.insertListingImages(imageListingRequest).enqueue(new Callback<Void>() {
+        retrofit.insertListingImages(DTOImageListing).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.d("ILoveYou", "so much :)");
@@ -351,7 +348,7 @@ public class PublishFragment extends Fragment {
                         if (latchPublishSP.getInt(LATCH_COUNTDOWN_COUNT, 0) == 2) {
                             progressDialog.setMessage("Listing your place...");
                             progressDialog.show();
-                            PublishListingDataRequestDTO publishListingDataRequestDTO = new PublishListingDataRequestDTO(
+                            DTOPublishListingDataRequest DTOPublishListingDataRequest = new DTOPublishListingDataRequest(
                                     sessionSP.getInt(SessionManager.USER_ID, 0),
                                     checkPropertyOwnership(),
                                     propertyTypeSP.getString(PropertyTypeFragment.PROPERTY_TYPE, "ERROR"),
@@ -405,9 +402,9 @@ public class PublishFragment extends Fragment {
                                     getCurrentDate()
                             );
 
-                            retrofit.insertListingData(publishListingDataRequestDTO).enqueue(new Callback<IdListing>() {
+                            retrofit.insertListingData(DTOPublishListingDataRequest).enqueue(new Callback<POJOIdListing>() {
                                 @Override
-                                public void onResponse(Call<IdListing> call, Response<IdListing> response) {
+                                public void onResponse(Call<POJOIdListing> call, Response<POJOIdListing> response) {
                                     progressDialog.dismiss();
                                     latch.countDown();
                                     Log.d("publishOnResponse", latch.getCount() + "");
@@ -417,7 +414,7 @@ public class PublishFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Call<IdListing> call, Throwable t) {
+                                public void onFailure(Call<POJOIdListing> call, Throwable t) {
                                     progressDialog.dismiss();
                                     Toast.makeText(getActivity(), "Failed to list your place, try again", Toast.LENGTH_LONG).show();
 

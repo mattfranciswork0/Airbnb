@@ -22,11 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.HomeFragment;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
-import com.example.toshiba.airbnb.Explore.POJOTotalListings;
+import com.example.toshiba.airbnb.Explore.ExploreFragment;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJO.POJOTotalListings;
 import com.example.toshiba.airbnb.Explore.SearchGuestFragment;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PlaceLocationDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOPlaceLocation;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
@@ -162,7 +162,7 @@ public class LocationFragment extends Fragment {
                                         dialog.setCancelable(false);
                                         dialog.show();
                                         retrofit.updateLocation(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
-                                                new PlaceLocationDTO(
+                                                new DTOPlaceLocation(
                                                         etCountryInput.getText().toString(),
                                                         tvStreetInput.getText().toString(), etExtraDetailsInput.getText().toString(),
                                                         etCityInput.getText().toString(), etStateInput.getText().toString()
@@ -199,7 +199,7 @@ public class LocationFragment extends Fragment {
                     }
                 });
 
-            } else if (getArguments().containsKey(HomeFragment.SEARCH_BAR_LOCATION)){
+            } else if (getArguments().containsKey(ExploreFragment.SEARCH_BAR_LOCATION)){
                 //get rid of section tab from activity
                 getActivity().findViewById(R.id.sectionTab).setVisibility(View.GONE);
                 LinearLayout layouTapInfo = (LinearLayout) view.findViewById(R.id.layoutTapInfo);
@@ -258,11 +258,11 @@ public class LocationFragment extends Fragment {
                                 Log.d("searchChildren", SearchGuestFragment.SEARCH_CHILDREN_PATH);
                                 Log.d("searchPets", String.valueOf(SearchGuestFragment.SEARCH_PETS_ALLOWED_PATH));
                                 Bundle bundle = new Bundle();
-                                bundle.putInt(HomeFragment.SEARCH_BAR_SIZE, Integer.parseInt(response.body().getTotalListings()));
-                                HomeFragment homeFragment = new HomeFragment();
-                                homeFragment.setArguments(bundle);
+                                bundle.putInt(ExploreFragment.SEARCH_BAR_SIZE, Integer.parseInt(response.body().getTotalListings()));
+                                ExploreFragment exploreFragment = new ExploreFragment();
+                                exploreFragment.setArguments(bundle);
                                 dialog.dismiss();
-                                getFragmentManager().beginTransaction().replace(R.id.sectionFragmentReplace, homeFragment).commit();
+                                getFragmentManager().beginTransaction().replace(R.id.sectionFragmentReplace, exploreFragment).commit();
 
 
                             }
@@ -326,11 +326,11 @@ public class LocationFragment extends Fragment {
                 }
                 Log.d("hiMatt", "click");
                 if(getArguments() != null){
-                    if (getArguments().containsKey(HomeFragment.SEARCH_BAR_LOCATION)) {
+                    if (getArguments().containsKey(ExploreFragment.SEARCH_BAR_LOCATION)) {
                         Log.d("hiMatt", "true");
                         LocationFilterFragment locationFilterFragment = new LocationFilterFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean(HomeFragment.SEARCH_BAR_LOCATION, getArguments().containsKey(HomeFragment.SEARCH_BAR_LOCATION));
+                        bundle.putBoolean(ExploreFragment.SEARCH_BAR_LOCATION, getArguments().containsKey(ExploreFragment.SEARCH_BAR_LOCATION));
                         locationFilterFragment.setArguments(bundle);
                         getFragmentManager().beginTransaction()
                                 .add(R.id.sectionFragmentReplace, locationFilterFragment).hide(LocationFragment.this)

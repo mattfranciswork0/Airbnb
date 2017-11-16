@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
+import com.example.toshiba.airbnb.Explore.POJO.POJOTotalListings;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BasicQuestions.LocationFragment;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
@@ -201,11 +202,11 @@ public class SearchGuestFragment extends Fragment {
                             @Override
                             public void onResponse(Call<POJOTotalListings> call, Response<POJOTotalListings> response) {
                                 Bundle bundle = new Bundle();
-                                bundle.putInt(HomeFragment.SEARCH_BAR_SIZE, Integer.parseInt(response.body().getTotalListings()));
-                                HomeFragment homeFragment = new HomeFragment();
-                                homeFragment.setArguments(bundle);
+                                bundle.putInt(ExploreFragment.SEARCH_BAR_SIZE, Integer.parseInt(response.body().getTotalListings()));
+                                ExploreFragment exploreFragment = new ExploreFragment();
+                                exploreFragment.setArguments(bundle);
                                 dialog.dismiss();
-                                getFragmentManager().beginTransaction().replace(R.id.sectionFragmentReplace, homeFragment).commit();
+                                getFragmentManager().beginTransaction().replace(R.id.sectionFragmentReplace, exploreFragment).commit();
 
                             }
 

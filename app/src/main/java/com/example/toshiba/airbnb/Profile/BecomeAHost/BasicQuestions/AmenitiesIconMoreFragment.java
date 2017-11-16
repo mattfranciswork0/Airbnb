@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.toshiba.airbnb.Explore.HomeDescFragment;
+import com.example.toshiba.airbnb.Explore.Homes.HomeDescFragment;
 import com.example.toshiba.airbnb.R;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package com.example.toshiba.airbnb.Explore;
 
 
-import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +20,7 @@ import com.example.toshiba.airbnb.R;
 
 
 public class MenuActivity extends AppCompatActivity {
-     HomeFragment homeFragment;
+     ExploreFragment exploreFragment;
 
     private void changeTabsFont(TabLayout tabLayout) {
 
@@ -49,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
             //section tab is invisible when one of the search-bar filters are clicked
             findViewById(R.id.sectionTab).setVisibility(View.VISIBLE);
         }
-        else if(currentFragment instanceof HomeFragment || currentFragment instanceof ProfileFragment){
+        else if(currentFragment instanceof ExploreFragment || currentFragment instanceof ProfileFragment){
             finish();
         }
         else{
@@ -66,17 +65,17 @@ public class MenuActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putInt(LoadingMenuActivity.TOTAL_LISTINGS, getIntent().getExtras().getInt(LoadingMenuActivity.TOTAL_LISTINGS));
-         homeFragment = new HomeFragment();
-        homeFragment.setArguments(bundle);
+         exploreFragment = new ExploreFragment();
+        exploreFragment.setArguments(bundle);
 
         final ProfileFragment profileFragment = new ProfileFragment();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.sectionFragmentReplace, homeFragment, "homeFragment");
+        fragmentTransaction.add(R.id.sectionFragmentReplace, exploreFragment, "exploreFragment");
 
         fragmentTransaction.hide(profileFragment);
-        fragmentTransaction.show(homeFragment);
+        fragmentTransaction.show(exploreFragment);
         fragmentTransaction.commit();
 
         TabLayout sectionTab = (TabLayout) findViewById(R.id.sectionTab);
@@ -89,7 +88,7 @@ public class MenuActivity extends AppCompatActivity {
                 switch (tab.getPosition()) {
                     case 0: //Explore
                        fragmentManager.beginTransaction().hide(profileFragment)
-                               .show(homeFragment).commit();
+                               .show(exploreFragment).commit();
 
                         break;
                     case 1:
@@ -97,7 +96,7 @@ public class MenuActivity extends AppCompatActivity {
                             fragmentManager.beginTransaction().add(R.id.sectionFragmentReplace, profileFragment).commit();
                         }
                         fragmentManager.beginTransaction().
-                                hide(homeFragment)
+                                hide(exploreFragment)
                                 .show(profileFragment)
                                 .commit();
                         break;

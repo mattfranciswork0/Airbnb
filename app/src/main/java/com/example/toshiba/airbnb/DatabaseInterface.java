@@ -5,41 +5,39 @@ package com.example.toshiba.airbnb;
  */
 
 
-import com.example.toshiba.airbnb.Explore.DTOBookSchedule;
-import com.example.toshiba.airbnb.Explore.POJOBookingData;
-import com.example.toshiba.airbnb.Explore.POJOBookingDataGetResult;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
-import com.example.toshiba.airbnb.Explore.POJOMultipleListingsData;
-import com.example.toshiba.airbnb.Explore.POJOMultipleListingsDataGetResult;
-import com.example.toshiba.airbnb.Explore.POJOTotalListings;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.BookingDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.CaptionDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.DescriptionDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.HouseRulesDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesItemDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.ListingImagesDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PlaceLocationDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.PriceDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.RoomsAndGuestDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesSpaceDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOBookingsToDelete;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOYourBookingGetResult;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.IdListing;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.ImageListingRequest;
-import com.example.toshiba.airbnb.Profile.BecomeAHost.PublishListingDataRequestDTO;
-import com.example.toshiba.airbnb.Profile.DTO.AboutMeDTO;
-import com.example.toshiba.airbnb.Profile.DTO.EmailDetailEditDTO;
-import com.example.toshiba.airbnb.Profile.DTO.LanguagesDetailEditDTO;
-import com.example.toshiba.airbnb.Profile.DTO.LocationDetailEditDTO;
-import com.example.toshiba.airbnb.Profile.DTO.PhoneNumDetailEditDTO;
-import com.example.toshiba.airbnb.Profile.DTO.WorkDetailEditDTO;
+import com.example.toshiba.airbnb.Explore.Homes.DTOBookSchedule;
+import com.example.toshiba.airbnb.Explore.POJO.POJOBookingDataGetResult;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJO.POJOMultipleListingsDataGetResult;
+import com.example.toshiba.airbnb.Explore.POJO.POJOTotalListings;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOBooking;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOCaption;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTODescription;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOHouseRules;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOAmenitiesItem;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOListingImages;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOPlaceLocation;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOPrice;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTORoomsAndGuest;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOAmenitiesSpace;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOTitle;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJO.POJOBookingsToDelete;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJO.POJOYourBookingGetResult;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.POJOIdListing;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.DTOImageListing;
+import com.example.toshiba.airbnb.Profile.BecomeAHost.DTOPublishListingDataRequest;
+import com.example.toshiba.airbnb.Profile.UserProfile.DTO.DTOAboutMe;
+import com.example.toshiba.airbnb.Profile.UserProfile.DTO.DTOEmailDetailEdit;
+import com.example.toshiba.airbnb.Profile.UserProfile.DTO.DTOLanguagesDetailEdit;
+import com.example.toshiba.airbnb.Profile.UserProfile.DTO.DTOLocationDetailEdit;
+import com.example.toshiba.airbnb.Profile.UserProfile.DTO.DTOPhoneNumDetailEdit;
+import com.example.toshiba.airbnb.Profile.UserProfile.DTO.DTOWorkDetailEdit;
 import com.example.toshiba.airbnb.Profile.POJOUserData;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOListingImageAndTitleGetResult;
-import com.example.toshiba.airbnb.UserAuthentication.EmailResult;
-import com.example.toshiba.airbnb.UserAuthentication.LogInRequest;
-import com.example.toshiba.airbnb.UserAuthentication.PasswordMatch;
-import com.example.toshiba.airbnb.UserAuthentication.UserRegistrationRequest;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJO.POJOListingImageAndTitleGetResult;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.POJOEmailResult;
+import com.example.toshiba.airbnb.UserAuthentication.LogIn.DTOLogInRequest;
+import com.example.toshiba.airbnb.UserAuthentication.LogIn.POJOPasswordMatch;
+import com.example.toshiba.airbnb.UserAuthentication.DTOUserRegistrationRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -56,23 +54,23 @@ import retrofit2.http.Path;
 public interface DatabaseInterface {
 
     @GET("/findUser/{email}")
-    Call<EmailResult> findUser(@Path("email") String email);
+    Call<POJOEmailResult> findUser(@Path("email") String email);
 
     @Headers("Content-Type: application/json")
     @POST("/register")
-    Call<Void> insertUserRegistration(@Body UserRegistrationRequest body); //Alter to Call<Void> later
+    Call<Void> insertUserRegistration(@Body DTOUserRegistrationRequest body); //Alter to Call<Void> later
 
     @Headers("Content-Type: application/json")
     @POST("/login")
-    Call<PasswordMatch> findLogInData(@Body LogInRequest body);
+    Call<POJOPasswordMatch> findLogInData(@Body DTOLogInRequest body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertListingData")
-    Call<IdListing> insertListingData(@Body PublishListingDataRequestDTO body);
+    Call<POJOIdListing> insertListingData(@Body DTOPublishListingDataRequest body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertListingImages")
-    Call<Void> insertListingImages(@Body ImageListingRequest body);
+    Call<Void> insertListingImages(@Body DTOImageListing body);
 
     @GET("/listingImageAndTitle/{user_id}")
     Call<POJOListingImageAndTitleGetResult> getListingImageAndTitle(@Path("user_id") int user_id);
@@ -120,27 +118,27 @@ public interface DatabaseInterface {
 
     @Headers("Content-Type: application/json")
     @POST("/insertAboutMe/{id}")
-    Call<Void> insertAboutMe(@Path("id") int user_id, @Body AboutMeDTO body);
+    Call<Void> insertAboutMe(@Path("id") int user_id, @Body DTOAboutMe body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertEmailDetailEdit/{id}")
-    Call<Void> insertEmailDetailEdit(@Path("id") int user_id, @Body EmailDetailEditDTO body);
+    Call<Void> insertEmailDetailEdit(@Path("id") int user_id, @Body DTOEmailDetailEdit body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertPhoneNumDetailEdit/{id}}")
-    Call<Void> insertPhoneNumDetailEdit(@Path("id") int user_id, @Body PhoneNumDetailEditDTO body);
+    Call<Void> insertPhoneNumDetailEdit(@Path("id") int user_id, @Body DTOPhoneNumDetailEdit body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertLocationDetailEdit/{id}")
-    Call<Void> insertLocationDetailEdit(@Path("id") int user_id, @Body LocationDetailEditDTO body);
+    Call<Void> insertLocationDetailEdit(@Path("id") int user_id, @Body DTOLocationDetailEdit body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertWorkDetailEdit/{id}")
-    Call<Void> insertWorkDetailEdit(@Path("id") int user_id, @Body WorkDetailEditDTO body);
+    Call<Void> insertWorkDetailEdit(@Path("id") int user_id, @Body DTOWorkDetailEdit body);
 
     @Headers("Content-Type: application/json")
     @POST("/insertLanguagesDetailEdit/{id}")
-    Call<Void> insertLanguagesDetailEdit(@Path("id") int user_id, @Body LanguagesDetailEditDTO body);
+    Call<Void> insertLanguagesDetailEdit(@Path("id") int user_id, @Body DTOLanguagesDetailEdit body);
 
     @GET("/bookingListingImageAndTitle/{user_id}")
     Call<POJOYourBookingGetResult> getBookingListingImageAndTitle(@Path("user_id") int user_id);
@@ -151,49 +149,49 @@ public interface DatabaseInterface {
     //edit listing
     @Headers("Content-Type: application/json")
     @POST("/updateListingImages/{listing_id}")
-    Call<Void> updateListingImages(@Path("listing_id") int listing_id, @Body ListingImagesDTO body);
+    Call<Void> updateListingImages(@Path("listing_id") int listing_id, @Body DTOListingImages body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateCaption")
-    Call<Void> updateCaption(@Body CaptionDTO body);
+    Call<Void> updateCaption(@Body DTOCaption body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateTitle/{listing_id}")
-    Call<Void> updateTitle(@Path("listing_id") int listing_id, @Body TitleDTO body);
+    Call<Void> updateTitle(@Path("listing_id") int listing_id, @Body DTOTitle body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateDescription/{listing_id}")
-    Call<Void> updateDescription(@Path("listing_id") int listing_id, @Body DescriptionDTO body);
+    Call<Void> updateDescription(@Path("listing_id") int listing_id, @Body DTODescription body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateRoomsAndGuests/{listing_id}")
-    Call<Void> updateRoomsAndGuests(@Path("listing_id") int listing_id, @Body RoomsAndGuestDTO body);
+    Call<Void> updateRoomsAndGuests(@Path("listing_id") int listing_id, @Body DTORoomsAndGuest body);
 
 
     @Headers("Content-Type: application/json")
     @POST("/updateAmenitiesItem/{listing_id}")
-    Call<Void> updateAmenitiesItem(@Path("listing_id") int listing_id, @Body AmenitiesItemDTO body);
+    Call<Void> updateAmenitiesItem(@Path("listing_id") int listing_id, @Body DTOAmenitiesItem body);
 
 
     @Headers("Content-Type: application/json")
     @POST("/updateAmenitiesSpace/{listing_id}")
-    Call<Void> updateAmenitiesSpace(@Path("listing_id") int listing_id, @Body AmenitiesSpaceDTO body);
+    Call<Void> updateAmenitiesSpace(@Path("listing_id") int listing_id, @Body DTOAmenitiesSpace body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateLocation/{listing_id}")
-    Call<Void> updateLocation(@Path("listing_id") int listing_id, @Body PlaceLocationDTO body);
+    Call<Void> updateLocation(@Path("listing_id") int listing_id, @Body DTOPlaceLocation body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateHouseRules/{listing_id}")
-    Call<Void> updateHouseRules(@Path("listing_id") int listing_id, @Body HouseRulesDTO body);
+    Call<Void> updateHouseRules(@Path("listing_id") int listing_id, @Body DTOHouseRules body);
 
     @Headers("Content-Type: application/json")
     @POST("/updateBooking/{listing_id}")
-    Call<Void> updateBooking(@Path("listing_id") int listing_id, @Body BookingDTO body);
+    Call<Void> updateBooking(@Path("listing_id") int listing_id, @Body DTOBooking body);
 
     @Headers("Content-Type: application/json")
     @POST("/updatePrice/{listing_id}")
-    Call<Void> updatePrice(@Path("listing_id") int listing_id, @Body PriceDTO body);
+    Call<Void> updatePrice(@Path("listing_id") int listing_id, @Body DTOPrice body);
 
 
     @GET("/bookingsToDeleteData/{listing_id}")

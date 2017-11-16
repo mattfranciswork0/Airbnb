@@ -7,16 +7,11 @@ package com.example.toshiba.airbnb.Profile.BecomeAHost.SetTheScene;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.CaptionDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOCaption;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
@@ -99,7 +94,7 @@ public class PhotoDescFragment extends Fragment {
                 public void onClick(View v) {
 
                     retrofit.updateCaption(
-                            new CaptionDTO(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URL),
+                            new DTOCaption(getArguments().getString(GalleryAdapter.CLICKED_IMAGE_URL),
                                     etCaption.getText().toString())).enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {

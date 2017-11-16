@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +21,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.POJOBookingData;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
 import com.example.toshiba.airbnb.Profile.POJOUserData;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.BookingDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.TitleDTO;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJOBookingsToDelete;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOBooking;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.POJO.POJOBookingsToDelete;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
 import com.example.toshiba.airbnb.R;
@@ -163,7 +160,7 @@ public class BookingFragment extends Fragment {
                                                                     , null, null);
                                                             if(finalI == size - 1 ) {
                                                                 retrofit.updateBooking(listingId,
-                                                                        new BookingDTO(etMaxMonth.getText().toString(), etArriveAfter.getText().toString(),
+                                                                        new DTOBooking(etMaxMonth.getText().toString(), etArriveAfter.getText().toString(),
                                                                                 etLeaveBefore.getText().toString(), etMaxStay.getText().toString(),
                                                                                 etMinStay.getText().toString())).enqueue(new Callback<Void>() {
                                                                     @Override

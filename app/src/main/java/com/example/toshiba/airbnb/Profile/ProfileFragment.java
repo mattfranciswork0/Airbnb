@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.Cloudinary;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
+import com.example.toshiba.airbnb.Profile.UserProfile.UserProfileActivity;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingActivity;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
@@ -79,7 +80,7 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.tvEdit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), HostProfileActivity.class);
+                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
                 startActivity(intent);
             }
         });
@@ -112,7 +113,7 @@ public class ProfileFragment extends Fragment {
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), HostProfileActivity.class);
+                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
                 startActivity(intent);
             }
         });

@@ -16,10 +16,10 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
-import com.example.toshiba.airbnb.Explore.POJOListingData;
+import com.example.toshiba.airbnb.Explore.POJO.POJOListingData;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.BecomeAHostActivity;
 import com.example.toshiba.airbnb.Profile.BecomeAHost.ProgressActivity;
-import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.EditListingDTO.AmenitiesSpaceDTO;
+import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.EditListing.DTO.DTOAmenitiesSpace;
 import com.example.toshiba.airbnb.Profile.ViewListingAndYourBooking.ViewListingAndYourBookingAdapter;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.Util.KeyboardUtil;
@@ -102,7 +102,7 @@ public class AmenitiesSpaceFragment extends Fragment {
                         dialog.setCancelable(false);
                         dialog.show();
                         retrofit.updateAmenitiesSpace(getArguments().getInt(ViewListingAndYourBookingAdapter.LISTING_ID),
-                                new AmenitiesSpaceDTO(
+                                new DTOAmenitiesSpace(
                                         rbKitchen.isChecked(), rbLaundry.isChecked(),
                                         rbParking.isChecked(), rbElevator.isChecked(),
                                         rbPool.isChecked(), rbGym.isChecked()
