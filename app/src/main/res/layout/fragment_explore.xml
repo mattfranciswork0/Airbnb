@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff9999"
+        android:orientation="vertical">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <!--<android.support.design.widget.TabLayout-->
+        <!--android:id="@+id/exploreSectionTab"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:background="#ff6666"-->
+        <!--app:tabIndicatorColor="#ffffff"-->
+        <!--app:tabSelectedTextColor="#ffffff"-->
+        <!--app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"-->
+        <!--app:tabTextColor="#fdf1f8"-->
+
+        <!--/>-->
+
+    <LinearLayout
+        android:id="@+id/exploreSectionFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+
+</LinearLayout>

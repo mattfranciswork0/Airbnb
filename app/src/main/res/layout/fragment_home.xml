@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightRed"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/whereLayout"
+
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/tvSearchAnywhere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anywhere"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/guestLayout"
+
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvSearchGuest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guest(s) - 1"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvEmptyListing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="There seems to be nothing here..."
+        android:textSize="20dp"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

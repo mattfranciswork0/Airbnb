@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cloudName">du8n2aa4p</string>
+    <string name="apiKey">847239287961448</string>
+    <string name="apiSecret">P2LUOMMTrMRij1Ny5ay8lWZHHUk</string>
+    <string name = "cloudinaryEnviornmentVariable">cloudinary://847239287961448:P2LUOMMTrMRij1Ny5ay8lWZHHUk@du8n2aa4p</string>
+</resources>

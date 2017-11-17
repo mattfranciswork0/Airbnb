@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/replaceLayout">
+
+        <ImageView
+            app:srcCompat="@drawable/hot_air_balloon"
+            android:id="@+id/imageView"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.05"
+            android:layout_height="437dp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutIntro"
+            android:padding="7dp">
+
+            <TextView
+                android:text="Swim in crystal clear waters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTitle"
+                android:textSize="30sp"
+                android:layout_below="@+id/imageView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textStyle="normal|bold"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:text="Barcelona - Snack and sip on drinks while enjoying the sea breeze"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDesc"
+                android:layout_marginBottom="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_below="@+id/tvLanguages"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutSummary"
+                android:padding="7dp">
+                <TextView
+                    android:text="Sports Experience"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvCategory"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="5dp"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    app:srcCompat="@drawable/hot_air_balloon"
+                    android:id="@+id/ivHost"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="90dp"
+                    android:layout_height="60dp"
+                    />
+
+                <TextView
+                    android:text="1 meal, drinks and equipment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTime"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tvGiven"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:text="Offered in English"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvGiven"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tvLanguages"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:text="2 hours total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvTime"
+                    android:layout_below="@+id/ivHost"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="13dp"
+                    android:layout_alignRight="@+id/ivHost"
+                    android:layout_alignEnd="@+id/ivHost"
+                    android:layout_marginBottom="5dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightRed"
+                    android:layout_below="@+id/tvLanguages"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:text="Hosted by Sergio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvHostName"
+                    android:layout_below="@+id/tvCategory"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+
+            </RelativeLayout>
+        </FrameLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutDo"
+            android:padding="7dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </LinearLayout>
+
+            <TextView
+                android:text="What we'll do"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDo"
+                android:textStyle="normal|bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp"
+                />
+
+            <TextView
+                android:text="Welcome to my sailboat. Sit, relax and enjoy the incredible perspective of Barcelona from the sea. I'll teach you some basics of sailing so you"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDoDesc"
+                android:textSize="15sp"
+                android:layout_marginBottom="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_below="@+id/tvLanguages"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutProvide"
+            android:padding="7dp">
+
+            <TextView
+                android:text="What I'll provide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvide"
+                android:textStyle="normal|bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp"
+                />
+            <TextView
+                android:text="Food"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvideSection1"
+                android:textStyle="normal|bold"/>
+            <TextView
+                android:text="Macaroni and cheese"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvideSection1Desc"
+                android:layout_marginBottom="5dp"
+                />
+            <TextView
+                android:text="Drinks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvideSection2"
+                android:textStyle="normal|bold"/>
+            <TextView
+                android:text="Water"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvideSection2Desc"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:text="Equipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvideSection3"
+                android:textStyle="normal|bold"/>
+            <TextView
+                android:text="Life Vest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProvideSection3Desc"
+                android:layout_marginBottom="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layoutNotes"
+            android:padding="7dp">
+
+
+
+            <TextView
+                android:text="Notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNotes"
+                android:layout_marginBottom="10dp"
+
+                android:textStyle="normal|bold"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:text="Please let me know if you have any dietary restriciton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNotesDesc"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layoutWhere"
+            android:padding="7dp">
+
+
+            <TextView
+                android:text="Where we'll be"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvWhere"
+                android:textStyle="normal|bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:text="I'll take you to a Paladar, where we will engange the owner and learn more about the adventure that is managing one. You will learn your fair share of Cubain cuisine and exchange with the expert about the city gastronomy and its evolution."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvWhereDesc"
+                android:layout_marginBottom="10dp"/>
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                tools:context="googleplayservices.samples.android.teamtreehouse.com.airbnb.MapsActivity"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutAboutHost"
+            android:padding="7dp">
+
+            <TextView
+                android:text="About your Host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAboutHost"
+                android:layout_marginBottom="10dp"
+
+                android:textStyle="normal|bold"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:text="A connoisseur of Havan's gastronomic scene, I engange restaurants and share their experience online as co-founder of AlaMessa, Cuba's leading platform for info about the country's culinary culture."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAboutHostDesc"
+                android:layout_marginBottom="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutAvailability"
+            android:padding="7dp">
+
+            <TextView
+                android:text="Availability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAvailability"
+
+                android:layout_marginBottom="10dp"/>
+
+            <CalendarView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/calendarItem"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightRed"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

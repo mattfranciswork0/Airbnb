@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+    android:layout_marginRight="10dp">
+
+    <TextView
+        android:text="CAD $30 Discover and eat French cheese with"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDesc"
+        android:layout_below="@+id/ivSingleContent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/ivSingleContent"
+        android:layout_alignEnd="@+id/ivSingleContent"
+        android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/ivSingleContent"
+        android:scaleType="fitXY"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_width="158dp"
+        android:layout_height="230dp"/>
+</RelativeLayout>

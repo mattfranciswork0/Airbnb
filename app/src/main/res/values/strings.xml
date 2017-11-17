@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">Airbnb</string>
+    <!--HostProfileView-->
+    <string name="PencilIcon">http://ryanboltondesign.com/wp-content/uploads/2015/01/graphicGrey1@2x.png</string>
+    <!--HostProfileEdit-->
+    <string name="GalleryIcon">http://www.iconsdb.com/icons/preview/gray/stack-of-photos-xxl.png</string>
+    <!--tags in AmenitiesItemFramgnet xml-->
+    <string name="rbEssentials">rbEssentials</string>
+    <string name="rbInternet">rbInternet</string>
+    <string name="rbShampoo">rbShampoo</string>
+    <string name="rbHangers">rbHangers</string>
+    <string name="rbTV">rbTV</string>
+    <string name="rbHeating">rbHeating</string>
+    <string name="rbAirConditioning">rbAirConditioning</string>
+    <string name="rbBreakfast">rbBreakfast</string>
+    <string name="additionalRules">additionalRules</string>
+
+    <string name="EssentialsIcon">https://cdn1.iconfinder.com/data/icons/hotel-restaurant/512/39-512.png</string>
+    <string name="InternetIcon">http://www.iconsdb.com/icons/preview/gray/wireless-xxl.png</string>
+    <string name="ShampooIcon">https://www.shareicon.net/download/2016/08/20/817707_recycle_512x512.png</string>
+    <string name="HangersIcon">https://cdn3.iconfinder.com/data/icons/glyph/227/Hanger-512.png</string>
+    <string name="TVIcon">http://www.freeiconspng.com/uploads/tv-icon-13.png</string>
+    <string name="HeatingIcon">https://cdn4.iconfinder.com/data/icons/hotel-facilities-2/500/heating-512.png</string>
+    <string name="AirConditioningIcon">https://www.ouedkniss.com/images/categories/sous_categories/189.png</string>
+    <string name="BreakfastIcon">https://cdn2.iconfinder.com/data/icons/hotel-facilities-1/500/breakfast2-512.png</string>
+
+    <!--tags in AmenitiesSpaceFragment xml-->
+    <string name="rbKitchen">rbKitchen</string>
+    <string name="rbLaundry">rbLaundry</string>
+    <string name="rbParking">rbParking</string>
+    <string name="rbElevator">rbElevator</string>
+    <string name="rbPool">rbPool</string>
+    <string name="rbGym">rbGym</string>
+
+    <string name="KitchenIcon">https://cdn4.iconfinder.com/data/icons/kitchen-solid-style/24/chef-hat-512.png</string>
+    <string name="LaundryIcon">https://www.shareicon.net/download/2015/08/14/84879_machine_512x512.png</string>
+    <string name="ParkingIcon">https://cdn4.iconfinder.com/data/icons/hotel-facilities-2/512/parking1-512.png</string>
+    <string name="ElevatorIcon">https://cdn3.iconfinder.com/data/icons/glyph/227/Hanger-512.png</string>
+    <string name="PoolIcon">https://cdn1.iconfinder.com/data/icons/hotel-restaurant/512/8-512.png</string>
+    <string name="GymIcon">https://cdn4.iconfinder.com/data/icons/hotel-facilities-1/512/gym-512.png</string>
+    <!--tags in HouseRuleFragment-->
+    <string name="rbChildren">rbChildren</string>
+    <string name="rbInfants">rbInfants</string>
+    <string name="rbPets">rbPets</string>
+    <string name="rbSmoking">rbSmoking</string>
+    <string name="rbParties">rbParties</string>
+
+    <!--default pic for profile picture-->
+    <string name="defaultProfilePicture">https://www.cmog.org/sites/default/files/styles/5_column/public/default_images/default-bio-photo.png?itok=U0XEkap3</string>
+
+    <!--edit profile detail-->
+    <string name="aboutMe">About Me</string>
+    <string name="email">Email</string>
+    <string name="phoneNum">Phone Number</string>
+    <string name="location">Location</string>
+    <string name="work">Work</string>
+    <string name="languages">Languages</string>
+
+    <!--fragment backstack names-->
+    <string name="hostProfileEditFragment">hostProfileEditFragment </string>
+
+    <string name="save">Save</string>
+    <string name="failedToUpdate">Failed to update, try again. Check your internet connection</string>
 </resources>
