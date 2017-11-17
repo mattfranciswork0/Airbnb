@@ -1,12 +1,12 @@
 package com.example.toshiba.airbnb.UserAuthentication.Registration;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,20 +22,20 @@ import com.example.toshiba.airbnb.R;
  * Created by Owner on 2017-06-09.
  */
 
-public class RegisterNameFragment extends Fragment {
+public class RegisterNameFragment extends android.support.v4.app.Fragment {
     Button bRegProceed;
     EditText etFirstName;
     EditText etLastName;
-    public static String sFirstName;
-    public static String sLastName;
+    public static String  FIRST_NAME;
+    public static String LAST_NAME;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_name, container, false);
+        View view = inflater.inflate(R.layout.fragment_register_name, container, false);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
-//        etFirstName = (EditText) view.findViewById(R.id.etFirstName);
-//        etLastName = (EditText) view.findViewById(R.id.etLastName);
+        etFirstName = (EditText) view.findViewById(R.id.etFirstName);
+        etLastName = (EditText) view.findViewById(R.id.etLastName);
 
         //Check text changes in EditText
         TextWatcher textWatcher = new TextWatcher() {
@@ -70,12 +70,12 @@ public class RegisterNameFragment extends Fragment {
             bRegProceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sFirstName = etFirstName.getText().toString();
-                    sLastName = etLastName.getText().toString();
+                    FIRST_NAME = etFirstName.getText().toString();
+                    LAST_NAME = etLastName.getText().toString();
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     RegisterEmailFragment registerEmailFragment = new RegisterEmailFragment();
-                    fragmentTransaction.replace(R.id.container, registerEmailFragment);
+                    fragmentTransaction.replace(R.id.progressFragment, registerEmailFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

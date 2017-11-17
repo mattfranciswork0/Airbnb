@@ -15,7 +15,7 @@ public class WelcomeActivity extends AppCompatActivity {
         SessionManager sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
 
-        getFragmentManager().beginTransaction().replace(R.id.container, new WelcomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.progressFragment, new WelcomeFragment()).commit();
 
 //        TextView tvWelcome = (TextView) findViewById(R.id.tvWelcome);
 //        Typeface openSans = Typeface.createFromAsset(getAssets(), "fonts.opensans/OpenSans-Regular.ttf");

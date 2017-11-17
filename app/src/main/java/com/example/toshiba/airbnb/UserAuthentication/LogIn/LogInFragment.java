@@ -5,7 +5,7 @@ package com.example.toshiba.airbnb.UserAuthentication.LogIn;
  */
 
 
-import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,7 +34,7 @@ import retrofit2.Response;
  * Created by Owner on 2017-06-23.
  */
 
-public class LogInFragment extends Fragment {
+public class LogInFragment extends android.support.v4.app.Fragment {
     EditText etEmail;
     EditText etPassword;
     Button bRegProceed;
@@ -44,7 +44,7 @@ public class LogInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        etEmail = (EditText) view.findViewById(R.id.etEmail);
+        etEmail = (EditText) view.findViewById(R.id.etFirstName);
         etPassword = (EditText) view.findViewById(R.id.etPassword);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
 
@@ -81,13 +81,16 @@ public class LogInFragment extends Fragment {
             bRegProceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final ProgressDialog dialog = new ProgressDialog(getActivity());
+                    dialog.setMessage("Logging you in...");
+                    dialog.show();
                     DTOLogInRequest DTOLogInRequest = new DTOLogInRequest(etEmail.getText().toString(), etPassword.getText().toString());
                     Call<POJOPasswordMatch> call = retrofit.findLogInData(DTOLogInRequest);
                     call.enqueue(new Callback<POJOPasswordMatch>() {
                         @Override
                         public void onResponse(Call<POJOPasswordMatch> call, Response<POJOPasswordMatch> response) {
                             if (response.body().getPasswordMatch()) {
-                                //TODO: PROGRESSDIALOG
+                                dialog.dismiss();
                                 Log.d("blue", "success login");
                                 POJOPasswordMatch body = response.body();
                                 SessionManager sessionManager = new SessionManager(getActivity());
@@ -96,6 +99,7 @@ public class LogInFragment extends Fragment {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             } else {
+                                dialog.dismiss();
                                 Toast.makeText(getActivity(), "Invalid login creddientals", Toast.LENGTH_LONG).show();
                             }
                         }

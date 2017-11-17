@@ -44,7 +44,9 @@
         android:layout_below="@+id/tvPhone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/etPhone"/>
+        android:id="@+id/etPhone"
+        android:imeOptions="actionDone"
+        android:inputType="phone" />
 
     <TextView
         android:text="Phone (include area code, eg; +1)"

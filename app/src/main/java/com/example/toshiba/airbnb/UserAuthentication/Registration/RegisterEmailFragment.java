@@ -1,13 +1,14 @@
 package com.example.toshiba.airbnb.UserAuthentication.Registration;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,14 +37,14 @@ import retrofit2.Response;
 public class RegisterEmailFragment extends Fragment {
     EditText etEmail;
     Button bRegProceed;
-    public static String sEmail;
+    public static String EMAIL;
     DatabaseInterface retrofit;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_email, container, false);
-        etEmail = (EditText) view.findViewById(R.id.etEmail);
+        View view = inflater.inflate(R.layout.fragment_register_email, container, false);
+        etEmail = (EditText) view.findViewById(R.id.etFirstName);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
 
         retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
@@ -83,8 +84,8 @@ public class RegisterEmailFragment extends Fragment {
                     progressDialog.setMessage("Checking if email already existed");
                     progressDialog.show();
 
-                    sEmail = etEmail.getText().toString();
-                    retrofit.findUser(sEmail).enqueue(new Callback<POJOEmailResult>() {
+                    EMAIL = etEmail.getText().toString();
+                    retrofit.findUser(EMAIL).enqueue(new Callback<POJOEmailResult>() {
                         @Override
                         public void onResponse(Call<POJOEmailResult> call, Response<POJOEmailResult> response) {
                             if(response.body().getEmail().equals("null")) {
@@ -92,7 +93,7 @@ public class RegisterEmailFragment extends Fragment {
                                 FragmentManager fragmentManager = getFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 RegisterPasswordFragment registerPasswordFragment = new RegisterPasswordFragment();
-                                fragmentTransaction.replace(R.id.container, registerPasswordFragment);
+                                fragmentTransaction.replace(R.id.progressFragment, registerPasswordFragment);
                                 fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.commit();
                                 progressDialog.dismiss();
@@ -105,6 +106,7 @@ public class RegisterEmailFragment extends Fragment {
                         @Override
                         public void onFailure(Call<POJOEmailResult> call, Throwable t) {
                             Log.d("heyBestie", "emailFail");
+                            Toast.makeText(getActivity(), "Failed to check your email, check your internet connection and try again", Toast.LENGTH_LONG).show();
                         }
                     });
 

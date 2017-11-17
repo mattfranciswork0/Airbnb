@@ -12,7 +12,7 @@ public class DTOUserRegistrationRequest {
     final String password;
     final String phone_num;
 
-    DTOUserRegistrationRequest(String first_name, String last_name, String email, String password, String phone_num ){
+    public DTOUserRegistrationRequest(String first_name, String last_name, String email, String password, String phone_num){
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;

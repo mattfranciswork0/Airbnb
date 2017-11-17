@@ -1,10 +1,10 @@
 package com.example.toshiba.airbnb.UserAuthentication;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,12 @@ import android.widget.TextView;
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.LogIn.LogInFragment;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.PhoneNumFragment;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.PhoneNumVerifyFragment;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.RegisterAgeFragment;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.RegisterEmailFragment;
 import com.example.toshiba.airbnb.UserAuthentication.Registration.RegisterNameFragment;
+import com.example.toshiba.airbnb.UserAuthentication.Registration.RegisterPasswordFragment;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
 
 import org.json.JSONException;
@@ -51,7 +56,7 @@ public class WelcomeFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 LogInFragment logInFragment = new LogInFragment();
-                fragmentTransaction.replace(R.id.container, logInFragment);
+                fragmentTransaction.replace(R.id.progressFragment, logInFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -64,50 +69,9 @@ public class WelcomeFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 RegisterNameFragment registerNameFragment = new RegisterNameFragment();
-                fragmentTransaction.replace(R.id.container, registerNameFragment);
+                fragmentTransaction.replace(R.id.progressFragment, registerNameFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-            }
-        });
-
-
-        final DatabaseInterface retrofit = RetrofitUtil.retrofitBuilderForDatabaseInterface();
-        Button bPost = (Button) view.findViewById(R.id.bPost);
-        bPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                DTOUserRegistrationRequest DTOUserRegistrationRequest = new DTOUserRegistrationRequest(
-//                        RegisterNameFragment.sFirstName, RegisterNameFragment.sLastName, RegisterEmailFragment.sEmail,
-//                        RegisterPasswordFragment.sPassword, PhoneNumVerifyFragment.phoneNum);
-
-                DTOUserRegistrationRequest DTOUserRegistrationRequest = new DTOUserRegistrationRequest(
-                        "Matt", "Francis", "q@gmail.com",
-                        "heyBestie123", "2897727436");
-
-                Call<Void> call = retrofit.insertUserRegistration(DTOUserRegistrationRequest);
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        Log.d("blue", "Data is sent");
-                        if (response.isSuccessful()) {
-                        } else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                jObjError.getString("message");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.d("blue", "fail:" +t.getMessage());
-                    }
-                });
-
             }
         });
 

@@ -1,12 +1,13 @@
 package com.example.toshiba.airbnb.UserAuthentication.Registration;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ public class RegisterPasswordFragment extends Fragment {
     EditText etPassword;
     Button bRegProceed;
     LinearLayout errorLayout;
-    public static String sPassword;
+    public static String PASSWORD;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,11 +75,11 @@ public class RegisterPasswordFragment extends Fragment {
                 bRegProceed.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sPassword = etPassword.getText().toString();
+                        PASSWORD = etPassword.getText().toString();
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         RegisterAgeFragment registerAgeFragment = new RegisterAgeFragment();
-                        fragmentTransaction.replace(R.id.container, registerAgeFragment);
+                        fragmentTransaction.replace(R.id.progressFragment, registerAgeFragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }

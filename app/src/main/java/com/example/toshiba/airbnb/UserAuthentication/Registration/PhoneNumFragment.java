@@ -79,8 +79,8 @@ public class PhoneNumFragment extends Fragment {
             public void onClick(View v) {
                 //Generate random num
                 Random random = new Random();
-                int min = 100000;
-                int max = 999999;
+                int min = 1000;
+                int max = 9999;
                 String randomNum = String.valueOf(random.nextInt((max - min) + 1) + min);
                 SmsManager sm = SmsManager.getDefault();
                 sm.sendTextMessage(userPhoneNum, null, "Airbnb security code: " + randomNum + ". Use this to finish verification", null, null);

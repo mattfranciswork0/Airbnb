@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/etEmail"
+        android:layout_below="@+id/etFirstName"
         android:layout_marginTop="20dp"
         android:text="LAST NAME"
         android:textColor="#ffffff"/>
@@ -58,12 +58,12 @@
         android:layout_alignParentEnd="true"/>
 
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/etFirstName"
         android:textColor="#ffffff"
         android:layout_width="wrap_content"
         android:layout_marginTop="77dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:text=""
         android:layout_height="40dp"
         android:layout_below="@+id/tvHeader"
@@ -71,7 +71,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:imeOptions="actionNext"
+        android:maxLines="1"/>
 
     <EditText
         android:textColor="#ffffff"
@@ -79,13 +81,15 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:text=""
+        android:maxLines="1"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:layout_below="@+id/tvLastName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:imeOptions="actionNext"/>
 
 </RelativeLayout>

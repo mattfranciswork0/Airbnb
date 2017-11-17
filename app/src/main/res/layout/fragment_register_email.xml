@@ -16,10 +16,25 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:text="When is your birthday?"
+        android:text="And, your email?"
         android:textSize="32sp"
         android:textStyle="normal|bold"
         android:textColor="#ffffff"/>
+
+    <EditText
+        android:id="@+id/etFirstName"
+        android:textColor="#ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvHeader"
+        android:layout_marginTop="74dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""/>
 
     <Button
         android:text=">"
@@ -36,41 +51,14 @@
         android:layout_height="50dp"/>
 
     <TextView
-        android:id="@+id/tvBirthDay"
+        android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BIRTHDAY"
+        android:text="EMAIL ADDRESS"
         android:textColor="#ffffff"
-        android:layout_marginBottom="43dp"
-        android:layout_alignBottom="@+id/etPassword"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
-    <TextView
-        android:text="You must be at least 16 years old to use Airbnb. Others won't see your birthday."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/tvHeader"
+        android:layout_alignBottom="@+id/etFirstName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        />
+        android:layout_marginBottom="41dp"/>
 
-    <EditText
-        android:id="@+id/etAge"
-        android:textColor="#ffffff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="   /     /"
-        android:textColorHint="#ffffff"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
 </RelativeLayout>
