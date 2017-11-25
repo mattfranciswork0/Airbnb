@@ -15,30 +15,50 @@
             android:value="@string/google_maps_key" />
 
 
-        <activity android:name=".UserAuthentication.WelcomeActivity">
+        <activity
+            android:name=".UserAuthentication.WelcomeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Explore.MenuActivity">
+        <activity android:name=".Explore.MenuActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".LoadingMenuActivity">
+        <activity android:name=".LoadingMenuActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".Profile.UserProfile.UserProfileActivity">
+        <activity android:name=".Profile.UserProfile.UserProfileActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"></activity>
-        <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity">
+        <activity android:name=".Profile.BecomeAHost.BecomeAHostActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Profile.BecomeAHost.BasicQuestions.BasicQuestionsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".Profile.ViewListingAndYourBooking.ViewListingAndYourBookingActivity"></activity>
-        <activity android:name=".Profile.ViewListingAndYourBooking.EditListing.EditListingActivity"></activity>
-        <activity android:name=".Profile.BecomeAHost.ProgressActivity"></activity>
+        <activity android:name=".Profile.ViewListingAndYourBooking.ViewListingAndYourBookingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Profile.ViewListingAndYourBooking.EditListing.EditListingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Profile.BecomeAHost.ProgressActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".Explore.Homes.HomeDescActivity"></activity>
+        <activity android:name=".Explore.Homes.HomeDescActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
 
     </application>
 
