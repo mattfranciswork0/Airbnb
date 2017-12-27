@@ -19,7 +19,7 @@ public class RetrofitUtil {
     public static DatabaseInterface retrofitBuilderForDatabaseInterface() {
         return new Retrofit.Builder()
 //                .baseUrl("http://192.168.2.89:3000/")
-                .baseUrl("http://192.168.0.34:3000/")
+                .baseUrl("http://192.168.0.11:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(DatabaseInterface.class);
     }

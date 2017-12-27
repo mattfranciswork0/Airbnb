@@ -46,7 +46,7 @@ public class UserProfileViewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_host_profile_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile_view, container, false);
         return view;
     }
 
@@ -79,7 +79,7 @@ public class UserProfileViewFragment extends Fragment {
         }else {
             getUserDataCall = retrofit.getUserData(userId);
         }
-
+        Glide.with(getActivity()).load(getResources().getString(R.string.defaultProfilePicture)).into(ivProfilePic);
         getUserDataCall.enqueue(new Callback<POJOUserData>() {
             @Override
             public void onResponse(Call<POJOUserData> call, Response<POJOUserData> response) {

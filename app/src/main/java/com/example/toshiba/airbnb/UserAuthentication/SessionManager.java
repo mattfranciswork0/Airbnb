@@ -55,11 +55,10 @@ public class SessionManager {
 
         // After logout redirect user to Loing Activity
         Intent intent = new Intent(context, WelcomeActivity.class);
-        // Closing all the Activities
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
         // Add new Flag to start new Activity
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Closing all the Activities
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         // Staring Login Activity
         context.startActivity(intent);

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.toshiba.airbnb.DatabaseInterface;
 import com.example.toshiba.airbnb.Explore.MenuActivity;
+import com.example.toshiba.airbnb.LoadingMenuActivity;
 import com.example.toshiba.airbnb.R;
 import com.example.toshiba.airbnb.UserAuthentication.SessionManager;
 import com.example.toshiba.airbnb.Util.RetrofitUtil;
@@ -44,7 +45,7 @@ public class LogInFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        etEmail = (EditText) view.findViewById(R.id.etFirstName);
+        etEmail = (EditText) view.findViewById(R.id.etEmail);
         etPassword = (EditText) view.findViewById(R.id.etPassword);
         bRegProceed = (Button) view.findViewById(R.id.bRegProceed);
 
@@ -83,6 +84,7 @@ public class LogInFragment extends android.support.v4.app.Fragment {
                 public void onClick(View v) {
                     final ProgressDialog dialog = new ProgressDialog(getActivity());
                     dialog.setMessage("Logging you in...");
+                    dialog.setCancelable(false);
                     dialog.show();
                     DTOLogInRequest DTOLogInRequest = new DTOLogInRequest(etEmail.getText().toString(), etPassword.getText().toString());
                     Call<POJOPasswordMatch> call = retrofit.findLogInData(DTOLogInRequest);
@@ -95,7 +97,7 @@ public class LogInFragment extends android.support.v4.app.Fragment {
                                 POJOPasswordMatch body = response.body();
                                 SessionManager sessionManager = new SessionManager(getActivity());
                                 sessionManager.createLoginSession(body.getUserId(), body.getEmail(), body.getFirstName(), body.getLastName(), body.getPhoneNum());
-                                Intent intent = new Intent(getActivity(), MenuActivity.class);
+                                Intent intent = new Intent(getActivity(), LoadingMenuActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             } else {
@@ -107,6 +109,8 @@ public class LogInFragment extends android.support.v4.app.Fragment {
                         @Override
                         public void onFailure(Call<POJOPasswordMatch> call, Throwable t) {
                             Log.d("blue", "fail login:" + t.getMessage());
+                            Toast.makeText(getActivity(),  t.getMessage(), Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
                         }
                     });
                 }
