@@ -28,9 +28,15 @@ type `node app.js` to start up the API.
 
 ## Images
 
-[![Screenshot_20171226-161146_1.png](https://s9.postimg.org/k25m6wixr/Screenshot_20171226-161146_1.png)](https://postimg.org/image/eqqpm6wuz/)
-[![Screenshot_20171226-182844_1.png](https://s10.postimg.org/lddods08p/Screenshot_20171226-182844_1.png)](https://postimg.org/image/nupfl1k51/)
-[![Screenshot_20171226-182852_1.png](https://s10.postimg.org/52dkhiswp/Screenshot_20171226-182852_1.png)](https://postimg.org/image/stcxzmt3p/)
-[![Screenshot_20171226-182858_1.png](https://s10.postimg.org/52dkhjg21/Screenshot_20171226-182858_1.png)](https://postimg.org/image/kb3hvb9qd/)
-[![Screenshot_20171226-193720_1.png](https://s10.postimg.org/ok87xhkpl/Screenshot_20171226-193720_1.png)](https://postimg.org/image/403dz04yd/)
-[![Screenshot_20171226-193732_1.png](https://s10.postimg.org/9biajqe6h/Screenshot_20171226-193732_1.png)](https://postimg.org/image/bsu1qzy2t/)
+<img src="readme-img/airbnb-welcome.png" width="200" height="360"/> <img src="readme-img/airbnb-login.png" width="200" height="360"/> <img src="readme-img/airbnb-amenities.png" width="200" height="360"/>
+<img src="readme-img/airbnb-birthday.png" width="200" height="360"/>
+<img src="readme-img/airbnb-content.png" width="200" height="360"/>
+<img src="readme-img/airbnb-content2.png" width="200" height="360"/>
+<img src="readme-img/airbnb-listing.png" width="200" height="360"/>
+<img src="readme-img/airbnb-place.png" width="200" height="360"/>
+<img src="readme-img/airbnb-map.png" width="200" height="360"/>
+<img src="readme-img/airbnb-user.png" width="200" height="360"/>
+<img src="readme-img/airbnb-digit.png" width="200" height="360"/>
+<img src="readme-img/airbnb-host.png" width="200" height="360"/>
+<img src="readme-img/airbnb-publish.png" width="200" height="360"/>
+<img src="readme-img/airbnb-space.png" width="200" height="360"/>
